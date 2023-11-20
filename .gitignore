@@ -24,13 +24,11 @@ ffprobe.exe
 *.exe
 *.log
 pyvenv.cfg
-run.bat
 setup.cfg
 *.pth
 
 
 *.spec
-tts.py
 test.py
 hubconf.py
 static/ttslist/*
