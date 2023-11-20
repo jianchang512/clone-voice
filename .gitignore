@@ -26,9 +26,10 @@ ffprobe.exe
 pyvenv.cfg
 setup.cfg
 *.pth
-
+*.pt
 
 *.spec
 
 hubconf.py
 static/ttslist/*
+tts/*.7z

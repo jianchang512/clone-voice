@@ -74,9 +74,7 @@
             margin-right: 10px;
         }
 
-        .btn-start-record {
-            margin-top: 1rem;
-        }
+     
 
         .btn-secondary-srt {
             margin-right: 10px;
@@ -98,6 +96,19 @@
         .text-danger {
             color: #dc3545;
         }
+		#dropaudio{
+			cursor:pointer
+		}
+		#dropaudio {
+		  border: 2px dashed #ccc;
+		  padding: 20px;
+		  text-align: center;
+		  cursor: pointer;
+		  background:#fff;
+		}
+		#dropaudio.dragover {
+		  background-color: #f0f0f0;
+		}
     </style>
 </head>
 <body>
@@ -127,17 +138,15 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="audioSelect" class="form-label">要使用的声音mp3文件：<a href="javascript:;" onclick="shiting(this)" class="form-text">试听</a></label>
+                <label for="audioSelect" class="form-label">要使用的声音wav文件：<a href="javascript:;" onclick="shiting(this)" class="form-text">试听</a></label>
 
                 <select class="form-select" id="audioSelect">
-                    <option value="1.mp3">1.mp3</option>
-                    <option value="2.mp3">2.mp3</option>
                 </select>
                 <div class="form-text">
                     <label class="btn btn-sm btn-secondary btn-file d-inline-block position-relative">本地上传
-                        <input id="fileInput" type="file" accept="audio/mp3" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadFromLocal(this)" />
+                        <input id="fileInput" type="file" accept="audio/wav" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadFromLocal(this)" />
                     </label>
-                    或在线录制5-15s的声音mp3，即可在此选择使用
+                    或在线录制5-15s的声音wav，即可在此选择使用
                 </div>
             </div>
             <div class="col-md-4">
@@ -149,21 +158,31 @@
         </div>
 
         <div class="row mt-4">
-            <div class="col-md-12">
-                <label for="textInput" class="form-label">要生成语音的文字：</label>
-
-                <textarea class="form-control" id="textInput" placeholder="在此输入要合成语音的文字" rows="5"></textarea>
+            <div class="col-md-12" id="tts_area">
+				<div>
+					<button onclick="toggle(this,'tts')" for="textInput" class="btn border btn-primary">文字->声音</button>
+					<button onclick="toggle(this,'sts')" for="textInput" class="btn border">声音->声音</button>				
+				</div>
+				<div>
+					<div id="tts-area">					
+						<textarea class="form-control d-block" id="textInput" placeholder="在此输入要合成语音的文字" rows="5"></textarea>	
+						<label class="btn btn-sm btn-secondary-srt btn-file">导入srt文件
+							<input type="file" accept=".srt" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadsrt(this)">
+						</label>
+					</div>
+					<div id="sts-area" class="d-none">
+						{% if voice_model=='yes' %}
+						<div id="dropaudio" class=" border m-2 p-5 text-center ">
+							拖拽音频文件到这里上传
+						</div>		
+						{% else %}
+							<div class="alert alert-primary my-2">
+								需要下载语音转换模型后才可使用 声音->声音，为减小预编译体积，默认没有包含该模型，请去 <a href="" target="_blank">下载模型</a>后，放到 {{ root_dir }}/tts/ 目录下，然后 "解压到当前文件夹" ,再重启软件
+							</div>
+						{% endif %}
+					</div>
+				</div>
             </div>
-        </div>
-
-        <div class="row mt-4">
-            <div class="col-md-12 text-center position-relative">
-                <label class="btn btn-sm btn-secondary-srt btn-file">导入srt文件
-                    <input type="file" accept=".srt" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadsrt(this)">
-                </label>
-                <button onclick="start(this)" class="btn btn-danger btn-start-record">立即开始生成</button>
-            </div>
-            <div class="col-md-12 d-none text-danger text-center" id="tips"></div>
         </div>
 
         <div class="row mt-4 mb-4">
@@ -171,6 +190,14 @@
                 <audio id="downloadbtn" class="d-none" controls></audio>
             </div>
         </div>
+        <div class="row mt-4">
+            <div class="col-md-12 text-center position-relative">
+                
+                <button onclick="start(this)" class="btn btn-danger btn-start-record">立即开始生成</button>
+            </div>
+            <div class="col-md-12 d-none text-danger text-center" id="tips"></div>
+        </div>
+
     </div>
 </div>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -186,14 +213,27 @@
     let audioChunks = [];
     let sec=0;
     let timeid=null;
+	// 切换文字->声音，声音->声音
+	function toggle(el,type){
+		$(el).addClass('btn-primary');
+		$(el).siblings().removeClass('btn-primary');
+		if(type=='tts'){
+			$("#sts-area").addClass('d-none');
+			$("#tts-area").removeClass('d-none');
+		}else{
+			$("#sts-area").removeClass('d-none');
+			$("#tts-area").addClass('d-none');
+		}
+	}
+	// 试听声音
 	function shiting(el){
-		let mp3Url=$('#audioSelect').val();
-		if(!mp3Url){
+		let wavUrl=$('#audioSelect').val();
+		if(!wavUrl){
 			return layer.alert('必须选择要试听的声音',{title:false})
 			
 		}
 		// 创建 audio 元素
-        var audio = new Audio('/static/voicelist/'+mp3Url);
+        var audio = new Audio('/static/voicelist/'+wavUrl);
 
         // 监听播放结束事件，删除 audio 元素
         audio.addEventListener('ended', function() {
@@ -206,7 +246,7 @@
         // 播放音频
         audio.play();
 	}
-
+	// 启动录音
     function startRecording() {
         audioChunks=[];
         navigator.mediaDevices.getUserMedia({audio: true})
@@ -218,7 +258,7 @@
                     }
                 };
                 mediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, {type: 'audio/mp3'});
+                    const audioBlob = new Blob(audioChunks, {type: 'audio/wav'});
                     const audioUrl = URL.createObjectURL(audioBlob);
                     audioPlayer.src = audioUrl;
                     uploadButton.disabled = false;
@@ -247,7 +287,7 @@
                 console.error('getUserMedia error:', error);
             });
     }
-
+	// 停止录音
     function stopRecording() {
         mediaRecorder.stop();
         startRecordButton.disabled = false;
@@ -257,12 +297,12 @@
         sec=0;
         clearInterval(timeid);
     }
-
+	// 录音后上传
     function uploadRecording() {
-        const audioBlob = new Blob(audioChunks, {type: 'audio/mp3'});
+        const audioBlob = new Blob(audioChunks, {type: 'audio/wav'});
 
         const formData = new FormData();
-        formData.append('audio', audioBlob, 'recorded_audio.mp3');
+        formData.append('audio', audioBlob, 'recorded_audio.wav');
 
         fetch('/upload', {
             method: 'POST',
@@ -274,7 +314,7 @@
                 if (data['code'] == 0) {
                     let el=$('#audioSelect');
                     el.find('option[selected]').removeAttr('selected');
-                    el.prepend(`<option selected value="${data['data']}">${data['data']}</option>`);
+                    el.prepend('<option selected value="'+data['data']+'">'+data['data']+'</option>');
                     uploadButton.disabled=true;
                     uploadButton.setAttribute('title','停止录制后,可使用此按钮');
                 }
@@ -284,6 +324,7 @@
             });
     }
 
+	// 本地上传声音
     function uploadFromLocal(inputEl) {
         const fileInput = document.getElementById('fileInput');
         const selectedFile = fileInput.files[0];
@@ -308,10 +349,10 @@
                 layer.msg('上传成功');
                     let el=$('#audioSelect');
                     el.find('option[selected]').removeAttr('selected');
-                    el.prepend(`<option selected value="${data['data']}">${data['data']}</option>`);
+                    el.prepend('<option selected value="'+data['data']+'">'+data['data']+'</option>');
                 let p=$(inputEl).parent();
                 $(inputEl).remove();
-                p.append(`<input id="fileInput" type="file" accept="audio/mp3" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadFromLocal(this)" />`);
+                p.append(`<input id="fileInput" type="file" accept="audio/wav" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadFromLocal(this)" />`);
             }else{
                 layer.msg(data['msg']?data['msg']:"出错了",{icon:2})
             }
@@ -347,61 +388,151 @@
     startRecordButton.addEventListener('click', startRecording);
     stopRecordButton.addEventListener('click', stopRecording);
     uploadButton.addEventListener('click', uploadRecording);
-
+	// 初始化获取可用的声音列表
     function init() {
         $.get('/init', function (res) {
             console.log(res)
             if (res) {
-                let html = ``;
+                let html = '';
                 res.forEach(it => {
-                    html += `<option value="${it}">${it}</option>`
+                    html += '<option value="'+it+'">'+it+'</option>'
                 })
                 $('#audioSelect').html(html)
             }
         });
     }
-
+	// 开始合成声音
     function start(el) {
         let voice = $("#audioSelect").val();
         let language = $('#languageSelect').val();
         let text = $('#textInput').val();
+		// 当前所选的 合成类型
+		let type=$('#tts-area').hasClass('d-none')?'sts':'tts';
+		
         if (!voice) {
             return layer.alert("必须选择要使用的声音", {title: false});
         }
-        if (!text) {
+        if (type=='tts' && !text) {
             return layer.alert("必须输入要合成的文字", {title: false});
         }
+		if (type=='sts' && !window['sts_audio_name']) {
+            return layer.alert("必须上传要转换的声音wav文件", {title: false});
+        }
+		
         $('#tips').removeClass('d-none').text("开始合成，用时可能较久，耐心等待");
         $(el).attr('disabled', 'disabled')
         window.timesec = 0;
         window.timeid = setInterval(function () {
             window.timesec += 1
-            $('#tips').text(`开始合成，用时可能较久，耐心等待:${window.timesec}秒`)
+            $('#tips').text('开始合成，用时可能较久，耐心等待:'+window.timesec+'秒')
         }, 1000);
 		$("#downloadbtn").removeAttr('src').addClass('d-none');
 		$("#downloadbtn")[0].load();
 		$('#errors').html('');
-        $.post('/tts', {voice: voice, text: text, language: language}, function (res) {
-            $(el).removeAttr('disabled')
-            console.log(res)
-            window.timesec = 0;
-            clearInterval(window.timeid);
-            if (res.code !== 0) {
-                $('#tips').text("出错了：" + res.msg);
-            } else {
-                
-                $("#downloadbtn").removeClass('d-none').attr('src', "/static/ttslist/" + res.name);
-				if(res['msg']){
-					$('#tips').html(res['msg']);
-				}else{
-					$('#tips').addClass('d-none').text('');
+		let fun_res=function(res){
+			$(el).removeAttr('disabled')
+				console.log(res)
+				window.timesec = 0;
+				clearInterval(window.timeid);
+				if (res.code !== 0) {
+					$('#tips').text("出错了：" + res.msg);
+				} else {
+					
+					$("#downloadbtn").removeClass('d-none').attr('src', "/static/ttslist/" + res.name);
+					if(res['msg']){
+						$('#tips').html(res['msg']);
+					}else{
+						$('#tips').addClass('d-none').text('');
+					}
+					
 				}
-				
-            }
-        });
+		}
+		
+		if(type=='tts'){
+			$.post('/tts', {voice: voice, text: text, language: language}, function (res) {
+				fun_res(res);
+			});
+		}else{
+			$.post('/sts', {voice: voice, name: window['sts_audio_name']}, function (res) {
+				fun_res(res);
+			});
+		}
     }
 
     init();
+	
+	// 初始化 声音转声音
+	function stsinit() {
+      var dropaudio = $('#dropaudio');
+	  if(dropaudio.length<1){
+		return
+	  } 
+
+      dropaudio.on('dragover', function(e) {
+        e.preventDefault();
+        dropaudio.addClass('dragover');
+      });
+
+      dropaudio.on('dragleave drop', function(e) {
+        e.preventDefault();
+        dropaudio.removeClass('dragover');
+      });
+
+      dropaudio.on('drop', function(e) {
+        e.preventDefault();
+
+        var files = e.originalEvent.dataTransfer.files;
+        if (files.length > 0) {
+          handleFileUpload(files[0]);
+        }
+      });
+
+      dropaudio.on('click', function() {
+        var fileInput = $('<input type="file" style="display: none;">');
+        fileInput.on('change', function() {
+          if (fileInput[0].files.length > 0) {
+            handleFileUpload(fileInput[0].files[0]);
+          }
+        });
+
+        fileInput.click();
+      });
+	}
+	stsinit();
+
+    // 拖拽上传声音音频  
+	function handleFileUpload(file) {
+		var dropaudio = $('#dropaudio');
+        var formData = new FormData();
+        formData.append('audio', file);
+		formData.append('save_dir','tmp')
+		
+        $.ajax({
+          type: 'POST',
+          url: '/upload',  // Update with your backend endpoint
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function(response) {
+            if (response.code === 0) {
+              dropaudio.text('上传成功: ' + response.data);
+			  window['sts_audio_name']=response.data
+            } else {
+              dropaudio.text('上传失败: ' + response.msg);
+            }
+          },
+          error: function() {
+            dropaudio.text('上传失败');
+          },
+          beforeSend: function() {
+            dropaudio.text('上传中...');
+          },
+          complete: function() {
+            dropaudio.removeClass('dragover');
+          }
+        });
+      }
+
 </script>
 
 </body>
