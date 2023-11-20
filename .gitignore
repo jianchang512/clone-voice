@@ -29,6 +29,6 @@ setup.cfg
 
 
 *.spec
-test.py
+
 hubconf.py
 static/ttslist/*
