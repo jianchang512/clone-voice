@@ -9,12 +9,12 @@ print(TTS().list_models())
 
 # exit()
 # Init TTS
-# tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
+tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
 
 # Run TTS
 # ❗ Since this model is multi-lingual voice cloning model, we must set the target speaker_wav and language
 # Text to speech list of amplitude values as output
-#wav = tts.tts(text="Text to speech list of amplitude values as output!", speaker_wav="sx.mp3", language="en")
+wav = tts.tts(text="Text to speech list of amplitude values as output!", speaker_wav="sx.mp3", language="en")
 # Text to speech to a file
 #['en', 'es', 'fr', 'de', 'it', 'pt', 'pl', 'tr', 'ru', 'nl', 'cs', 'ar', 'zh-cn', 'hu', 'ko', 'ja']
 tts = TTS(
