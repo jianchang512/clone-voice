@@ -27,6 +27,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4c180383-bbe1-4301-98
 3. 双击 run.bat ，等待自动打开web窗口，如下
 ![](./images/0.png)
 4. 输入文字，选择或录制声音，开始体验吧
+5. 为减小体积，预编译版仅支持CPU，若需GPU支持，请拉取源码本地编译
 
 
 # 源码部署
