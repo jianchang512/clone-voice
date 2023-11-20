@@ -22,9 +22,9 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4c180383-bbe1-4301-98
 
 # 使用方法
 
-1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中下载预编译版，适用于window 10/11(已含模型文件和GPU支持，因此压缩包有点大),Mac下请拉取源码自行编译
+1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中下载预编译版，适用于window 10/11(已含模型文件，因此压缩包有点大),Mac下请拉取源码自行编译
 2. 下载后解压到某处，比如E:/clone-voice 下
-3. 双击 app.exe ，等待自动打开web窗口，如下
+3. 双击 run.bat ，等待自动打开web窗口，如下
 ![](./images/0.png)
 4. 输入文字，选择或录制声音，开始体验吧
 
@@ -33,12 +33,11 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4c180383-bbe1-4301-98
 
 0. 要求 python 3.9+
 1. 创建空目录，比如 E:/clone-voice
-2. `git clone https://github.com/jianchang512/clone-voice .`
-   [下载模型 model.pth 放到 models/tts_models--multilingual--multi-dataset--xtts_v2目录下](https://github.com/jianchang512/clone-voice/releases/download/v0.0.1/model.pth)
-3. 创建虚拟环境 `python -m venv venv`
-4. 激活环境 `cd venv/scripts`,`activate`,`cd ../..`
-5. 安装依赖 `pip install -r requirements.txt`
-6. 解压 ffmpeg.7z 到项目根目录
+2. 创建虚拟环境 `python -m venv venv`
+3. 激活环境 `cd venv/scripts`,`activate`,`cd ../..`
+4. 安装依赖 CPU版: `pip install -r requirements.txt`, GPU版:`pip install -r requirements-gpu.txt`
+5. 解压 ffmpeg.7z 到项目根目录
+6. [下载模型 model.pth 放到 models/tts_models--multilingual--multi-dataset--xtts_v2目录下](https://github.com/jianchang512/clone-voice/releases/download/v0.0.1/model.pth)
 7. 启动 `python app.py`
 
 # 预览图
