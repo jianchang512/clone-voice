@@ -4,12 +4,18 @@ import logging
 import re
 import threading
 import time
+import sys
 
 from flask import Flask, request, render_template, jsonify, send_file
 import os
-ROOT_DIR=os.getcwd().replace('\\', '/')
+ROOT_DIR= os.getcwd() #os.path.dirname(os.path.abspath(__file__))
+
+print(f"{ROOT_DIR=}")
 os.environ['TTS_HOME']=ROOT_DIR
-os.environ['PATH'] = ROOT_DIR + ';' + os.environ['PATH']
+if sys.platform == 'win32':
+    os.environ['PATH'] = ROOT_DIR + ';' + os.environ['PATH']
+else:
+    os.environ['PATH'] = ROOT_DIR + ':' + os.environ['PATH']
 import glob
 import hashlib
 import torch
@@ -32,8 +38,13 @@ TTS_DIR = os.path.join(ROOT_DIR, 'static/ttslist')
 # 临时目录
 TMP_DIR=os.path.join(ROOT_DIR,'static/tmp')
 # 声音转声音 模型是否存在
-VOICE_MODEL_EXITS=True if os.path.exists(f"{ROOT_DIR}/tts/voice_conversion_models--multilingual--vctk--freevc24/model.pth") else False
+if os.path.exists(os.path.join(ROOT_DIR, "tts/voice_conversion_models--multilingual--vctk--freevc24/model.pth")):
+    VOICE_MODEL_EXITS=True
+else:
+    VOICE_MODEL_EXITS=False
 
+
+print(f"{os.environ['TTS_HOME']=}")
 
 if not os.path.exists(VOICE_DIR):
     os.makedirs(VOICE_DIR)
@@ -62,7 +73,7 @@ def ttsloop():
             obj=q.get(block=True,timeout=1)
             app.logger.info(f"[tts][ttsloop]开始合成，{obj=}")
             try:
-                tts.tts_to_file(text=obj['text'], speaker_wav=os.path.join(VOICE_DIR, obj['voice']), language=obj['language'], file_path=f"{TTS_DIR}/{obj['filename']}")
+                tts.tts_to_file(text=obj['text'], speaker_wav=os.path.join(VOICE_DIR, obj['voice']), language=obj['language'], file_path=os.path.join(TTS_DIR, obj['filename']))
                 global_tts_result[obj['filename']]=1
                 app.logger.info(f"[tts][ttsloop]合成结束{obj=}")
             except Exception as e:
@@ -75,30 +86,36 @@ def ttsloop():
 # s t s 线程
 def stsloop():
     global global_sts_result
-    
-    tts = TTS(model_name='voice_conversion_models/multilingual/vctk/freevc24').to(device)
-    while True:
-        try:
-            obj=q_sts.get(block=True,timeout=1)
-            app.logger.info(f"[sts][stsloop]开始转换声音，{obj=}")
+    try:
+        tts = TTS(model_name='voice_conversion_models/multilingual/vctk/freevc24').to(device)
+        while True:
             try:
-                tts.voice_conversion_to_file(source_wav=TMP_DIR+"/"+obj['filename'], target_wav=os.path.join(VOICE_DIR, obj['voice']), file_path=f"{TTS_DIR}/{obj['filename']}")
-                global_sts_result[obj['filename']]=1
-                app.logger.info(f"[sts][stsloop]合成结束{obj=}")
+                obj=q_sts.get(block=True,timeout=1)
+                app.logger.info(f"[sts][stsloop]开始转换声音，{obj=}")
+                try:
+                    tts.voice_conversion_to_file(source_wav=os.path.join(TMP_DIR, obj['filename']), target_wav=os.path.join(VOICE_DIR, obj['voice']), file_path=os.path.join(TTS_DIR, obj['filename']))
+                    global_sts_result[obj['filename']]=1
+                    app.logger.info(f"[sts][stsloop]合成结束{obj=}")
+                except Exception as e:
+                    app.logger.error(f"[sts][stsloop]转换声音失败:{str(e)}")
+                    global_sts_result[obj['filename']]=str(e)           
             except Exception as e:
-                app.logger.error(f"[sts][stsloop]转换声音失败:{str(e)}")
-                global_sts_result[obj['filename']]=str(e)           
-        except Exception as e:
-            pass
+                pass
+    except Exception as e:
+        app.logger.error(f"启动声音->声音线程失败{str(e)}")
+        time.sleep(30)
+        stsloop()
+        return
 
 
 # 实际启动tts合成的函数
 def create_tts(*,text,voice,language,filename):
     global global_tts_result
-    if os.path.exists(f"{TTS_DIR}/{filename}") and os.path.getsize(f"{TTS_DIR}/{filename}") > 0:
+    absofilename=os.path.join(TTS_DIR, filename)
+    if os.path.exists(absofilename) and os.path.getsize(absofilename) > 0:
         app.logger.info(f"[tts][create_ts]{filename}已存在，直接返回")
         global_tts_result[filename]=1
-        return {"code": 0, "filename": f"{TTS_DIR}/{filename}", 'name': filename}
+        return {"code": 0, "filename": absofilename, 'name': filename}
     try:
         app.logger.info(f"[tts][create_ts]{text}压入队列，准备合成")
         q.put({"voice": voice, "text": text, "language": language, "filename": filename})
@@ -110,13 +127,13 @@ def create_tts(*,text,voice,language,filename):
 
 
 
-app = Flask(__name__,static_folder=f'{ROOT_DIR}/static', static_url_path='/static', template_folder=f'{ROOT_DIR}/templates')
+app = Flask(__name__,static_folder=os.path.join(ROOT_DIR, 'static'), static_url_path='/static', template_folder=os.path.join(ROOT_DIR, 'templates'))
 
 # 配置日志
 app.logger.setLevel(logging.INFO)  # 设置日志级别为 INFO
 
 # 创建 RotatingFileHandler 对象，设置写入的文件路径和大小限制
-file_handler = RotatingFileHandler(f'{ROOT_DIR}/app.log', maxBytes=1024*1024, backupCount=5)
+file_handler = RotatingFileHandler(os.path.join(ROOT_DIR, 'app.log'), maxBytes=1024*1024, backupCount=5)
 
 # 创建日志的格式
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -144,15 +161,15 @@ def upload():
         # 获取上传的文件
         audio_file = request.files['audio']
         save_dir=request.form.get("save_dir")
-        save_dir=VOICE_DIR if not save_dir else f"{ROOT_DIR}/static/{save_dir}"
+        save_dir=VOICE_DIR if not save_dir else os.path.join(ROOT_DIR, f'static/{save_dir}')
         app.logger.info(f"[upload]上传文件{audio_file.filename=},{save_dir=}")
         # 检查文件是否存在且是 WAV 格式
         if audio_file and audio_file.filename.endswith('.wav'):
             # 保存文件到服务器指定目录
             name=f"{os.path.basename(audio_file.filename.replace(' ',''))}"
-            if os.path.exists(f"{save_dir}/{name}"):
+            if os.path.exists(os.path.join(save_dir,name)):
                 name = f'{datetime.datetime.now().strftime("%m%d-%H%M%S")}-{name}'
-            audio_file.save(f"{save_dir}/{name}")
+            audio_file.save(os.path.join(save_dir,name))
             # 返回成功的响应
             return {'code': 0, 'msg': '上传成功',"data":name}
         else:
@@ -293,7 +310,7 @@ def tts():
         if global_tts_result[filename]!=1:
             msg={"code":1,"msg":global_tts_result[filename]}
         else:
-            msg={"code":0,"filename":f"{TTS_DIR}/{filename}",'name':filename}
+            msg={"code":0,"filename":os.path.join(TTS_DIR, filename),'name':filename}
         app.logger.info(f"[tts][tts]当前结果,{filename=},{msg=}")
         global_tts_result.pop(filename)
         if not is_srt:
@@ -335,7 +352,7 @@ def sts():
 
         obj={"filename":filename,"voice":voice}
         # 压入队列，准备转换语音
-        app.logger.info(f"[sts][sts]压入 sts队列，准确转换")
+        app.logger.info(f"[sts][sts]压入 sts队列，准备转换")
         q_sts.put(obj)
         # 已有结果或错误，直接返回
         # 循环等待 最多7200s
@@ -351,7 +368,7 @@ def sts():
             msg={"code":1,"msg":global_sts_result[filename]}
             app.logger.error(f"[sts][sts]转换失败，{msg=}")
         else:
-            msg={"code":0,"filename":f"{TTS_DIR}/{filename}",'name':filename}
+            msg={"code":0,"filename":os.path.join(TTS_DIR, filename),'name':filename}
             app.logger.info(f"[sts][sts]转换成功，{msg=}")            
         global_sts_result.pop(filename)
         return jsonify(msg)
@@ -369,8 +386,9 @@ def merge_audio_segments(text_list):
     md5_hash = hashlib.md5()
     md5_hash.update(f"{json.dumps(text_list)}".encode('utf-8'))
     filename = md5_hash.hexdigest() + ".wav"
-    if os.path.exists(f"{TTS_DIR}/{filename}"):
-        return (f"{TTS_DIR}/{filename}","")
+    absofilename=os.path.join(TTS_DIR,filename)
+    if os.path.exists(absofilename):
+        return (absofilename,"")
     segments=[]
     start_times=[]
     errors=[]
@@ -405,8 +423,8 @@ def merge_audio_segments(text_list):
 
         merged_audio += segment
 
-    merged_audio.export(f"{TTS_DIR}/{filename}", format="wav")
-    return (f"{TTS_DIR}/{filename}","<-->".join(errors))
+    merged_audio.export(absofilename, format="wav")
+    return (absofilename,"<-->".join(errors))
 
 
 def openweb():
@@ -415,12 +433,18 @@ def openweb():
 
 if __name__ == '__main__':
     try:        
-        print("本地web地址: http://127.0.0.1:9988")
+        #print("本地web地址: http://127.0.0.1:9988")
+        print("开始启动，请稍后...")
         app.logger.info("本地web地址: http://127.0.0.1:9988")
+        print("启动 t->s 线程")
         threading.Thread(target=ttsloop).start()
         if VOICE_MODEL_EXITS:
+            print("启动 s->s 线程")
             threading.Thread(target=stsloop).start()
+        elif os.path.exists(os.path.join(ROOT_DIR, 'tts/speech-to-speech')):
+            print("语音到语音模型直接解压到 tts 目录下，而非 tts/speech-to-speech 目录")
         threading.Thread(target=openweb).start()
+        
         app.run(port=9988)
     except Exception as e:
         print("执行出错:"+str(e))
