@@ -33,3 +33,5 @@ setup.cfg
 hubconf.py
 static/ttslist/*
 tts/*.7z
+static/tmp/*.wav
+static/ttslist/*.wav
