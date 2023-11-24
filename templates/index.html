@@ -303,13 +303,14 @@
 
         const formData = new FormData();
         formData.append('audio', audioBlob, 'recorded_audio.wav');
-
+        let index=layer.load();
         fetch('/upload', {
             method: 'POST',
             body: formData
         })
             .then(response => response.json())
             .then(data => {
+                layer.close(index);
                 console.log('Server response:', data);
                 if (data['code'] == 0) {
                     let el=$('#audioSelect');
@@ -320,6 +321,7 @@
                 }
             })
             .catch(error => {
+                layer.close(index);
                 console.error('Upload error:', error);
             });
     }

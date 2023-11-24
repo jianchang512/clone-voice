@@ -169,7 +169,11 @@ def upload():
             name=f"{os.path.basename(audio_file.filename.replace(' ',''))}"
             if os.path.exists(os.path.join(save_dir,name)):
                 name = f'{datetime.datetime.now().strftime("%m%d-%H%M%S")}-{name}'
-            audio_file.save(os.path.join(save_dir,name))
+
+            savename=os.path.join(save_dir,name)
+            tmp_wav=os.path.join(TMP_DIR,name)
+            audio_file.save(tmp_wav)
+            os.system(f'ffmpeg -i "{tmp_wav}" "{savename}"')
             # 返回成功的响应
             return {'code': 0, 'msg': '上传成功',"data":name}
         else:
@@ -438,11 +442,11 @@ if __name__ == '__main__':
         app.logger.info("本地web地址: http://127.0.0.1:9988")
         print("启动 t->s 线程")
         threading.Thread(target=ttsloop).start()
-        if VOICE_MODEL_EXITS:
-            print("启动 s->s 线程")
-            threading.Thread(target=stsloop).start()
-        elif os.path.exists(os.path.join(ROOT_DIR, 'tts/speech-to-speech')):
-            print("语音到语音模型直接解压到 tts 目录下，而非 tts/speech-to-speech 目录")
+        # if VOICE_MODEL_EXITS:
+        #     print("启动 s->s 线程")
+        #     threading.Thread(target=stsloop).start()
+        # elif os.path.exists(os.path.join(ROOT_DIR, 'tts/speech-to-speech')):
+        #     print("语音到语音模型直接解压到 tts 目录下，而非 tts/speech-to-speech 目录")
         threading.Thread(target=openweb).start()
         
         app.run(port=9988)
