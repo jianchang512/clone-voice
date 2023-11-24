@@ -6,7 +6,7 @@ import threading
 import time
 import sys
 
-from flask import Flask, request, render_template, jsonify, send_file
+from flask import Flask, request, render_template, jsonify, send_file, send_from_directory
 import os
 ROOT_DIR= os.getcwd() #os.path.dirname(os.path.abspath(__file__))
 
@@ -16,13 +16,12 @@ if sys.platform == 'win32':
     os.environ['PATH'] = ROOT_DIR + ';' + os.environ['PATH']
 else:
     os.environ['PATH'] = ROOT_DIR + ':' + os.environ['PATH']
+
 import glob
 import hashlib
 import torch
 from pydub import AudioSegment
 from logging.handlers import RotatingFileHandler
-
-
 from TTS.api import TTS
 import queue
 import webbrowser
@@ -442,11 +441,11 @@ if __name__ == '__main__':
         app.logger.info("本地web地址: http://127.0.0.1:9988")
         print("启动 t->s 线程")
         threading.Thread(target=ttsloop).start()
-        # if VOICE_MODEL_EXITS:
-        #     print("启动 s->s 线程")
-        #     threading.Thread(target=stsloop).start()
-        # elif os.path.exists(os.path.join(ROOT_DIR, 'tts/speech-to-speech')):
-        #     print("语音到语音模型直接解压到 tts 目录下，而非 tts/speech-to-speech 目录")
+        if VOICE_MODEL_EXITS:
+            print("启动 s->s 线程")
+            threading.Thread(target=stsloop).start()
+        elif os.path.exists(os.path.join(ROOT_DIR, 'tts/speech-to-speech')):
+            print("语音到语音模型直接解压到 tts 目录下，而非 tts/speech-to-speech 目录")
         threading.Thread(target=openweb).start()
         
         app.run(port=9988)
