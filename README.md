@@ -46,6 +46,8 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 # 源码部署/以window为例，其他类似
 
+**源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问**
+
 0. 要求 python 3.9+
 1. 创建空目录，比如 E:/clone-voice
 2. 创建虚拟环境 `python -m venv venv`
