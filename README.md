@@ -60,14 +60,17 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 1. 语音到语音模型(speech-to-speech)百度网盘下载
 链接：[https://pan.baidu.com/s/1vIYzxnlmx2_4prahufoEEw?pwd=hgh2](https://pan.baidu.com/s/1vIYzxnlmx2_4prahufoEEw?pwd=hgh2)
 提取码：hgh2
+
 从github下载: [https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1](https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1)
-解压后![](./images/2.png)
+
 
 
 2. 文字到语音模型(text-to-speech)百度网盘下载(预编译版已包含该模型)
-链接：[https://pan.baidu.com/s/1LA3JFIb0MnCgoF0Q1sW5dQ?pwd=5k7c](https://pan.baidu.com/s/1LA3JFIb0MnCgoF0Q1sW5dQ?pwd=5k7c)
-提取码：5k7c
+链接: [https://pan.baidu.com/s/1zsAydvL5MJqyNIUevAKb9Q?pwd=9tvi](https://pan.baidu.com/s/1zsAydvL5MJqyNIUevAKb9Q?pwd=9tvi)
+提取码: 9tvi
+
 从github下载: [https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1](https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1)
+
 解压后![](./images/2.png)
 
 
@@ -77,7 +80,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 # 注意事项
 
-1. 启动后需要冷加载模型，会消耗一些时间，请耐心等待显示出`http://127.0.0.1:9988`， 并自动打开浏览器页面后，稍等两三分钟后再进行转换
+1. 启动后需要冷加载模型，会消耗一些时间，请耐心等待显示线程启动成功， 并自动打开浏览器页面后，稍等两三分钟后再进行转换
 2. 功能有：
 
 		文字到语音:即输入文字，用选定的音色生成声音，这个功能预编译已包含模型，开箱即用。

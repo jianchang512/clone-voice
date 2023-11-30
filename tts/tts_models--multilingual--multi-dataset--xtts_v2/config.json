@@ -109,7 +109,7 @@
         "gpt_layers": 30,
         "gpt_n_model_channels": 1024,
         "gpt_n_heads": 16,
-        "gpt_number_text_tokens": 6153,
+        "gpt_number_text_tokens": 6681,
         "gpt_start_text_token": null,
         "gpt_stop_text_token": null,
         "gpt_num_audio_tokens": 1026,
@@ -143,11 +143,12 @@
         "zh-cn",
         "hu",
         "ko",
-        "ja"
+        "ja",
+        "hi"
     ],
     "temperature": 0.75,
     "length_penalty": 1.0,
-    "repetition_penalty": 10.0,
+    "repetition_penalty": 5.0,
     "top_k": 50,
     "top_p": 0.85,
     "num_gpt_outputs": 1,

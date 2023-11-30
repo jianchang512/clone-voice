@@ -7,7 +7,6 @@
     <title>语音克隆-用任意声音说话</title>
     <style>
         body {
-            background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -112,21 +111,24 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="custom-alert" role="alert">
+<div class="container my-0">
+    <div class="alert  rounded-0" role="alert">
         <h4 class="alert-heading d-flex justify-content-between">		
-			<span>语音克隆-用任意声音说话!</span>
+			<span class="text-danger">语音克隆-用任意声音说话!</span>
 			<span>
-			
-			<a class="fs-6 text-black" href="https://github.com/jianchang512/clone-voice" target="_blank">Github</a>
-			<a class="fs-6 text-black" href="https://github.com/jianchang512/clone-voice/issue" target="_blank">Issue</a>
+			<a class="fs-6 text-black btn" href="https://github.com/jianchang512/clone-voice" target="_blank">Github仓库</a>
+			<a class="fs-6 text-black btn" href="https://github.com/jianchang512/clone-voice/issue" target="_blank">遇到问题?</a>
+			<a class="fs-6 text-success btn" href="https://github.com/jianchang512/clone-voice/issues/10" target="_blank">捐助该项目</a>
 			</span>
 		</h4>
         <hr>
+        <div>
+
         <p class="mb-0">用自己的声音或使用任意音色录制一段音频</p>
         <p class="mb-0">用于克隆的最佳音频素材时长为 5-15s，确保清晰准确的人声，不要有杂音、背景音</p>
+        </div>
     </div>
-    <div class="p-3 shadow">
+    <div class="p-3 shadow bg-white">
         <div class="row mt-4">
             <div class="col-md-4">
                 <label for="languageSelect" class="form-label">文本语言：</label>
@@ -177,7 +179,7 @@
 						</div>		
 						{% else %}
 							<div class="alert alert-primary my-2">
-								需要下载语音转换模型后才可使用 声音->声音，为减小预编译体积，默认没有包含该模型，请去 <a href="" target="_blank">下载模型</a>后，放到 {{ root_dir }}/tts/ 目录下，然后 "解压到当前文件夹" ,再重启软件
+								需要下载语音转换模型后才可使用 声音->声音，为减小预编译体积，默认没有包含该模型，请去 <a href="https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1" target="_blank">下载模型</a>后，放到 {{ root_dir }}/tts/ 目录下，然后 "解压到当前文件夹",确保tts目录下存在`voice_conversion_models--multilingual--vctk--freevc24`和`wavlm`文件夹，然后重启软件
 							</div>
 						{% endif %}
 					</div>
