@@ -59,19 +59,30 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 # 模型下载
 
+
+## 百度网盘下载 
+
 1. 语音到语音模型(speech-to-speech)百度网盘下载
-链接：[https://pan.baidu.com/s/1vIYzxnlmx2_4prahufoEEw?pwd=hgh2](https://pan.baidu.com/s/1vIYzxnlmx2_4prahufoEEw?pwd=hgh2)
-提取码：hgh2
-
-从github下载: [https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1](https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1)
-
+链接: https://pan.baidu.com/s/16GoUvdcZW6kM9UVZIVQkkw?pwd=493p 
+提取码: 493p
 
 
 2. 文字到语音模型(text-to-speech)百度网盘下载(预编译版已包含该模型)
 链接: [https://pan.baidu.com/s/1zsAydvL5MJqyNIUevAKb9Q?pwd=9tvi](https://pan.baidu.com/s/1zsAydvL5MJqyNIUevAKb9Q?pwd=9tvi)
 提取码: 9tvi
 
-从github下载: [https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1](https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1)
+
+## 阿里云盘下载
+
+1. 语音到语音模型(speech-to-speech)百度网盘下载
+链接: https://pan.baidu.com/s/16GoUvdcZW6kM9UVZIVQkkw?pwd=493p 
+提取码: 493p
+
+
+2. 文字到语音模型(text-to-speech)百度网盘下载(预编译版已包含该模型)
+链接: [https://pan.baidu.com/s/1zsAydvL5MJqyNIUevAKb9Q?pwd=9tvi](https://pan.baidu.com/s/1zsAydvL5MJqyNIUevAKb9Q?pwd=9tvi)
+提取码: 9tvi
+
 
 解压后![](./images/2.png)
 

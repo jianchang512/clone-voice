@@ -204,9 +204,10 @@ def upload():
                 name = f'{datetime.datetime.now().strftime("%m%d-%H%M%S")}-{name}'
 
             savename = os.path.join(save_dir, name)
-            tmp_wav = os.path.join(TMP_DIR, name)
+            tmp_wav = os.path.join(TMP_DIR, "tmp_"+name)
             audio_file.save(tmp_wav)
-            os.system(f'ffmpeg -i "{tmp_wav}" "{savename}"')
+            os.system(f'ffmpeg -y -i "{tmp_wav}" "{savename}"')
+            os.unlink(tmp_wav)
             # 返回成功的响应
             return {'code': 0, 'msg': '上传成功', "data": name}
         else:

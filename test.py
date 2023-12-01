@@ -5,10 +5,28 @@ import re
 import shutil
 import threading
 import time
+from dotenv import load_dotenv
+load_dotenv()
+import os
 
+def setorget_proxy():
+    proxy = os.environ.get("http_proxy", '') or os.environ.get("HTTP_PROXY", '')
+    if proxy:
+        os.environ['AIOHTTP_PROXY'] = "http://" + proxy.replace('http://', '')
+        return proxy
+    if not proxy:
+        proxy = os.getenv('HTTP_PROXY', '')
+        if proxy:
+            os.environ['HTTP_PROXY'] = "http://" + proxy.replace('http://', '')
+            os.environ['HTTPS_PROXY'] = "http://" + proxy.replace('http://', '')
+            os.environ['AIOHTTP_PROXY'] = "http://" + proxy.replace('http://', '')
+            return proxy
+    return proxy
+
+#print(setorget_proxy())
 import aiohttp
 from flask import Flask, request, render_template, jsonify, send_file
-import os
+
 import glob
 import hashlib
 import torch
@@ -42,25 +60,17 @@ shutil.copytree("./static","./dist/app/static",dirs_exist_ok=True)
 shutil.copytree("./templates","./dist/app/templates",dirs_exist_ok=True)
 '''
 
-from dotenv import load_dotenv
-load_dotenv()
-
-def setorget_proxy(returnval=False):
-    proxy=os.environ.get("http_proxy",'') or os.environ.get("HTTP_PROXY",'')
-    if proxy:
-        return proxy
-    if not proxy:
-        proxy=os.getenv('HTTP_PROXY')
-        if proxy:
-            os.environ['HTTP_PROXY']="http://"+proxy.replace('http://','')
-            os.environ['HTTPS_PROXY']="http://"+proxy.replace('http://','')
-            return proxy
-    return proxy
 
 # print(setorget_proxy())
 # device = "cuda" if torch.cuda.is_available() else "cpu"
 # try:
-#     tts = TTS(model_name='voice_conversion_models/multilingual/vctk/freevc24').to(device)
+
+ROOT_DIR = os.getcwd()
+os.environ['TTS_HOME'] = ROOT_DIR
+#exit()
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+tts = TTS(model_name='voice_conversion_models/multilingual/vctk/freevc24').to(device)
 # except aiohttp.client_exceptions.ClientOSError as e:
 #     if not setorget_proxy():
 #         print(f'请在 .env 文件中正确设置 http 代理，以便能从 https://huggingface.co 下载模型')
@@ -77,5 +87,23 @@ def setorget_proxy(returnval=False):
 #     print(f'{n=}')
 # except:
 #     pass
-device = "cuda" if torch.cuda.is_available() else "cpu"
-tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
+#device = "cuda" if torch.cuda.is_available() else "cpu"
+#tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
+
+import py7zr
+import os
+
+def extract_7z(archive_path, extract_dir):
+    with py7zr.SevenZipFile(archive_path, mode='r') as z:
+        z.extractall(extract_dir)
+
+def main():
+    archive_path = 'tts/11.7z'  # 压缩包路径
+    extract_dir = 'tts'  # 解压目录
+
+    if not os.path.exists(extract_dir):
+        os.makedirs(extract_dir)
+
+    extract_7z(archive_path, extract_dir)
+
+
