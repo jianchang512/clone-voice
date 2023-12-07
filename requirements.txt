@@ -82,7 +82,7 @@ networkx==2.8.8
 nltk==3.8.1
 num2words==0.5.13
 numba==0.58.1
-numpy==1.26.2
+numpy
 oauthlib==3.2.2
 opencv-python==4.8.1.78
 packaging==23.2
