@@ -1,3 +1,4 @@
+[加入Discord讨论组](https://discord.gg/evkPeKJddD)
 
 # CV声音克隆工具
 
@@ -23,7 +24,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 # 使用方法
 
-1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中下载预编译版，适用于window 10/11(已含文字到语音模型，语音到语音模型需单独下载),Mac下请拉取源码自行编译
+1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中下载预编译版，适用于window 10/11(已含全部模型，分为3个压缩卷),Mac下请拉取源码自行编译
 2. 下载后解压到某处，比如 E:/clone-voice 下
 3. 双击 start.bat ，等待自动打开web窗口，如下
 ![](./images/0.png)
@@ -33,14 +34,8 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 	- 在文本框中输入文字、或导入srt文件，或者选择“声音->声音”，选择要转换的声音wav格式文件
 	- 然后从“要使用的声音wav文件”下拉框中选择要用的声音，如果没有满意的，也可以点击“本地上传”按钮，选择已录制好的5-20s的wav声音文件。或者点击“开始录制”按钮，在线录制你自己的声音5-20s，录制完成点击使用
 	- 点击“立即开始生成”按钮，耐心等待完成。
-	
-5. 为减小预编译版体积，预编译版仅支持CPU，只包含“文字到语音(text-to-speech)模型”
-	
-    如果需要 **声音->声音** 功能，即上传一个音频文件，然后将该音频转换为使用选定音色的另一个音频，需单独下载**语音到语音(speech-to-speech)模型**，然后放到和app.exe同级的tts文件夹中，右键“解压到当前文件夹下” 解压后如图
-    ![](./images/2.png)
-    
 
-6. 如需GPU支持，请拉取源码本地编译
+5. 如需GPU支持，请拉取源码本地编译
 
 
 
@@ -54,7 +49,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 3. 激活环境 `cd venv/scripts`,`activate`,`cd ../..`
 4. 安装依赖 CPU版: `pip install -r requirements.txt`, GPU版:`pip install -r requirements-gpu.txt`
 5. 解压 ffmpeg.7z 到项目根目录
-6. 下载模型 **文字到语音(text-to-speech)模型**  和  **语音到语音(speect-to-speech)模型**  到项目目录下的tts文件中，然后解压到当前文件夹
+6. 下载模型 [**文字到语音(text-to-speech)模型**  和  **语音到语音(speect-to-speech)模型**](https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1)  到项目目录下的tts文件中，然后解压到当前文件夹,或者无需手动下载，挂全局代理，在线下载
 7. 启动 `python app.py`
 8. CUDA支持：如果你的显卡是 Nvidia，可以根据显卡驱动版本和操作系统版本，去安装对应的 [CUDA Toolkit 11.8](https://developer.nvidia.com/cuda-downloads) ,建议预先将显卡驱动升级到最新版，再去安装。
 
@@ -66,38 +61,10 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 安装完毕后，在该环境里，执行 python,等待进入后，再分别执行 import torch,torch.cuda.is_available(),如果有输出，说明CUDA配置正确，否则请检查配置或者重新配置CUDA
 
-# 模型下载
+# 模型单独下载地址
 
+[模型下载地址](https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1)
 
-## 百度网盘下载 
-
-1. 语音到语音模型(speech-to-speech)百度网盘下载
-链接: https://pan.baidu.com/s/16GoUvdcZW6kM9UVZIVQkkw?pwd=493p 
-提取码: 493p
-
-
-2. 文字到语音模型(text-to-speech)百度网盘下载(预编译版已包含该模型)
-链接: [https://pan.baidu.com/s/1zsAydvL5MJqyNIUevAKb9Q?pwd=9tvi](https://pan.baidu.com/s/1zsAydvL5MJqyNIUevAKb9Q?pwd=9tvi)
-提取码: 9tvi
-
-
-## 阿里云盘下载
-
-1. 语音到语音模型(speech-to-speech)百度网盘下载
-链接: https://pan.baidu.com/s/16GoUvdcZW6kM9UVZIVQkkw?pwd=493p 
-提取码: 493p
-
-
-2. 文字到语音模型(text-to-speech)百度网盘下载(预编译版已包含该模型)
-链接: [https://pan.baidu.com/s/1zsAydvL5MJqyNIUevAKb9Q?pwd=9tvi](https://pan.baidu.com/s/1zsAydvL5MJqyNIUevAKb9Q?pwd=9tvi)
-提取码: 9tvi
-
-
-解压后![](./images/2.png)
-
-
-3. 预编译版下载(已包含text-t-speech文字到语音模型)
-点击右侧 Releases,下载最新版本
 
 
 # 注意事项
@@ -116,12 +83,5 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 ![](./images/4.png)
 
 
-
-
-# 预览图
-
-![](./images/0.png)
-![](./images/1.png)
-![](./images/2.png)
 
 # [Youtube演示视频](https://youtu.be/NL5cIoJ9Gjo)
