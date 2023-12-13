@@ -1,4 +1,4 @@
-[加入Discord讨论组](https://discord.gg/evkPeKJddD)
+[加入Discord讨论](https://discord.gg/TMCM2PfHzQ)
 
 # CV声音克隆工具
 
