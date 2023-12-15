@@ -1,5 +1,4 @@
-[加入Discord讨论](https://discord.gg/TMCM2PfHzQ)
-
+[加入Discord讨论](https://discord.gg/TMCM2PfHzQ) / QQ群 902124277
 # CV声音克隆工具
 
 > 
