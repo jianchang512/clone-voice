@@ -11,7 +11,7 @@
 > 为保证合成效果，建议录制时长5秒到20秒，发音清晰准确，不要存在背景噪声。
 > 
 > 英文效果很棒，中文效果还凑合。
-> 该项目基于  https://github.com/coqui-ai/TTS
+> 该项目所用模型均源于 https://github.com/coqui-ai/TTS  ，模型协议为cpml，只可用于学习研究，不可商用
 
 
 # 视频演示
@@ -67,6 +67,8 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 
 # 注意事项
+
+模型xtts仅可用于学习研究，不可用于商业，具体见
 
 
 0. 源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问
