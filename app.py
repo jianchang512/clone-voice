@@ -15,6 +15,8 @@ load_dotenv()
 ROOT_DIR = os.getcwd()  # os.path.dirname(os.path.abspath(__file__))
 print(f"当前项目路径：{ROOT_DIR}")
 os.environ['TTS_HOME'] = ROOT_DIR
+
+
 if sys.platform == 'win32':
     os.environ['PATH'] = ROOT_DIR + ';' + os.environ['PATH']
 else:
@@ -476,25 +478,27 @@ if __name__ == '__main__':
     tts_thread=None
     sts_thread=None
     try:
-        print(f"本地web地址: {web_address}")
-        print("开始启动，请稍后...")
-        app.logger.info(f"本地web地址: {web_address}")
-        print("准备启动 文字->声音 线程")
+        if 'app.py'==sys.argv[0] and 'app.py'==os.path.basename(__file__):
+            print('\n=====源码部署须知======\n如果你是源码部署，需要先执行 python code_dev.py 文件，以便同意coqou-ai的授权协议(显示同意协议后输入 y )，然后从墙外下载或更新模型，需要提前配置好全局vpn\n=====\n')
+        
+        print("准备启动 【文字->声音】 线程")
         tts_thread=threading.Thread(target=ttsloop)
         tts_thread.start()
         if VOICE_MODEL_EXITS:
-            print("准备启动 声音->声音 线程")
+            print("准备启动 【声音->声音】 线程")
             sts_thread=threading.Thread(target=stsloop)
             sts_thread.start()
         elif os.path.exists(os.path.join(ROOT_DIR, 'tts/speech-to-speech')):
             print("语音到语音模型直接解压到 tts 目录下，而非 tts/speech-to-speech 目录")
-        #stsloop()
+
         threading.Thread(target=openweb).start()
-        print("启动后加载模型可能需要几分钟，请耐心等待,当显示 【启动xxx线程成功】后，可使用")
+        print("启动后加载模型可能需要几分钟，当显示 【启动xxx线程成功】 后，方可使用")
     except Exception as e:
         print("执行出错:" + str(e))
         app.logger.error(f"[app]启动出错:{str(e)}")
     try:
+        app.debug = False
+        os.environ['FLASK_ENV'] = 'production'
         app.run(port=web_address.split(':')[-1])
     finally:
         # 设置事件，通知线程退出
