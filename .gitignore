@@ -32,10 +32,10 @@ setup.cfg
 *.txt
 test.py
 testapi.py
+tts/*.7z
+tts_cache/*
 
 hubconf.py
 static/ttslist/*
-tts/*.7z
-tts_cache/*
 static/tmp/*.wav
 static/ttslist/*.wav
