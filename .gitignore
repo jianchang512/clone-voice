@@ -36,5 +36,6 @@ testapi.py
 hubconf.py
 static/ttslist/*
 tts/*.7z
+tts_cache/*
 static/tmp/*.wav
 static/ttslist/*.wav
