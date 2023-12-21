@@ -24,11 +24,10 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 
 
-# 使用方法
-
+# 预编译版使用方法
 1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中下载预编译版，适用于window 10/11(已含全部模型，分为2个压缩卷),Mac和linux下请使用源码部署
 2. 下载后解压到某处，比如 E:/clone-voice 下
-3. 双击 start.bat ，等待自动打开web窗口，如下
+3. 双击 start.bat ，等待自动打开web窗口，如下，**请仔细阅读cmd窗口的文字提示**
 ![](./images/0.png)
 
 4. 转换操作步骤
@@ -38,7 +37,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 	- 点击“立即开始生成”按钮，耐心等待完成。
 
 5. 如需GPU支持，请拉取源码本地编译
-
+6. 如果提示 连接 github.com 失败，[请下载此文件,解压到 `tts_cache` 文件夹内](https://github.com/jianchang512/clone-voice/files/13742412/tts_cache.zip)，如果不存在 `tts_cache` 文件夹，西安创建，然后在内解压
 
 
 # 源码部署/以window为例，其他类似
@@ -54,7 +53,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 6. 首先运行  python  code_dev.py  ，在提示同意协议时，输入y，然后等待模型下载完毕。下载模型需要挂全局代理，在线墙外下载，模型非常大，下载会很慢
 7. 下载完毕后，再启动 `python app.py`
 
-## CUDA 加速支持
+# CUDA 加速支持
 
 **安装CUDA工具**
 
