@@ -53,26 +53,27 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 5. 解压 ffmpeg.7z 到项目根目录
 6. 首先运行  python  code_dev.py  ，在提示同意协议时，输入y，然后等待模型下载完毕。下载模型需要挂全局代理，在线墙外下载，模型非常大，下载会很慢
 7. 下载完毕后，再启动 `python app.py`
-8. CUDA支持：如果你的显卡是 Nvidia，可以根据显卡驱动版本和操作系统版本，去安装对应的 [CUDA Toolkit 11.8](https://developer.nvidia.com/cuda-downloads) ,建议预先将显卡驱动升级到最新版，再去安装。
 
-执行 pip uninstall torch torchaudio torchvision 卸载，然后去 [https://pytorch.org/get-started/locally/](https://github.com/jianchang512/pyvideotrans/blob/main) 根据你的操作系统类型和 CUDA 版本，选择命令
+## CUDA 加速支持
 
-![](https://private-user-images.githubusercontent.com/3378335/285566255-521d8623-fc91-43cb-bed4-e21b9b87f39d.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MDA5MDg0MDcsIm5iZiI6MTcwMDkwODEwNywicGF0aCI6Ii8zMzc4MzM1LzI4NTU2NjI1NS01MjFkODYyMy1mYzkxLTQzY2ItYmVkNC1lMjFiOWI4N2YzOWQucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQUlXTkpZQVg0Q1NWRUg1M0ElMkYyMDIzMTEyNSUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyMzExMjVUMTAyODI3WiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9MDZlODIyYjc1NjgzNWM0NGM4OWY1M2Y3N2Y3OTk3OTg3NzkxODZiOWIwY2Y4NmM0NjVhMjFkMDNlY2NkZjc5NSZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmYWN0b3JfaWQ9MCZrZXlfaWQ9MCZyZXBvX2lkPTAifQ.-WNQR73lwrc-gEHU_-aX5Us-pzeyyRKNMm-5v212CWc)
+**安装CUDA工具**
 
-然后将 pip3 改为 pip，再复制命令去执行。
+如果你的电脑是 Nvidia 显卡，先升级显卡驱动到最新，然后去安装对应的 
+   [CUDA Toolkit 11.8](https://developer.nvidia.com/cuda-downloads)  和  [cudnn for CUDA11.X](https://developer.nvidia.com/rdp/cudnn-archive)。
+   
+   安装完成成，按`Win + R`,输入 `cmd`然后回车，在弹出的窗口中输入`nvcc --version`,确认有版本信息显示，类似该图
+   ![image](https://github.com/jianchang512/pyvideotrans/assets/3378335/e68de07f-4bb1-4fc9-bccd-8f841825915a)
 
-安装完毕后，在该环境里，执行 python,等待进入后，再分别执行 import torch,torch.cuda.is_available(),如果有输出，说明CUDA配置正确，否则请检查配置或者重新配置CUDA
+   然后继续输入`nvidia-smi`,确认有输出信息，并且能看到cuda版本号，类似该图
+   ![image](https://github.com/jianchang512/pyvideotrans/assets/3378335/71f1d7d3-07f9-4579-b310-39284734006b)
 
-# 模型单独下载地址
-
-[模型下载地址](https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1)
+   说明安装正确，预编译版可以启用CUDA了，否则需重新安装
 
 
 
 # 注意事项
 
-模型xtts仅可用于学习研究，不可用于商业，具体见
-
+模型xtts仅可用于学习研究，不可用于商业
 
 0. 源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问
 1. 启动后需要冷加载模型，会消耗一些时间，请耐心等待显示出`http://127.0.0.1:9988`， 并自动打开浏览器页面后，稍等两三分钟后再进行转换
