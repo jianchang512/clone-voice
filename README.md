@@ -37,7 +37,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 	- 点击“立即开始生成”按钮，耐心等待完成。
 
 5. 如需GPU支持，请拉取源码本地编译
-6. 如果提示 连接 github.com 失败，[请下载此文件,解压到 `tts_cache` 文件夹内](https://github.com/jianchang512/clone-voice/files/13742412/tts_cache.zip)，如果不存在 `tts_cache` 文件夹，西安创建，然后在内解压
+6. 如果提示 连接 github.com 失败，[请下载此文件,解压到 `tts_cache` 文件夹内](https://github.com/jianchang512/clone-voice/files/13742412/tts_cache.zip)，如果不存在 `tts_cache` 文件夹，先创建，然后在内解压
 
 
 # 源码部署/以window为例，其他类似
