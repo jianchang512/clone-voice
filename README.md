@@ -26,7 +26,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 # 使用方法
 
-1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中下载预编译版，适用于window 10/11(已含全部模型，分为3个压缩卷),Mac下请拉取源码自行编译
+1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中下载预编译版，适用于window 10/11(已含全部模型，分为2个压缩卷),Mac和linux下请使用源码部署
 2. 下载后解压到某处，比如 E:/clone-voice 下
 3. 双击 start.bat ，等待自动打开web窗口，如下
 ![](./images/0.png)
