@@ -51,8 +51,8 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 3. 激活环境 `cd venv/scripts`,`activate`,`cd ../..`
 4. 安装依赖 CPU版: `pip install -r requirements.txt`, GPU版:`pip install -r requirements-gpu.txt`
 5. 解压 ffmpeg.7z 到项目根目录
-6. 下载模型 [**文字到语音(text-to-speech)模型**  和  **语音到语音(speect-to-speech)模型**](https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1)  到项目目录下的tts文件中，然后解压到当前文件夹,或者无需手动下载，挂全局代理，在线下载
-7. 启动 `python app.py`
+6. 首先运行  python  code_dev.py  ，在提示同意协议时，输入y，然后等待模型下载完毕。下载模型需要挂全局代理，在线墙外下载，模型非常大，下载会很慢
+7. 下载完毕后，再启动 `python app.py`
 8. CUDA支持：如果你的显卡是 Nvidia，可以根据显卡驱动版本和操作系统版本，去安装对应的 [CUDA Toolkit 11.8](https://developer.nvidia.com/cuda-downloads) ,建议预先将显卡驱动升级到最新版，再去安装。
 
 执行 pip uninstall torch torchaudio torchvision 卸载，然后去 [https://pytorch.org/get-started/locally/](https://github.com/jianchang512/pyvideotrans/blob/main) 根据你的操作系统类型和 CUDA 版本，选择命令
