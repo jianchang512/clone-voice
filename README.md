@@ -41,8 +41,6 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 	- 点击“立即开始生成”按钮，耐心等待完成。
 
 5. 如需GPU支持，请拉取源码本地编译
-6. 如果cmd窗口提示 连接 github.com 失败，[请下载此文件,解压到 `tts_cache` 文件夹内](https://github.com/jianchang512/clone-voice/files/13742412/tts_cache.zip)，如果不存在 `tts_cache` 文件夹，先创建，然后在内解压
-7. 如果经过第6步，cmd窗口仍显示失败，请挂全局代理
 
 
 # 源码部署 / 以window为例，其他类似
@@ -78,7 +76,7 @@ if md5sum is not None:
 	    self.create_dir_and_download_model(model_name, model_item, output_path)
 ```
 
-
+9. 源码版启动时可能频繁遇到错误，基本都是代理问题导致无法从墙外下载模型或下载中断不完整。建议使用稳定的代理，全局开启。如果始终无法完整下载，建议使用预编译版。
 
 
 # CUDA 加速支持
