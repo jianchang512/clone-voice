@@ -25,6 +25,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 
 # 预编译版使用方法
+
 1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中下载预编译版，适用于window 10/11(已含全部模型，分为2个压缩卷),Mac和linux下请使用源码部署
 2. 下载后解压到某处，比如 E:/clone-voice 下
 3. 双击 start.bat ，等待自动打开web窗口，如下，**请仔细阅读cmd窗口的文字提示**
@@ -37,7 +38,8 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 	- 点击“立即开始生成”按钮，耐心等待完成。
 
 5. 如需GPU支持，请拉取源码本地编译
-6. 如果提示 连接 github.com 失败，[请下载此文件,解压到 `tts_cache` 文件夹内](https://github.com/jianchang512/clone-voice/files/13742412/tts_cache.zip)，如果不存在 `tts_cache` 文件夹，先创建，然后在内解压
+6. 如果cmd窗口提示 连接 github.com 失败，[请下载此文件,解压到 `tts_cache` 文件夹内](https://github.com/jianchang512/clone-voice/files/13742412/tts_cache.zip)，如果不存在 `tts_cache` 文件夹，先创建，然后在内解压
+7. 如果经过第6步，cmd窗口仍显示失败，请挂全局代理
 
 
 # 源码部署/以window为例，其他类似
@@ -50,14 +52,15 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 3. 激活环境 `cd venv/scripts`,`activate`,`cd ../..`
 4. 安装依赖 CPU版: `pip install -r requirements.txt`, GPU版:`pip install -r requirements-gpu.txt`
 5. 解压 ffmpeg.7z 到项目根目录
-6. 首先运行  python  code_dev.py  ，在提示同意协议时，输入y，然后等待模型下载完毕。下载模型需要挂全局代理，在线墙外下载，模型非常大，下载会很慢
+6. **首先运行**  python  code_dev.py  ，在提示同意协议时，输入y，然后等待模型下载完毕。下载模型需要挂全局代理，在线墙外下载，模型非常大，下载会很慢。
 7. 下载完毕后，再启动 `python app.py`
+8. 每次启动都会连接墙外检测或更新模型，请耐心等待
 
 # CUDA 加速支持
 
 **安装CUDA工具**
 
-如果你的电脑是 Nvidia 显卡，先升级显卡驱动到最新，然后去安装对应的 
+如果你的电脑拥有 Nvidia 显卡，先升级显卡驱动到最新，然后去安装对应的 
    [CUDA Toolkit 11.8](https://developer.nvidia.com/cuda-downloads)  和  [cudnn for CUDA11.X](https://developer.nvidia.com/rdp/cudnn-archive)。
    
    安装完成成，按`Win + R`,输入 `cmd`然后回车，在弹出的窗口中输入`nvcc --version`,确认有版本信息显示，类似该图
