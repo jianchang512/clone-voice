@@ -26,10 +26,13 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 # 预编译版使用方法
 
-1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中下载预编译版，适用于window 10/11(已含全部模型，分为2个压缩卷),Mac和linux下请使用源码部署
+1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中分别下载预编译版主文件(318MB)和模型(3G)
 2. 下载后解压到某处，比如 E:/clone-voice 下
 3. 双击 start.bat ，等待自动打开web窗口，如下，**请仔细阅读cmd窗口的文字提示**
 ![](./images/0.png)
+4. 模型下载后解压到软件目录下的 tts 文件夹内，解压后效果如图 
+
+![image](https://github.com/jianchang512/clone-voice/assets/3378335/4b5a60eb-124d-404b-a748-c0a527482e90)
 
 4. 转换操作步骤
 	
