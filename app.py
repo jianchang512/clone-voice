@@ -55,6 +55,11 @@ if os.path.exists(os.path.join(ROOT_DIR, "tts/voice_conversion_models--multiling
 else:
     VOICE_MODEL_EXITS = False
 
+if os.path.exists(os.path.join(ROOT_DIR, "tts/tts_models--multilingual--multi-dataset--xtts_v2/model.pth")):
+    TEXT_MODEL_EXITS = True
+else:
+    TEXT_MODEL_EXITS = False
+
 
 if not os.path.exists(VOICE_DIR):
     os.makedirs(VOICE_DIR)
@@ -481,15 +486,19 @@ if __name__ == '__main__':
         if 'app.py'==sys.argv[0] and 'app.py'==os.path.basename(__file__):
             print('\n=====源码部署须知======\n如果你是源码部署，需要先执行 python code_dev.py 文件，以便同意coqou-ai的授权协议(显示同意协议后输入 y )，然后从墙外下载或更新模型，需要提前配置好全局vpn\n=====\n')
         
-        print("准备启动 【文字->声音】 线程")
-        tts_thread=threading.Thread(target=ttsloop)
-        tts_thread.start()
+        if TEXT_MODEL_EXITS:
+            print("准备启动 【文字->声音】 线程")
+            tts_thread=threading.Thread(target=ttsloop)
+            tts_thread.start()
+        else:
+            app.logger.error("不存在 【文字->声音】 模型，下载地址: https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1")
+            
         if VOICE_MODEL_EXITS:
             print("准备启动 【声音->声音】 线程")
             sts_thread=threading.Thread(target=stsloop)
             sts_thread.start()
-        elif os.path.exists(os.path.join(ROOT_DIR, 'tts/speech-to-speech')):
-            print("语音到语音模型直接解压到 tts 目录下，而非 tts/speech-to-speech 目录")
+        else:
+            app.logger.error("不存在 【声音->声音】 模型，下载地址: https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1")
 
         threading.Thread(target=openweb).start()
         print("启动后加载模型可能需要几分钟，当显示 【启动xxx线程成功】 后，方可使用")
