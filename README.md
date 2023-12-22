@@ -53,8 +53,25 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 4. 安装依赖 CPU版: `pip install -r requirements.txt`, GPU版:`pip install -r requirements-gpu.txt`
 5. 解压 ffmpeg.7z 到项目根目录
 6. **首先运行**  python  code_dev.py  ，在提示同意协议时，输入y，然后等待模型下载完毕。下载模型需要挂全局代理，在线墙外下载，模型非常大，下载会很慢。
-7. 下载完毕后，再启动 `python app.py`
-8. 每次启动都会连接墙外检测或更新模型，请耐心等待
+7. 下载完毕后，再启动 `python app.py`，
+8. 每次启动都会连接墙外检测或更新模型，请耐心等待。如果不想每次启动都检测或更新，需手动修改依赖包下文件，打开 \venv\Lib\site-packages\TTS\utils\manage.py ,大约 389 行附近，def download_model 方法中，注释掉如下代码
+
+```
+if md5sum is not None:
+	md5sum_file = os.path.join(output_path, "hash.md5")
+	if os.path.isfile(md5sum_file):
+	    with open(md5sum_file, mode="r") as f:
+		if not f.read() == md5sum:
+		    print(f" > {model_name} has been updated, clearing model cache...")
+		    self.create_dir_and_download_model(model_name, model_item, output_path)
+		else:
+		    print(f" > {model_name} is already downloaded.")
+	else:
+	    print(f" > {model_name} has been updated, clearing model cache...")
+	    self.create_dir_and_download_model(model_name, model_item, output_path)
+```
+
+
 
 # CUDA 加速支持
 
