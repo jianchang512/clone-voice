@@ -9,11 +9,10 @@ All the models used in this project are from https://github.com/coqui-ai/TTS, th
 > 
 > It's very easy to use, even without an N-series GPU. Download the precompiled version and double click on app.exe to open a web interface, and it can be used with a few mouse clicks. 
 > 
-> Supports **Chinese**, **English**, **Japanese**, and **Korean** 4 languages, and can record voices online through a microphone. 
+> Supports **Chinese English Japanese Korean eg. total 16 languages**, and can record voices online through a microphone. 
 > 
 > To ensure the synthesized effect, it's recommended to record for 5 to 20 seconds, pronounce clearly and accurately, and don't have background noise. 
 > 
-> The English effect is great, and the Chinese effect is tolerable.
 > 
 
 
