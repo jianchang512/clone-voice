@@ -1,4 +1,4 @@
-[简体中文](./README.md) / [Join the Discord Discussion](https://discord.gg/TMCM2PfHzQ) / [Buy me a coffee](https://ko-fi.com/jianchang512) 
+[简体中文](./README.md) / [Discord](https://discord.gg/TMCM2PfHzQ) / [Buy me a coffee](https://ko-fi.com/jianchang512) / [Twitter](https://twitter.com/mortimer_wang)
 
 # CV Voice Clone Tool
 
