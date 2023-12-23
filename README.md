@@ -26,7 +26,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 
 
-# 预编译版使用方法
+# win下预编译版使用方法(其他系统可源码部署)
 
 1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中分别下载‘预编译版主文件‘(1.7G)和‘模型‘(3G)
 2. 下载后解压到某处，比如 E:/clone-voice 下
@@ -50,7 +50,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 6. 如果机器拥有N卡GPU，并正确配置了CUDA环境，将自动使用CUDA加速
 
 
-# 源码部署 / 以window为例，其他类似
+# 源码部署(linux mac window) / 以window为例，其他类似
 
 **源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问**
 
