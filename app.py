@@ -497,7 +497,7 @@ if __name__ == '__main__':
         if VOICE_MODEL_EXITS:
             print("准备启动 【声音->声音】 线程")
             sts_thread=threading.Thread(target=stsloop)
-            #sts_thread.start()
+            sts_thread.start()
         else:
             app.logger.error("\n\n不存在 【声音->声音】 模型，下载地址: https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1\n\n")
 
