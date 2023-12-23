@@ -1,0 +1,4 @@
+该目录下有3个模型文件夹，如下，源码版首先执行 python code_dev.py 将自动下载模型到此。需全局代理
+tts_models--multilingual--multi-dataset--xtts_v2
+voice_conversion_models--multilingual--vctk--freevc24 
+wavlm

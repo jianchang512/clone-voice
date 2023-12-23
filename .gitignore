@@ -29,7 +29,6 @@ setup.cfg
 *.pt
 
 *.spec
-*.txt
 test.py
 testapi.py
 tts/*.7z
