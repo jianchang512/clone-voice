@@ -154,7 +154,7 @@ def create_tts(*, text, voice, language, filename):
         global_tts_result[filename] = 1
         return {"code": 0, "filename": absofilename, 'name': filename}
     try:
-        app.logger.info(f"[tts][create_ts]{text}压入队列，准备合成")
+        app.logger.info(f"[tts][create_ts] **{text}** 压入队列，准备合成")
         q.put({"voice": voice, "text": text, "language": language, "filename": filename})
     except Exception as e:
         print(e)
@@ -192,7 +192,7 @@ def static_files(filename):
 def index():
     voice_model = "yes" if VOICE_MODEL_EXITS else "no"
     text_model = "yes" if TEXT_MODEL_EXITS else "no"
-    return render_template("index.html", voice_model=voice_model, root_dir=ROOT_DIR.replace('\\','/'))
+    return render_template("index.html",text_model=text_model , voice_model=voice_model, root_dir=ROOT_DIR.replace('\\','/'))
 
 
 # 上传音频
@@ -492,14 +492,14 @@ if __name__ == '__main__':
             tts_thread=threading.Thread(target=ttsloop)
             tts_thread.start()
         else:
-            app.logger.error("不存在 【文字->声音】 模型，下载地址: https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1")
+            app.logger.error("\n\n不存在 【文字->声音】 模型，下载地址: https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1\n\n")
             
         if VOICE_MODEL_EXITS:
             print("准备启动 【声音->声音】 线程")
             sts_thread=threading.Thread(target=stsloop)
-            sts_thread.start()
+            #sts_thread.start()
         else:
-            app.logger.error("不存在 【声音->声音】 模型，下载地址: https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1")
+            app.logger.error("\n\n不存在 【声音->声音】 模型，下载地址: https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1\n\n")
 
         threading.Thread(target=openweb).start()
         print("启动后加载模型可能需要几分钟，当显示 【启动xxx线程成功】 后，方可使用")

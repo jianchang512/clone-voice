@@ -5,7 +5,7 @@
 __pycache__
 scripts
 
-
+ku
 build
 dist
 docs
@@ -27,10 +27,15 @@ pyvenv.cfg
 setup.cfg
 *.pth
 *.pt
+cn1.wav
+sx1.wav
 
 *.spec
 test.py
 testapi.py
+tts/tts_models--multilingual--multi-dataset--xtts_v2
+tts/voice_conversion_models--multilingual--vctk--freevc24
+tts/wavlm
 tts/*.7z
 tts_cache/*
 

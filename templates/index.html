@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="/static/js/bootstrap.min.css" rel="stylesheet">
-    <title>语音克隆-用任意声音说话</title>
+    <title data-en="Voice Clone - Speak with Any Voice">语音克隆-用任意声音说话</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1240px;
             margin: 20px auto 50px;
         }
 
@@ -108,53 +108,66 @@
 		#dropaudio.dragover {
 		  background-color: #f0f0f0;
 		}
+		a.btn-link{text-decoration:none}
     </style>
 </head>
 <body>
 <div class="container my-0">
     <div class="alert  rounded-0" role="alert">
         <h4 class="alert-heading d-flex justify-content-between">		
-			<span class="text-danger">语音克隆-用任意声音说话!</span>
+			<span class="text-danger" data-en="Voice Clone - Speak with Any Voice">语音克隆-用任意声音说话!</span>
 			<span>
-			<a class="fs-6 text-black btn" href="https://github.com/jianchang512/clone-voice" target="_blank">Github仓库</a>
-			<a class="fs-6 text-black btn" href="https://github.com/jianchang512/clone-voice/issue" target="_blank">遇到问题?</a>
-			<a class="fs-6 text-success btn" href="https://github.com/jianchang512/clone-voice/issues/10" target="_blank">捐助该项目</a>
+			<a class="fs-6 text-black btn" href="https://github.com/jianchang512/clone-voice" target="_blank">Github</a>
+			<a class="fs-6 text-black btn" href="https://github.com/jianchang512/clone-voice/issue" target="_blank" data-en="encounter a problem">遇到问题?</a>
+			<a class="fs-6 text-success btn" href="https://github.com/jianchang512/clone-voice/issues/10" target="_blank" data-en="Donate to the project">捐助该项目</a>
 			</span>
 		</h4>
         <hr>
         <div>
 
-        <p class="mb-0">用自己的声音或使用任意音色录制一段音频</p>
-        <p class="mb-0">用于克隆的最佳音频素材时长为 5-15s，确保清晰准确的人声，不要有杂音、背景音</p>
+        <p class="mb-0" data-en="Record an audio segment with your own voice or using any tone">用自己的声音或使用任意音色录制一段音频</p>
+        <p class="mb-0" data-en="The optimal audio material duration for cloning is 5-15s, ensuring clear and accurate vocals without any noise or background noise">用于克隆的最佳音频素材时长为 5-15s，确保清晰准确的人声，不要有杂音、背景音</p>
         </div>
     </div>
     <div class="p-3 shadow bg-white">
         <div class="row mt-4">
             <div class="col-md-4">
-                <label for="languageSelect" class="form-label">文本语言：</label>
+                <label for="languageSelect" class="form-label" data-en="Language:">文本语言：</label>
                 <select class="form-select" id="languageSelect">
-                    <option value="zh-cn">中文</option>
-                    <option value="en">英文</option>
-                    <option value="ja">日语</option>
-                    <option value="ko">韩语</option>
+                    <option value="zh-cn">Chinese</option>
+                    <option value="en">English</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ko">Korean</option>
+                    <option value="es">Spanish</option>
+                    <option value="de">German</option>
+                    <option value="fr">French</option>
+                    <option value="it">Italian</option>
+                    <option value="tr">Turkish</option>
+                    <option value="ru">Russian</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="pl">Polish</option>
+                    <option value="nl">Dutch</option>
+                    <option value="ar">Arabic</option>
+                    <option value="hu">Hungarian</option>
+                    <option value="cs">Czech</option>
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="audioSelect" class="form-label">要使用的声音wav文件：<a href="javascript:;" onclick="shiting(this)" class="form-text">试听</a></label>
+                <label for="audioSelect" data-en="The sound wav file to be used" class="form-label">要使用的声音wav文件：<a href="javascript:;" onclick="shiting(this)" class="form-text" data-en="audition">试听</a></label>
 
                 <select class="form-select" id="audioSelect">
                 </select>
                 <div class="form-text">
-                    <label class="btn btn-sm btn-secondary btn-file d-inline-block position-relative">本地上传
+                    <label class="btn btn-sm btn-secondary btn-file d-inline-block position-relative"><span data-en="Local Upload">本地上传</span>
                         <input id="fileInput" type="file" accept="audio/wav" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadFromLocal(this)" />
                     </label>
-                    或在线录制5-15s的声音wav，即可在此选择使用
+                    <span data-en="Or record a 5-15s sound wave online, and you can choose to use it here">或在线录制5-15s的声音wav，即可在此选择使用</span>
                 </div>
             </div>
             <div class="col-md-4">
-                <button class="btn btn-sm btn-primary btn-record" id="startRecord">开始录制</button>
-                <button class="btn btn-sm btn-danger btn-record" id="stopRecord" disabled>停止录制</button>
-                <button class="btn btn-sm btn-success btn-record" id="upload" disabled>使用该录音</button>
+                <button class="btn btn-sm btn-primary btn-record" id="startRecord" data-en="start recording">开始录制</button>
+                <button class="btn btn-sm btn-danger btn-record" id="stopRecord" disabled data-en="stop recorder">停止录制</button>
+                <button class="btn btn-sm btn-success btn-record" id="upload" disabled data-en="Use this recording">使用该录音</button>
                 <audio class="mt-1" id="audioPlayer" controls></audio>
             </div>
         </div>
@@ -162,30 +175,33 @@
         <div class="row mt-4">
             <div class="col-md-12" id="tts_area">
 				<div>
-					<button onclick="toggle(this,'tts')" for="textInput" class="btn border btn-primary">文字->声音</button>
-					<button onclick="toggle(this,'sts')" for="textInput" class="btn border">声音->声音</button>				
+					<button onclick="toggle(this,'tts')" for="textInput" class="btn border btn-primary" data-en="Text ->Sound">文字->声音</button>
+					<button onclick="toggle(this,'sts')" for="textInput" class="btn border" data-en="Sound ->Sound">声音->声音</button>				
 				</div>
 				<div>
 					<div id="tts-area">
-						<textarea class="form-control d-block" id="textInput" placeholder="在此输入要合成语音的文字" rows="5"></textarea>
+						<textarea class="form-control d-block" id="textInput" placeholder="在此输入要合成的文字" placeholderen="input text in there" rows="5"></textarea>
                         {% if text_model=='yes' %}
-						<label class="btn btn-sm btn-secondary-srt btn-file">导入srt文件
+						<label class="btn-file  btn-secondary-srt">
+                            <span class="btn btn-sm " data-en="Import SRT file">导入srt文件</span>
 							<input type="file" accept=".srt" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadsrt(this)">
 						</label>
                         {% else %}
 							<div class="alert alert-primary my-2">
-                                需要下载模型后才可使用，如果源码部署，请执行<code>python code_dev.py</code>在线下载模型，预编译版请去 <a href="https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1" target="_blank">下载模型</a>后，放到 {{ root_dir }}/tts/ 目录下解压,确保解压后tts目录下存在`tts_models--multilingual--multi-dataset--xtts_v2` 和  `voice_conversion_models--multilingual--vctk--freevc24`和`wavlm` 3个文件夹，然后重启软件
+                                <span data-en="The model needs to be downloaded before it can be used. If the source code is deployed, please execute the `python code_dev.py` download the model online, please go to the pre compiled version">需要下载模型后才可使用，如果源码部署，请执行 python code_dev.py 在线下载模型，预编译版请去</span> 
+                                <a href="https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1" target="_blank" data-en="Download model">下载模型</a>，<span data-en="Unzip the tts folder in the current project directory, ensuring that the following three folders exist in the tts directory after decompression, and then restart the software">放到当前项目目录的 tts 文件夹下解压,确保解压后tts目录下存在如下3个文件夹，然后重启软件</span> `tts_models--multilingual--multi-dataset--xtts_v2` &   `voice_conversion_models--multilingual--vctk--freevc24` & `wavlm` 
 							</div>
 						{% endif %}
 					</div>
 					<div id="sts-area" class="d-none">
 						{% if voice_model=='yes' %}
-						<div id="dropaudio" class=" border m-2 p-5 text-center ">
+						<div id="dropaudio" class=" border m-2 p-5 text-center " data-en="Drag and drop audio files here to upload">
 							拖拽音频文件到这里上传
 						</div>		
 						{% else %}
 							<div class="alert alert-primary my-2">
-								需要下载模型后才可使用，如果源码部署，请执行<code>python code_dev.py</code>在线下载模型，预编译版请去 <a href="https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1" target="_blank">下载模型</a>后，放到 {{ root_dir }}/tts/ 目录下解压,确保解压后tts目录下存在`tts_models--multilingual--multi-dataset--xtts_v2` 和  `voice_conversion_models--multilingual--vctk--freevc24`和`wavlm` 3个文件夹，然后重启软件
+								<span data-en="The model needs to be downloaded before it can be used. If the source code is deployed, please execute the `python code_dev.py` download the model online, please go to the pre compiled version">需要下载模型后才可使用，如果源码部署，请执行 python code_dev.py 在线下载模型，预编译版请去</span> 
+                                <a href="https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1" target="_blank" data-en="Download model">下载模型</a>，<span data-en="Unzip the tts folder in the current project directory, ensuring that the following three folders exist in the tts directory after decompression, and then restart the software">放到当前项目目录的 tts 文件夹下解压,确保解压后tts目录下存在如下3个文件夹，然后重启软件</span> `tts_models--multilingual--multi-dataset--xtts_v2` &   `voice_conversion_models--multilingual--vctk--freevc24` & `wavlm` 
 							</div>
 						{% endif %}
 					</div>
@@ -201,17 +217,63 @@
         <div class="row mt-4">
             <div class="col-md-12 text-center position-relative">
                 
-                <button onclick="start(this)" class="btn btn-danger btn-start-record">立即开始生成</button>
+                <button onclick="start(this)" class="btn btn-danger btn-start-record" data-en="Start generating immediately">立即开始生成</button>
             </div>
             <div class="col-md-12 d-none text-danger text-center" id="tips"></div>
         </div>
-
+        
+        <div class="my-5 py-2 text-center">
+            <a href="https://github.com/jianchang512/clone-voice/issues/10"  class="text-black-50 btn-link" data-en="If the project is helpful to you, saving time and money, please consider providing small funding to developers help the project can be updated and maintained for a long time." target="_blank">如果项目对你有帮助，节省了时间和金钱，请考虑小额资助开发者，帮助项目能够长期保持更新和维护。</a>
+        </div>
     </div>
 </div>
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/layer/layer.js"></script>
 <script src="/static/js/bootstrap.bundle.min.js"></script>
 <script>
+    let langlist={
+        "lang1":'必须选择要试听的声音', 
+        "lang2":'录制中', 
+        "lang3":'停止录制后,可使用此按钮', 
+        'lang4':'已录制', 
+        'lang5':'开始录制', 
+        'lang6':'停止录制后,可使用此按钮', 
+        'lang7':'请选择要上传的文件', 
+        'lang8':'只可导入srt格式字幕文件', 
+        'lang9':'请选择一个srt文件', 
+        'lang10':"必须选择要使用的声音", 
+        'lang11':"必须输入要合成的文字", 
+        'lang12':'必须上传要转换的声音wav文件', 
+        'lang13':'开始合成，用时可能较久，耐心等待'
+        
+    };
+    (function(){
+            if(!/^zh/i.test(navigator.language) && !/^zh/i.test(navigator.languages[0])){
+                $('[data-en]').each(function(){
+                   $(this).text($(this).attr('data-en'));
+                   
+                });
+                $('[placeholderen]').each(function(){
+                   $(this).attr('placeholder', $(this).attr('placeholderen'));
+                    
+                });
+                langlist={
+                    "lang1": 'You must select the voice for audition', 
+                    "lang2": 'Recording', 
+                    "lang3": 'Use this button after stopping recording', 
+                    'lang4':'Recorded', 
+                    'lang5':'Start recording', 
+                    'lang6':'Use this button after stopping recording', 
+                    'lang7':'Please select a file to upload', 
+                    'lang8':'Only SRT subtitle files can be imported', 
+                    'lang9':'Please select an SRT file', 
+                    'lang10':'You must select a voice to use', 
+                    'lang11':'You must enter the text to be synthesized', 
+                    'lang12':'You must upload the WAV audio file for conversion', 
+                    'lang13':'The synthesis might take a while, please wait patiently'
+                }
+            }
+    }());
     const startRecordButton = document.getElementById('startRecord');
     const stopRecordButton = document.getElementById('stopRecord');
     const uploadButton = document.getElementById('upload');
@@ -237,7 +299,7 @@
 	function shiting(el){
 		let wavUrl=$('#audioSelect').val();
 		if(!wavUrl){
-			return layer.alert('必须选择要试听的声音',{title:false})
+			return layer.alert(langlist['lang1'],{title:false})
 			
 		}
 		// 创建 audio 元素
@@ -272,17 +334,17 @@
                     uploadButton.disabled = false;
                 };
                 mediaRecorder.start();
-                startRecordButton.textContent='录制中...';
+                startRecordButton.textContent=langlist['lang2']+'...';
                 audioPlayer.src=null;
                 audioPlayer.load();
                 startRecordButton.disabled = true;
                 stopRecordButton.disabled = false;
                 uploadButton.disabled = true;
-                uploadButton.setAttribute('title','停止录制后,可使用此按钮');
+                uploadButton.setAttribute('title',langlist['lang3']);
                 clearInterval(timeid);
                 timeid=setInterval(function (){
                     sec+=1;
-                    startRecordButton.textContent=`已录制${sec}s`;
+                    startRecordButton.textContent=`${langlist['lang4']}${sec}s`;
                     // 大于20s强制停止
                     if(sec>20){
                         stopRecording();
@@ -299,7 +361,7 @@
     function stopRecording() {
         mediaRecorder.stop();
         startRecordButton.disabled = false;
-        startRecordButton.textContent='开始录制';
+        startRecordButton.textContent=langlist['lang5'];
         stopRecordButton.disabled = true;
         uploadButton.disabled = false;
         sec=0;
@@ -325,7 +387,7 @@
                     el.find('option[selected]').removeAttr('selected');
                     el.prepend('<option selected value="'+data['data']+'">'+data['data']+'</option>');
                     uploadButton.disabled=true;
-                    uploadButton.setAttribute('title','停止录制后,可使用此按钮');
+                    uploadButton.setAttribute('title',langlist['lang6']);
                 }
             })
             .catch(error => {
@@ -340,7 +402,7 @@
         const selectedFile = fileInput.files[0];
 
         if (!selectedFile) {
-            layer.alert('请选择要上传的文件',{title:false});
+            layer.alert(langlist['lang7'],{title:false});
             return;
         }
 
@@ -353,10 +415,9 @@
         })
         .then(response => response.json())
         .then(data => {
-            console.log('服务器响应:', data);
             layer.close(index);
             if (data['code'] == 0) {
-                layer.msg('上传成功');
+                    layer.msg('OK');
                     let el=$('#audioSelect');
                     el.find('option[selected]').removeAttr('selected');
                     el.prepend('<option selected value="'+data['data']+'">'+data['data']+'</option>');
@@ -364,11 +425,11 @@
                 $(inputEl).remove();
                 p.append(`<input id="fileInput" type="file" accept="audio/wav" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadFromLocal(this)" />`);
             }else{
-                layer.msg(data['msg']?data['msg']:"出错了",{icon:2})
+                layer.msg(data['msg']?data['msg']:"Error",{icon:2})
             }
         })
         .catch(error => {
-            console.error('上传错误:', error);
+            console.error('error:', error);
         });
     }
 
@@ -377,7 +438,7 @@
         let textarea=document.getElementById('textInput')
         console.log(el.files[0])
         if (el.files[0]['name'].substr(-3).toLowerCase()!='srt'){
-            return layer.alert("只可导入srt格式字幕文件",{title:false})
+            return layer.alert(langlist["lang8"],{title:false})
         }
         // 确保选择了文件
         if (el.files.length > 0) {
@@ -391,7 +452,7 @@
             // 读取文件内容
             reader.readAsText(selectedFile);
         } else {
-            layer.alert('请选择一个srt文件',{title:false});
+            layer.alert(langlist['lang9'],{title:false});
         }
     }
 
@@ -420,21 +481,21 @@
 		let type=$('#tts-area').hasClass('d-none')?'sts':'tts';
 		
         if (!voice) {
-            return layer.alert("必须选择要使用的声音", {title: false});
+            return layer.alert(langlist['10'], {title: false});
         }
         if (type=='tts' && !text) {
-            return layer.alert("必须输入要合成的文字", {title: false});
+            return layer.alert(langlist['lang11'], {title: false});
         }
 		if (type=='sts' && !window['sts_audio_name']) {
-            return layer.alert("必须上传要转换的声音wav文件", {title: false});
+            return layer.alert(langlist['lang12'], {title: false});
         }
 		
-        $('#tips').removeClass('d-none').text("开始合成，用时可能较久，耐心等待");
+        $('#tips').removeClass('d-none').text(langlist['lang13']);
         $(el).attr('disabled', 'disabled')
         window.timesec = 0;
         window.timeid = setInterval(function () {
             window.timesec += 1
-            $('#tips').text('开始合成，用时可能较久，耐心等待:'+window.timesec+'秒')
+            $('#tips').text(langlist['lang13']+':'+window.timesec+'秒')
         }, 1000);
 		$("#downloadbtn").removeAttr('src').addClass('d-none');
 		$("#downloadbtn")[0].load();
@@ -445,7 +506,7 @@
 				window.timesec = 0;
 				clearInterval(window.timeid);
 				if (res.code !== 0) {
-					$('#tips').text("出错了：" + res.msg);
+					$('#tips').text("Error：" + res.msg);
 				} else {
 					
 					$("#downloadbtn").removeClass('d-none').attr('src', "/static/ttslist/" + res.name);
@@ -525,17 +586,17 @@
           processData: false,
           success: function(response) {
             if (response.code === 0) {
-              dropaudio.text('上传成功: ' + response.data);
+              dropaudio.text('OK: ' + response.data);
 			  window['sts_audio_name']=response.data
             } else {
-              dropaudio.text('上传失败: ' + response.msg);
+              dropaudio.text('Error: ' + response.msg);
             }
           },
           error: function() {
-            dropaudio.text('上传失败');
+            dropaudio.text('Error');
           },
           beforeSend: function() {
-            dropaudio.text('上传中...');
+            dropaudio.text('Upload...');
           },
           complete: function() {
             dropaudio.removeClass('dragover');

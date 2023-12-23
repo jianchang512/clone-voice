@@ -1,4 +1,4 @@
-[加入Discord讨论](https://discord.gg/TMCM2PfHzQ) / [请我喝杯咖啡](https://github.com/jianchang512/clone-voice/issues/10) / QQ群 902124277
+[English Version](./README.md)  / [加入Discord讨论](https://discord.gg/TMCM2PfHzQ) / [请我喝杯咖啡](https://github.com/jianchang512/clone-voice/issues/10) / QQ群 902124277
 # CV声音克隆工具
 
 该项目所用模型均源于 https://github.com/coqui-ai/TTS  ，模型协议为[CPML](https://coqui.ai/cpml/)只可用于学习研究，不可商用
