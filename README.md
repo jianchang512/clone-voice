@@ -21,7 +21,8 @@
 
 https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb13-41f9251ceda8
 
-![](./images/0.png)
+![image](https://github.com/jianchang512/clone-voice/assets/3378335/5401a3f8-1623-452b-b0b3-cb2efe87e3d1)
+
 
 
 
@@ -29,13 +30,16 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中分别下载‘预编译版主文件‘(1.7G)和‘模型‘(3G)
 2. 下载后解压到某处，比如 E:/clone-voice 下
-3. 双击 app.exe ，等待自动打开web窗口，如下，**请仔细阅读cmd窗口的文字提示**
+3. 双击 app.exe ，等待自动打开web窗口，**请仔细阅读cmd窗口的文字提示**,如有错误，均会在此显示
+![image](https://github.com/jianchang512/clone-voice/assets/3378335/ad9bdaaa-f2a9-4133-9087-a272db662455)
+
+
 
 4. 模型下载后解压到软件目录下的 tts 文件夹内，解压后效果如图 
 
 ![image](https://github.com/jianchang512/clone-voice/assets/3378335/4b5a60eb-124d-404b-a748-c0a527482e90)
 
-4. 转换操作步骤
+5. 转换操作步骤
 	
 	- 在文本框中输入文字、或导入srt文件，或者选择“声音->声音”，选择要转换的声音wav格式文件
 	
@@ -43,7 +47,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 	
 	- 点击“立即开始生成”按钮，耐心等待完成。
 
-5. 如果机器拥有N卡GPU，并正确配置了CUDA环境，将自动使用CUDA加速
+6. 如果机器拥有N卡GPU，并正确配置了CUDA环境，将自动使用CUDA加速
 
 
 # 源码部署 / 以window为例，其他类似
@@ -57,14 +61,16 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 4. 安装依赖: `pip install -r requirements.txt`
 5. 解压 ffmpeg.7z 到项目根目录
 6. **首先运行**  `python  code_dev.py`，在提示同意协议时，输入 `y`，然后等待模型下载完毕。
-
+   ![](./images/code_dev01.png)
+   ![](./images/code_dev02.png)
+   
 	下载模型需要挂全局代理，模型非常大，如果代理不够稳定可靠，可能会遇到很多错误，大部分的错误均是代理问题导致。
 	
 	如果显示下载多个模型均成功了，但最后还是提示“Downloading WavLM model”错误，则需要修改库包文件 `\venv\Lib\site-packages\aiohttp\client.py`, 在大约535行附近，`if proxy is not None:` 上面一行添加你的代理地址，比如 `proxy="http://127.0.0.1:10809"`.
 
-7. 下载完毕后，再启动 `python app.py`，
+8. 下载完毕后，再启动 `python app.py`，
 
-8. 每次启动都会连接墙外检测或更新模型，请耐心等待。如果不想每次启动都检测或更新，需手动修改依赖包下文件，打开 \venv\Lib\site-packages\TTS\utils\manage.py ,大约 389 行附近，def download_model 方法中，注释掉如下代码
+9. 每次启动都会连接墙外检测或更新模型，请耐心等待。如果不想每次启动都检测或更新，需手动修改依赖包下文件，打开 \venv\Lib\site-packages\TTS\utils\manage.py ,大约 389 行附近，def download_model 方法中，注释掉如下代码
 
 ```
 if md5sum is not None:
