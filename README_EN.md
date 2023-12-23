@@ -21,7 +21,7 @@ All the models used in this project are from https://github.com/coqui-ai/TTS, th
 
 https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb13-41f9251ceda8
 
-![image](https://github.com/jianchang512/clone-voice/assets/3378335/5401a3f8-1623-452b-b0b3-cb2efe87e3d1)
+![image](https://github.com/jianchang512/clone-voice/assets/3378335/e4cfee2a-20f1-4395-b1b9-b3f7015502a2)
 
 
 
