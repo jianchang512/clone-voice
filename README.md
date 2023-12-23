@@ -19,7 +19,10 @@
 
 # 视频演示
 
-https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb13-41f9251ceda8
+
+https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4d9-ecf4d4f81acd
+
+
 
 ![image](https://github.com/jianchang512/clone-voice/assets/3378335/5401a3f8-1623-452b-b0b3-cb2efe87e3d1)
 
