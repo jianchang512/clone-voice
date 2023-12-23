@@ -19,7 +19,10 @@ All the models used in this project are from https://github.com/coqui-ai/TTS, th
 # Video Demonstration
 
 
-https://github.com/jianchang512/clone-voice/assets/3378335/9c2d795b-8bc0-488d-8061-cdfd2542f791
+
+https://github.com/jianchang512/clone-voice/assets/3378335/813d46dd-7634-43d1-97ae-1531369c471f
+
+
 
 
 
