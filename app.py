@@ -191,6 +191,7 @@ def static_files(filename):
 @app.route('/')
 def index():
     voice_model = "yes" if VOICE_MODEL_EXITS else "no"
+    text_model = "yes" if TEXT_MODEL_EXITS else "no"
     return render_template("index.html", voice_model=voice_model, root_dir=ROOT_DIR.replace('\\','/'))
 
 

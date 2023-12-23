@@ -166,11 +166,17 @@
 					<button onclick="toggle(this,'sts')" for="textInput" class="btn border">声音->声音</button>				
 				</div>
 				<div>
-					<div id="tts-area">					
-						<textarea class="form-control d-block" id="textInput" placeholder="在此输入要合成语音的文字" rows="5"></textarea>	
+					<div id="tts-area">
+						<textarea class="form-control d-block" id="textInput" placeholder="在此输入要合成语音的文字" rows="5"></textarea>
+                        {% if text_model=='yes' %}
 						<label class="btn btn-sm btn-secondary-srt btn-file">导入srt文件
 							<input type="file" accept=".srt" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadsrt(this)">
 						</label>
+                        {% else %}
+							<div class="alert alert-primary my-2">
+                                需要下载模型后才可使用，如果源码部署，请执行<code>python code_dev.py</code>在线下载模型，预编译版请去 <a href="https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1" target="_blank">下载模型</a>后，放到 {{ root_dir }}/tts/ 目录下解压,确保解压后tts目录下存在`tts_models--multilingual--multi-dataset--xtts_v2` 和  `voice_conversion_models--multilingual--vctk--freevc24`和`wavlm` 3个文件夹，然后重启软件
+							</div>
+						{% endif %}
 					</div>
 					<div id="sts-area" class="d-none">
 						{% if voice_model=='yes' %}
@@ -179,7 +185,7 @@
 						</div>		
 						{% else %}
 							<div class="alert alert-primary my-2">
-								需要下载语音转换模型后才可使用 声音->声音，为减小预编译体积，默认没有包含该模型，请去 <a href="https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1" target="_blank">下载模型</a>后，放到 {{ root_dir }}/tts/ 目录下，然后 "解压到当前文件夹",确保tts目录下存在`voice_conversion_models--multilingual--vctk--freevc24`和`wavlm`文件夹，然后重启软件
+								需要下载模型后才可使用，如果源码部署，请执行<code>python code_dev.py</code>在线下载模型，预编译版请去 <a href="https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1" target="_blank">下载模型</a>后，放到 {{ root_dir }}/tts/ 目录下解压,确保解压后tts目录下存在`tts_models--multilingual--multi-dataset--xtts_v2` 和  `voice_conversion_models--multilingual--vctk--freevc24`和`wavlm` 3个文件夹，然后重启软件
 							</div>
 						{% endif %}
 					</div>

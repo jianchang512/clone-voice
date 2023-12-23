@@ -26,7 +26,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 
 # 预编译版使用方法
 
-1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中分别下载预编译版主文件(318MB)和模型(3G)
+1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中分别下载‘预编译版主文件‘(1.7G)和‘模型‘(3G)
 2. 下载后解压到某处，比如 E:/clone-voice 下
 3. 双击 start.bat ，等待自动打开web窗口，如下，**请仔细阅读cmd窗口的文字提示**
 ![](./images/0.png)
@@ -37,10 +37,12 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 4. 转换操作步骤
 	
 	- 在文本框中输入文字、或导入srt文件，或者选择“声音->声音”，选择要转换的声音wav格式文件
+	
 	- 然后从“要使用的声音wav文件”下拉框中选择要用的声音，如果没有满意的，也可以点击“本地上传”按钮，选择已录制好的5-20s的wav声音文件。或者点击“开始录制”按钮，在线录制你自己的声音5-20s，录制完成点击使用
+	
 	- 点击“立即开始生成”按钮，耐心等待完成。
 
-5. 如需GPU支持，请拉取源码本地编译
+5. 如果机器拥有N卡GPU，并正确配置了CUDA环境，将自动使用CUDA加速
 
 
 # 源码部署 / 以window为例，其他类似
@@ -48,10 +50,10 @@ https://github.com/jianchang512/clone-voice/assets/3378335/a0b44b50-66b5-47a1-bb
 **源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问**
 
 0. 要求 python 3.9+, 并开启全局代理，确保代理稳定
-1. 创建空目录，比如 E:/clone-voice
+1. 创建空目录，比如 E:/clone-voice, 在这个目录下打开 cmd 窗口，方法是地址栏中输入 `cmd`, 然后回车
 2. 创建虚拟环境 `python -m venv venv`
-3. 激活环境 `cd venv/scripts`,`activate`,`cd ../..`
-4. 安装依赖 CPU版: `pip install -r requirements.txt`, GPU版:`pip install -r requirements-gpu.txt`
+3. 激活环境 `E:/clone-voice/venv/scripts/activate`
+4. 安装依赖: `pip install -r requirements.txt`
 5. 解压 ffmpeg.7z 到项目根目录
 6. **首先运行**  `python  code_dev.py`，在提示同意协议时，输入 `y`，然后等待模型下载完毕。
 
@@ -81,7 +83,7 @@ if md5sum is not None:
 9. 源码版启动时可能频繁遇到错误，基本都是代理问题导致无法从墙外下载模型或下载中断不完整。建议使用稳定的代理，全局开启。如果始终无法完整下载，建议使用预编译版。
 
 
-# CUDA 加速支持，需源码部署
+# CUDA 加速支持
 
 **安装CUDA工具**
 
@@ -94,7 +96,7 @@ if md5sum is not None:
    然后继续输入`nvidia-smi`,确认有输出信息，并且能看到cuda版本号，类似该图
    ![image](https://github.com/jianchang512/pyvideotrans/assets/3378335/71f1d7d3-07f9-4579-b310-39284734006b)
 
-   说明安装正确，拉取源码本地部署，就可以cuda加速了，否则需重新安装
+   说明安装正确，可以cuda加速了，否则需重新安装
 
 
 
@@ -102,15 +104,18 @@ if md5sum is not None:
 
 模型xtts仅可用于学习研究，不可用于商业
 
-0. 源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问
+0. 源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问，源码版启动时可能频繁遇到错误，基本都是代理问题导致无法从墙外下载模型或下载中断不完整。建议使用稳定的代理，全局开启。如果始终无法完整下载，建议使用预编译版。
+
 1. 启动后需要冷加载模型，会消耗一些时间，请耐心等待显示出`http://127.0.0.1:9988`， 并自动打开浏览器页面后，稍等两三分钟后再进行转换
+
 2. 功能有：
 
-		文字到语音:即输入文字，用选定的音色生成声音，这个功能预编译已包含模型，开箱即用。
+		文字到语音:即输入文字，用选定的音色生成声音。
 		
-		声音到声音：即从本地选择一个音频文件，用选定的音色生成另一个音频文件，为减小预编译版体积，没有包含在内，需要单独下载模型，放在app.exe 同目录下的tts文件夹中，解压到当前文件夹下，解压后会多两个文件夹,`voice_conversion_models--multilingual--vctk--freevc24`和`wavlm`,请确保位置正确
+		声音到声音：即从本地选择一个音频文件，用选定的音色生成另一个音频文件.
 		
 3. 如果打开的cmd窗口很久不动，需要在上面按下回车才继续输出，请在cmd左上角图标上单击，选择“属性”，然后取消“快速编辑”和“插入模式”的复选框
+
 ![](./images/3.png)
 ![](./images/4.png)
 
