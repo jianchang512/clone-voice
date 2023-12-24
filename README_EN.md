@@ -34,7 +34,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/813d46dd-7634-43d1-97
 # How to use the precompiled version under win (other systems can deploy source code)
 
 
-1. Download the 'precompiled version of the main file' (1.7G) and 'Model' (3G) separately from [Releases](https://github.com/jianchang512/clone-voice/releases) on the right. 
+1. Download the 'precompiled version of the main file(1.7G) and Model(3G) separately from [Releases](https://github.com/jianchang512/clone-voice/releases) on the right. 
 2. After downloading, unzip it to somewhere, for example E:/clone-voice. 
 3. Double click app.exe, wait for the web window to open automatically, **Please read the text prompts in the CMD window carefully**, if there are errors, they will be displayed here.
 ![image](https://github.com/jianchang512/clone-voice/assets/3378335/ad9bdaaa-f2a9-4133-9087-a272db662455)
@@ -63,6 +63,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/813d46dd-7634-43d1-97
 
 0. Required python 3.9-> 3.11, and enable a global proxy, ensure the proxy is stable
 1. Create an empty directory, such as E:/clone-voice, open a cmd window in this directory, the method is to type `cmd` in the address bar, then press Enter.
+and exec git pull source code `git clone git@github.com:jianchang512/clone-voice.git . `
 2. Create a virtual environment `python -m venv venv`
 3. Activate the environment `E:/clone-voice/venv/scripts/activate`
 4. Install dependencies: `pip install -r requirements.txt`

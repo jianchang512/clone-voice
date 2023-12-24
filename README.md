@@ -31,14 +31,16 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 
 # win下预编译版使用方法(其他系统可源码部署)
 
-1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中分别下载‘预编译版主文件‘(1.7G)和‘模型‘(3G)
+1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中分别下载 预编译版主文件(1.7G)和  模型(3G)
+
 2. 下载后解压到某处，比如 E:/clone-voice 下
+
 3. 双击 app.exe ，等待自动打开web窗口，**请仔细阅读cmd窗口的文字提示**,如有错误，均会在此显示
 ![image](https://github.com/jianchang512/clone-voice/assets/3378335/ad9bdaaa-f2a9-4133-9087-a272db662455)
 
 
 
-4. 模型下载后解压到软件目录下的 tts 文件夹内，解压后效果如图 
+4. 模型下载后解压到软件目录下的 `tts` 文件夹内，解压后效果如图 
 
 ![image](https://github.com/jianchang512/clone-voice/assets/3378335/4b5a60eb-124d-404b-a748-c0a527482e90)
 
@@ -57,12 +59,13 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 
 **源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问**
 
-0. 要求 python 3.9->3.11, 并开启全局代理，确保代理稳定
-1. 创建空目录，比如 E:/clone-voice, 在这个目录下打开 cmd 窗口，方法是地址栏中输入 `cmd`, 然后回车
+0. 要求 python 3.9->3.11
+1. 创建空目录，比如 E:/clone-voice, 在这个目录下打开 cmd 窗口，方法是地址栏中输入 `cmd`, 然后回车。
+使用git拉取源码到当前目录 ` git clone git@github.com:jianchang512/clone-voice.git . `
 2. 创建虚拟环境 `python -m venv venv`
 3. 激活环境 `E:/clone-voice/venv/scripts/activate`
 4. 安装依赖: `pip install -r requirements.txt`
-5. 解压 ffmpeg.7z 到项目根目录
+5. 解压 ffmpeg.7z 到当前目录
 6. **首先运行**  `python  code_dev.py`，在提示同意协议时，输入 `y`，然后等待模型下载完毕。
    ![](./images/code_dev01.png)
    ![](./images/code_dev02.png)
