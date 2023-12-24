@@ -57,7 +57,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 
 **源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问**
 
-0. 要求 python 3.9+, 并开启全局代理，确保代理稳定
+0. 要求 python 3.9->3.11, 并开启全局代理，确保代理稳定
 1. 创建空目录，比如 E:/clone-voice, 在这个目录下打开 cmd 窗口，方法是地址栏中输入 `cmd`, 然后回车
 2. 创建虚拟环境 `python -m venv venv`
 3. 激活环境 `E:/clone-voice/venv/scripts/activate`

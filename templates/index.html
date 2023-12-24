@@ -134,22 +134,22 @@
             <div class="col-md-4">
                 <label for="languageSelect" class="form-label" data-en="Language:">文本语言：</label>
                 <select class="form-select" id="languageSelect">
-                    <option value="zh-cn">Chinese</option>
-                    <option value="en">English</option>
-                    <option value="ja">Japanese</option>
-                    <option value="ko">Korean</option>
-                    <option value="es">Spanish</option>
-                    <option value="de">German</option>
-                    <option value="fr">French</option>
-                    <option value="it">Italian</option>
-                    <option value="tr">Turkish</option>
-                    <option value="ru">Russian</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="pl">Polish</option>
-                    <option value="nl">Dutch</option>
-                    <option value="ar">Arabic</option>
-                    <option value="hu">Hungarian</option>
-                    <option value="cs">Czech</option>
+                    <option data-en="Chinese" value="zh-cn">中文</option>
+                    <option data-en="English" value="en">英语</option>
+                    <option data-en="Japanese" value="ja">日语</option>
+                    <option data-en="Korean" value="ko">韩语</option>
+                    <option data-en="Spanish" value="es">西班牙语</option>
+                    <option data-en="German" value="de">德语</option>
+                    <option data-en="French" value="fr">法语</option>
+                    <option data-en="Italian" value="it">意大利语</option>
+                    <option data-en="Turkish" value="tr">土耳其语</option>
+                    <option data-en="Russian" value="ru">俄语</option>
+                    <option data-en="Portuguese" value="pt">葡萄牙语</option>
+                    <option data-en="Polish" value="pl">波兰语</option>
+                    <option data-en="Dutch" value="nl">荷兰语</option>
+                    <option data-en="Arabic" value="ar">阿拉伯语</option>
+                    <option data-en="Hungarian" value="hu">匈牙利语</option>
+                    <option data-en="Czech" value="cs">捷克语</option>
                 </select>
             </div>
             <div class="col-md-4">
@@ -187,9 +187,9 @@
 							<input type="file" accept=".srt" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadsrt(this)">
 						</label>
                         {% else %}
-							<div class="alert alert-primary my-2">
+							<div class="alert alert-danger my-2">
                                 <span data-en="The model needs to be downloaded before it can be used. If the source code is deployed, please execute the `python code_dev.py` download the model online, please go to the pre compiled version">需要下载模型后才可使用，如果源码部署，请执行 python code_dev.py 在线下载模型，预编译版请去</span> 
-                                <a href="https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1" target="_blank" data-en="Download model">下载模型</a>，<span data-en="Unzip the tts folder in the current project directory, ensuring that the following three folders exist in the tts directory after decompression, and then restart the software">放到当前项目目录的 tts 文件夹下解压,确保解压后tts目录下存在如下3个文件夹，然后重启软件</span> `tts_models--multilingual--multi-dataset--xtts_v2` &   `voice_conversion_models--multilingual--vctk--freevc24` & `wavlm` 
+                                <a href="https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1" target="_blank" data-en="Download model">下载模型</a>，<span data-en="Unzip the tts folder in the current project directory, ensuring that the following three folders exist in the tts directory after decompression, and then restart the software">放到当前项目目录的 tts 文件夹下解压,确保解压后tts目录下存在如下3个文件夹，然后重启软件</span> <img class="d-block" src="/static/images/2.png" width="300">
 							</div>
 						{% endif %}
 					</div>
@@ -199,9 +199,9 @@
 							拖拽音频文件到这里上传
 						</div>		
 						{% else %}
-							<div class="alert alert-primary my-2">
+							<div class="alert alert-danger my-2">
 								<span data-en="The model needs to be downloaded before it can be used. If the source code is deployed, please execute the `python code_dev.py` download the model online, please go to the pre compiled version">需要下载模型后才可使用，如果源码部署，请执行 python code_dev.py 在线下载模型，预编译版请去</span> 
-                                <a href="https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1" target="_blank" data-en="Download model">下载模型</a>，<span data-en="Unzip the tts folder in the current project directory, ensuring that the following three folders exist in the tts directory after decompression, and then restart the software">放到当前项目目录的 tts 文件夹下解压,确保解压后tts目录下存在如下3个文件夹，然后重启软件</span> `tts_models--multilingual--multi-dataset--xtts_v2` &   `voice_conversion_models--multilingual--vctk--freevc24` & `wavlm` 
+                                <a href="https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1" target="_blank" data-en="Download model">下载模型</a>，<span data-en="Unzip the tts folder in the current project directory, ensuring that the following three folders exist in the tts directory after decompression, and then restart the software">放到当前项目目录的 tts 文件夹下解压,确保解压后tts目录下存在如下3个文件夹，然后重启软件</span> <img class="d-block" src="/static/images/2.png" width="300">
 							</div>
 						{% endif %}
 					</div>
@@ -215,9 +215,11 @@
             </div>
         </div>
         <div class="row mt-4">
+            <div class="col-md-12 my-2 d-none text-danger text-center" data-en="The [Text ->Sound] or [Sound ->Sound] threads have not finished starting yet, please wait" id="nostart">
+            [文字->声音]或[声音->声音]线程都还没有启动完毕，若模型已存在，请等待，否则请下载模型
+            </div>
             <div class="col-md-12 text-center position-relative">
-                
-                <button onclick="start(this)" class="btn btn-danger btn-start-record" data-en="Start generating immediately">立即开始生成</button>
+                <button id="start_button" onclick="start(this)" class="btn btn-danger btn-start-record" data-en="Start generating immediately">立即开始生成</button>
             </div>
             <div class="col-md-12 d-none text-danger text-center" id="tips"></div>
         </div>
@@ -244,10 +246,20 @@
         'lang10':"必须选择要使用的声音", 
         'lang11':"必须输入要合成的文字", 
         'lang12':'必须上传要转换的声音wav文件', 
-        'lang13':'开始合成，用时可能较久，耐心等待'
+        'lang13':'开始合成，用时可能较久，耐心等待',
+        'lang14':"[文字->声音]或[声音->声音]线程还没有启动完毕，请等待"
         
     };
-    (function(){
+    const startRecordButton = document.getElementById('startRecord');
+    const stopRecordButton = document.getElementById('stopRecord');
+    const uploadButton = document.getElementById('upload');
+    const audioPlayer = document.getElementById('audioPlayer');
+
+    let mediaRecorder;
+    let audioChunks = [];
+    let sec=0;
+    let timeid=null;
+    function switch_language(){
             if(!/^zh/i.test(navigator.language) && !/^zh/i.test(navigator.languages[0])){
                 $('[data-en]').each(function(){
                    $(this).text($(this).attr('data-en'));
@@ -273,16 +285,8 @@
                     'lang13':'The synthesis might take a while, please wait patiently'
                 }
             }
-    }());
-    const startRecordButton = document.getElementById('startRecord');
-    const stopRecordButton = document.getElementById('stopRecord');
-    const uploadButton = document.getElementById('upload');
-    const audioPlayer = document.getElementById('audioPlayer');
+    }
 
-    let mediaRecorder;
-    let audioChunks = [];
-    let sec=0;
-    let timeid=null;
 	// 切换文字->声音，声音->声音
 	function toggle(el,type){
 		$(el).addClass('btn-primary');
@@ -502,7 +506,6 @@
 		$('#errors').html('');
 		let fun_res=function(res){
 			$(el).removeAttr('disabled')
-				console.log(res)
 				window.timesec = 0;
 				clearInterval(window.timeid);
 				if (res.code !== 0) {
@@ -530,7 +533,7 @@
 		}
     }
 
-    init();
+
 	
 	// 初始化 声音转声音
 	function stsinit() {
@@ -569,7 +572,7 @@
         fileInput.click();
       });
 	}
-	stsinit();
+
 
     // 拖拽上传声音音频  
 	function handleFileUpload(file) {
@@ -603,6 +606,26 @@
           }
         });
       }
+
+    function check_start(){
+        $.get('/isstart',function (res){
+           if(res.msg<1){
+               setTimeout(function (){
+                   return check_start();
+               },3000);
+               $('#nostart').removeClass('d-none');
+               $('#start_button').attr('disabled',true);
+               return;
+           }
+           $('#nostart').addClass('d-none');
+           $('#start_button').removeAttr('disabled');
+
+        });
+    }
+
+    init();
+    stsinit();
+    check_start();
 
 </script>
 

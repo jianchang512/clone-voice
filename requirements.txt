@@ -4,3 +4,4 @@ pydub
 flask
 tts
 requests
+gevent

@@ -5,17 +5,18 @@ import re
 import threading
 import time
 import sys
-
+import gevent
 import aiohttp
 from flask import Flask, request, render_template, jsonify, send_file, send_from_directory
 import os
 from dotenv import load_dotenv
+from gevent.pywsgi import WSGIServer
 
 load_dotenv()
 ROOT_DIR = os.getcwd()  # os.path.dirname(os.path.abspath(__file__))
-print(f"当前项目路径：{ROOT_DIR}")
 os.environ['TTS_HOME'] = ROOT_DIR
 
+print(f"\n当前项目路径：{ROOT_DIR}")
 
 if sys.platform == 'win32':
     os.environ['PATH'] = ROOT_DIR + ';' + os.environ['PATH']
@@ -75,14 +76,16 @@ global_tts_result = {}
 global_sts_result = {}
 # 用于通知线程退出的事件
 exit_event = threading.Event()
-
+tts_n=0
+sts_n=0
 
 # tts 合成线程
 def ttsloop():
-    global global_tts_result
+    global global_tts_result,tts_n
     try:
         tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
         print(f'启动 文字->声音 线程成功')
+        tts_n+=1
     except aiohttp.client_exceptions.ClientOSError as e:
         print(f'启动 文字->声音 线程失败：{str(e)}')
         if not setorget_proxy():
@@ -112,10 +115,11 @@ def ttsloop():
 
 # s t s 线程
 def stsloop():
-    global global_sts_result
+    global global_sts_result,sts_n
     try:
         tts = TTS(model_name='voice_conversion_models/multilingual/vctk/freevc24').to(device)
         print(f'启动 声音->声音 线程成功')
+        sts_n+=0
     except aiohttp.client_exceptions.ClientOSError as e:
         print(f'启动 声音->声音 线程失败：{str(e)}')
         if not setorget_proxy():
@@ -299,8 +303,18 @@ def get_subtitle_from_srt(txt):
     return new_result
 
 
+# 判断线程是否启动
+@app.route('/isstart',methods=['GET','POST'])
+def isstart():
+    total=tts_n+sts_n
+    return jsonify({"code": 0, "msg": total})
+
 # 根据文本返回tts结果，返回 name=文件名字，filename=文件绝对路径
 # 请求端根据需要自行选择使用哪个
+# params
+# text:待合成文字
+# voice：声音文件
+# language:语言代码
 @app.route('/tts', methods=['GET', 'POST'])
 def tts():
     global global_tts_result
@@ -346,7 +360,6 @@ def tts():
                 break
             else:
                 text_list[num]['result'] = rs
-
         # 循环等待 最多7200s
         time_tmp = 0
         while filename not in global_tts_result:
@@ -386,6 +399,10 @@ def tts():
 
 
 # s to s wav->wav
+# params
+# voice: 声音文件
+# filename: 上传的原始声音
+
 @app.route('/sts', methods=['GET', 'POST'])
 def sts():
     global global_sts_result
@@ -474,13 +491,14 @@ def merge_audio_segments(text_list):
 
 
 def openweb():
-    time.sleep(5)
-    webbrowser.open(web_address)
-    print(f"已打开浏览器窗口")
+    while sts_n==0 and tts_n==0:
+        time.sleep(5)
+    webbrowser.open("http://"+web_address)
+    print(f"\n[已打开浏览器窗口,如果未能自动打开，你也可以手动打开地址] http://{web_address}")
 
 
 if __name__ == '__main__':
-    web_address='http://'+os.getenv('WEB_ADDRESS','127.0.0.1:9988')
+    web_address=os.getenv('WEB_ADDRESS','127.0.0.1:9988')
     tts_thread=None
     sts_thread=None
     try:
@@ -492,25 +510,32 @@ if __name__ == '__main__':
             tts_thread=threading.Thread(target=ttsloop)
             tts_thread.start()
         else:
-            app.logger.error("\n\n不存在 【文字->声音】 模型，下载地址: https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1\n\n")
+            app.logger.error("不存在 【文字->声音】 模型，下载地址: https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1\n\n")
             
         if VOICE_MODEL_EXITS:
             print("准备启动 【声音->声音】 线程")
             sts_thread=threading.Thread(target=stsloop)
             sts_thread.start()
         else:
-            app.logger.error("\n\n不存在 【声音->声音】 模型，下载地址: https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1\n\n")
+            app.logger.error("不存在 【声音->声音】 模型，下载地址: https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1\n\n")
+        
+        if not VOICE_MODEL_EXITS and not TEXT_MODEL_EXITS:
+            print("不存在任何模型，请先下载模型后，解压到tts目录下: https://github.com/jianchang512/clone-voice/releases/tag/v0.0.1\n\n")
+            exit()       
 
-        threading.Thread(target=openweb).start()
         print("启动后加载模型可能需要几分钟，当显示 【启动xxx线程成功】 后，方可使用")
     except Exception as e:
         print("执行出错:" + str(e))
         app.logger.error(f"[app]启动出错:{str(e)}")
+        exit()
     try:
-        app.debug = False
-        os.environ['FLASK_ENV'] = 'production'
-        app.run(port=web_address.split(':')[-1])
+        host=web_address.split(':')
+        http_server = WSGIServer((host[0], int(host[1])), app)
+        threading.Thread(target=openweb).start()
+        http_server.serve_forever()
     finally:
+        if http_server:
+            http_server.stop()
         # 设置事件，通知线程退出
         exit_event.set()
         # 等待后台线程结束
