@@ -65,7 +65,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 2. 创建虚拟环境 `python -m venv venv`
 3. 激活环境，win下 `E:/clone-voice/venv/scripts/activate`，
 4. 安装依赖: `pip install -r requirements.txt`
-5. win下解压 ffmpeg.7z 到当前目录, linux和mac 到 [ffmpeg官网](https://ffmpeg.org/download.html)下载对应版本ffmpeg，解压到根目录下，注意必须是直接将可执行文件 `ffmpeg` 放在根目录下
+5. win下解压 ffmpeg.7z，将其中的`ffmpeg.exe`和`app.py`在同一目录下, linux和mac 到 [ffmpeg官网](https://ffmpeg.org/download.html)下载对应版本ffmpeg，解压其中的`ffmpeg`程序到根目录下，必须将可执行二进制文件 `ffmpeg` 和app.py放在同一目录下
 6. **首先运行**  `python  code_dev.py `，在提示同意协议时，输入 `y`，然后等待模型下载完毕。
    ![](./images/code_dev01.png)
    ![](./images/code_dev02.png)
