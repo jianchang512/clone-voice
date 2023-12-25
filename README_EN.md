@@ -65,9 +65,9 @@ https://github.com/jianchang512/clone-voice/assets/3378335/813d46dd-7634-43d1-97
 1. Create an empty directory, such as E:/clone-voice, open a cmd window in this directory, the method is to type `cmd` in the address bar, then press Enter.
 and exec git pull source code `git clone git@github.com:jianchang512/clone-voice.git . `
 2. Create a virtual environment `python -m venv venv`
-3. Activate the environment `E:/clone-voice/venv/scripts/activate`
+3. Activate the environment `E:/clone-voice/venv/scripts/activate`, linux and Mac exec `source ./venv/bin/activate`
 4. Install dependencies: `pip install -r requirements.txt`
-5. Unzip the ffmpeg.7z to the project root directory
+5. Unzip the ffmpeg.7z to the project root directory;for Linux and Mac, download the corresponding version of ffmpeg from the [ffmpeg official website](https://ffmpeg.org/download.html), unzip it to the root directory, and make sure to place the executable file ffmepg directly in the root directory.
 6. **First run** `python code_dev.py`, enter `y` when prompted to accept the agreement, then wait for the model to be downloaded completely.
    ![](./images/code_dev01.png)
    ![](./images/code_dev02.png)

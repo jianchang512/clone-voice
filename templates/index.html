@@ -117,6 +117,7 @@
         <h4 class="alert-heading d-flex justify-content-between">		
 			<span class="text-danger" data-en="Voice Clone - Speak with Any Voice">语音克隆-用任意声音说话!</span>
 			<span>
+                <a href="https://github.com/jianchang512/clone-voice/releases" target="_blank" class="d-none fs-6 text-danger btn" id="checkupdate"></a>
 			<a class="fs-6 text-black btn" href="https://github.com/jianchang512/clone-voice" target="_blank">Github</a>
 			<a class="fs-6 text-black btn" href="https://github.com/jianchang512/clone-voice/issue" target="_blank" data-en="encounter a problem">遇到问题?</a>
 			<a class="fs-6 text-success btn" href="https://github.com/jianchang512/clone-voice/issues/10" target="_blank" data-en="Donate to the project">捐助该项目</a>
@@ -215,8 +216,8 @@
             </div>
         </div>
         <div class="row mt-4">
-            <div class="col-md-12 my-2 d-none text-danger text-center" data-en="The [Text ->Sound] or [Sound ->Sound] threads have not finished starting yet, please wait" id="nostart">
-            [文字->声音]或[声音->声音]线程都还没有启动完毕，若模型已存在，请等待，否则请下载模型
+            <div class="col-md-12 my-2 d-none text-danger text-center" id="nostart">
+            
             </div>
             <div class="col-md-12 text-center position-relative">
                 <button id="start_button" onclick="start(this)" class="btn btn-danger btn-start-record" data-en="Start generating immediately">立即开始生成</button>
@@ -609,23 +610,34 @@
 
     function check_start(){
         $.get('/isstart',function (res){
-           if(res.msg<1){
+           if(res.msg<2){
                setTimeout(function (){
                    return check_start();
                },3000);
-               $('#nostart').removeClass('d-none');
-               $('#start_button').attr('disabled',true);
-               return;
+               $('#nostart').removeClass('d-none').text(res.tts+res.sts);
+               if(res.msg<1){
+                    $('#start_button').attr('disabled',true);
+               }else{
+                    $('#start_button').removeAttr('disabled');
+               }
+           }else{
+               $('#nostart').addClass('d-none');
+               $('#start_button').removeAttr('disabled');
            }
-           $('#nostart').addClass('d-none');
-           $('#start_button').removeAttr('disabled');
-
+        });
+    }
+    function checkupdate(){
+        $.get('/checkupdate',function (res){
+            if(res.code ===0 && res.msg){
+                $('#checkupdate').removeClass('d-none').text(res.msg);
+            }
         });
     }
 
     init();
     stsinit();
     check_start();
+    checkupdate();
 
 </script>
 

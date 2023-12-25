@@ -55,7 +55,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 6. 如果机器拥有N卡GPU，并正确配置了CUDA环境，将自动使用CUDA加速
 
 
-# 源码部署(linux mac window) / 以window为例
+# 源码部署(linux mac window)
 
 **源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问**
 
@@ -63,10 +63,10 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 1. 创建空目录，比如 E:/clone-voice, 在这个目录下打开 cmd 窗口，方法是地址栏中输入 `cmd`, 然后回车。
 使用git拉取源码到当前目录 ` git clone git@github.com:jianchang512/clone-voice.git . `
 2. 创建虚拟环境 `python -m venv venv`
-3. 激活环境 `E:/clone-voice/venv/scripts/activate`
+3. 激活环境，win下 `E:/clone-voice/venv/scripts/activate`，
 4. 安装依赖: `pip install -r requirements.txt`
-5. 解压 ffmpeg.7z 到当前目录
-6. **首先运行**  `python  code_dev.py`，在提示同意协议时，输入 `y`，然后等待模型下载完毕。
+5. win下解压 ffmpeg.7z 到当前目录, linux和mac 到 [ffmpeg官网](https://ffmpeg.org/download.html)下载对应版本ffmpeg，解压到根目录下，注意必须是直接将可执行文件 `ffmpeg` 放在根目录下
+6. **首先运行**  `python  code_dev.py `，在提示同意协议时，输入 `y`，然后等待模型下载完毕。
    ![](./images/code_dev01.png)
    ![](./images/code_dev02.png)
    
