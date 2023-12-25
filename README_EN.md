@@ -68,14 +68,17 @@ and exec git pull source code `git clone git@github.com:jianchang512/clone-voice
 3. Activate the environment `E:/clone-voice/venv/scripts/activate`, linux and Mac exec `source ./venv/bin/activate`
 4. Install dependencies: `pip install -r requirements.txt`
 5. Unzip the ffmpeg.7z to the project root directory;for Linux and Mac, download the corresponding version of ffmpeg from the [ffmpeg official website](https://ffmpeg.org/download.html), unzip it to the root directory, and make sure to place the executable file ffmepg directly in the root directory.
+
+    ![image](https://github.com/jianchang512/clone-voice/assets/3378335/0c61c8b6-7f7e-475f-8984-47fb87ba58e8)
+   
 6. **First run** `python code_dev.py`, enter `y` when prompted to accept the agreement, then wait for the model to be downloaded completely.
    ![](./images/code_dev01.png)
    ![](./images/code_dev02.png)
 
 
-8. After downloading, restart `python app.py`.
+7. After downloading, restart `python app.py`.
 
-9. Every startup will connect to the foreign Internet to check or update the model, please be patient and wait. If you don't want to check or update every time you start, you need to manually modify the files under the dependent package, open \venv\Lib\site-packages\TTS\utils\manage.py, around line 389, def download_model method, comment out the following code.
+8. Every startup will connect to the foreign Internet to check or update the model, please be patient and wait. If you don't want to check or update every time you start, you need to manually modify the files under the dependent package, open \venv\Lib\site-packages\TTS\utils\manage.py, around line 389, def download_model method, comment out the following code.
 
 ```
 if md5sum is not None:
