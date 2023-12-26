@@ -48,16 +48,21 @@ def upload():
         save_dir = request.form.get("save_dir")
         save_dir = VOICE_DIR if not save_dir else os.path.join(ROOT_DIR, f'static/{save_dir}')
         app.logger.info(f"[upload]{audio_file.filename=},{save_dir=}")
-        # 检查文件是否存在且是 WAV 格式
-        if audio_file and audio_file.filename.endswith('.wav'):
+        # 检查文件是否存在且是 WAV/mp3格式
+        noextname, ext=os.path.splitext(os.path.basename(audio_file.filename.lower()))
+        noextname=noextname.replace(' ', '')
+        if audio_file and ext in [".wav", ".mp3"]:
             # 保存文件到服务器指定目录
-            name = f"{os.path.basename(audio_file.filename.replace(' ', ''))}"
-            if os.path.exists(os.path.join(save_dir, name)):
-                name = f'{datetime.datetime.now().strftime("%m%d-%H%M%S")}-{name}'
-
-            savename = os.path.join(save_dir, name)
+            name=f'{noextname}{ext}'
+            if os.path.exists(os.path.join(save_dir, f'{noextname}{ext}')):
+                name = f'{datetime.datetime.now().strftime("%m%d-%H%M%S")}-{noextname}{ext}'
+            # mp3 or wav           
             tmp_wav = os.path.join(TMP_DIR, "tmp_" + name)
             audio_file.save(tmp_wav)
+            #save to wav
+            if ext =='.mp3':
+                name=f"{name[:-3]}wav"
+            savename = os.path.join(save_dir, name)
             os.system(f'ffmpeg -y -i "{tmp_wav}" "{savename}"')
             os.unlink(tmp_wav)
             # 返回成功的响应

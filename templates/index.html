@@ -112,7 +112,7 @@
     </style>
 </head>
 <body>
-<div class="container my-0">
+<div class="container mb-2">
     <div class="alert  rounded-0" role="alert">
         <h4 class="alert-heading d-flex justify-content-between">		
 			<span class="text-danger" data-en="Voice Clone - Speak with Any Voice">语音克隆-用任意声音说话!</span>
@@ -160,7 +160,7 @@
                 </select>
                 <div class="form-text">
                     <label class="btn btn-sm btn-secondary btn-file d-inline-block position-relative"><span data-en="Local Upload">本地上传</span>
-                        <input id="fileInput" type="file" accept="audio/wav" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadFromLocal(this)" />
+                        <input id="fileInput" type="file" accept="audio/wav, audio/mp3" class="position-absolute start-0 top-0 end-0 bottom-0 opacity-0" onchange="uploadFromLocal(this)" />
                     </label>
                     <span data-en="Or record a 5-15s sound wave online, and you can choose to use it here">或在线录制5-15s的声音wav，即可在此选择使用</span>
                 </div>
@@ -196,8 +196,8 @@
 					</div>
 					<div id="sts-area" class="d-none">
 						{% if voice_model=='yes' %}
-						<div id="dropaudio" class=" border m-2 p-5 text-center " data-en="Drag and drop audio files here to upload">
-							拖拽音频文件到这里上传
+						<div id="dropaudio" class=" border m-2 p-5 text-center " data-en="Drag and drop or click  audio files here to upload">
+							拖拽或点击将音频wav/mp3文件上传
 						</div>		
 						{% else %}
 							<div class="alert alert-danger my-2">
@@ -246,9 +246,10 @@
         'lang9':'请选择一个srt文件', 
         'lang10':"必须选择要使用的声音", 
         'lang11':"必须输入要合成的文字", 
-        'lang12':'必须上传要转换的声音wav文件', 
+        'lang12':'必须上传要转换的声音wav/mp3文件', 
         'lang13':'开始合成，用时可能较久，耐心等待',
-        'lang14':"[文字->声音]或[声音->声音]线程还没有启动完毕，请等待"
+        'lang14':"[文字->声音]或[声音->声音]线程还没有启动完毕，请等待", 
+        'lang15':'已转为wav格式: '
         
     };
     const startRecordButton = document.getElementById('startRecord');
@@ -282,8 +283,10 @@
                     'lang9':'Please select an SRT file', 
                     'lang10':'You must select a voice to use', 
                     'lang11':'You must enter the text to be synthesized', 
-                    'lang12':'You must upload the WAV audio file for conversion', 
-                    'lang13':'The synthesis might take a while, please wait patiently'
+                    'lang12':'You must upload the wav/mp3 audio file for conversion', 
+                    'lang13':'The synthesis might take a while, please wait patiently', 
+                    'lang14':"[text->speech] or [speech->speech] thread not started，hold on", 
+                    'lang15':'Convered to wav format: '
                 }
             }
     }
@@ -590,7 +593,8 @@
           processData: false,
           success: function(response) {
             if (response.code === 0) {
-              dropaudio.text('OK: ' + response.data);
+              oktext= file.name.substr(-3).toLowerCase() ==='wav'?'OK: ':langlist['lang15']
+              dropaudio.text(oktext + response.data);
 			  window['sts_audio_name']=response.data
             } else {
               dropaudio.text('Error: ' + response.msg);
