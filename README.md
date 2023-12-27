@@ -1,4 +1,4 @@
-[English README](./README_EN.md)  / [Discord](https://discord.gg/TMCM2PfHzQ) / [捐助项目](https://github.com/jianchang512/clone-voice/issues/10) / QQ群 902124277
+[English README](./README_EN.md)  / [Discord](https://discord.gg/TMCM2PfHzQ) / [捐助项目](https://github.com/jianchang512/clone-voice/issues/10) / Q群`902124277`<img src="https://github.com/jianchang512/clone-voice/assets/3378335/20858f50-6d47-411d-939b-272fe35e474c" width="40" title="点击看大图">
 # CV声音克隆工具
 
 该项目所用模型均源于 https://github.com/coqui-ai/TTS  ，模型协议为[CPML](https://coqui.ai/cpml/)只可用于学习研究，不可商用
