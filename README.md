@@ -29,16 +29,14 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 
 
 
-# win下预编译版使用方法(其他系统可源码部署)
+# window预编译版使用方法(其他系统可源码部署)
 
-1. [点击此处打开Releases页面](https://github.com/jianchang512/clone-voice/releases)，下载预编译版主文件(1.7G) 和  模型(3G)
+1. [点击此处打开Releases下载页面](https://github.com/jianchang512/clone-voice/releases)，下载预编译版主文件(1.7G) 和 模型(3G)
 
 2. 下载后解压到某处，比如 E:/clone-voice 下
 
 3. 双击 app.exe ，等待自动打开web窗口，**请仔细阅读cmd窗口的文字提示**,如有错误，均会在此显示
 ![image](https://github.com/jianchang512/clone-voice/assets/3378335/ad9bdaaa-f2a9-4133-9087-a272db662455)
-
-
 
 4. 模型下载后解压到软件目录下的 `tts` 文件夹内，解压后效果如图 
 
@@ -46,13 +44,12 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 
 5. 转换操作步骤
 	
-	- 在文本框中输入文字、或导入srt文件，或者选择“声音->声音”，选择要转换的声音wav格式文件
+	- 选择【文字->声音】按钮，在文本框中输入文字、或点击导入srt字幕文件，然后点击“立即开始”。
 	
-	- 然后从“要使用的声音wav文件”下拉框中选择要用的声音，如果没有满意的，也可以点击“本地上传”按钮，选择已录制好的5-20s的wav声音文件。或者点击“开始录制”按钮，在线录制你自己的声音5-20s，录制完成点击使用
+	- 选择【声音->声音】按钮，点击或拖拽要转换的音频文件(mp3/wav/flac)，然后从“要使用的声音文件”下拉框中选择要克隆的音色，如果没有满意的，也可以点击“本地上传”按钮，选择已录制好的5-20s的wav/mp3/flac声音文件。或者点击“开始录制”按钮，在线录制你自己的声音5-20s，录制完成点击使用。然后点击“立即开始”按钮
 	
-	- 点击“立即开始生成”按钮，耐心等待完成。
-
 6. 如果机器拥有N卡GPU，并正确配置了CUDA环境，将自动使用CUDA加速
+
 
 
 # 源码部署(linux mac window)
