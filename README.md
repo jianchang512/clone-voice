@@ -31,7 +31,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 
 # win下预编译版使用方法(其他系统可源码部署)
 
-1. 右侧[Releases](https://github.com/jianchang512/clone-voice/releases)中分别下载 预编译版主文件(1.7G)和  模型(3G)
+1. [点击此处打开Releases页面](https://github.com/jianchang512/clone-voice/releases)，下载预编译版主文件(1.7G) 和  模型(3G)
 
 2. 下载后解压到某处，比如 E:/clone-voice 下
 
