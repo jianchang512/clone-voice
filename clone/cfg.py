@@ -11,13 +11,13 @@ load_dotenv()
 ROOT_DIR = os.getcwd()  # os.path.dirname(os.path.abspath(__file__))
 os.environ['TTS_HOME'] = ROOT_DIR
 
-print(f"\n{ROOT_DIR}")
+print(f"DIR: {ROOT_DIR}")
 LANG = "en" if locale.getdefaultlocale()[0].split('_')[0].lower() != 'zh' else "zh"
 
 if sys.platform == 'win32':
-    os.environ['PATH'] = ROOT_DIR + ';' + os.environ['PATH']
+    os.environ['PATH'] = f'{ROOT_DIR};{ROOT_DIR}\\ffmpeg;' + os.environ['PATH']
 else:
-    os.environ['PATH'] = ROOT_DIR + ':' + os.environ['PATH']
+    os.environ['PATH'] = f'{ROOT_DIR}:{ROOT_DIR}/ffmpeg:' +  os.environ['PATH']
 
 
 def setorget_proxy():

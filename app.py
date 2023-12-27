@@ -6,38 +6,62 @@ import time
 import sys
 from flask import Flask, request, render_template, jsonify, send_file, send_from_directory
 import os
-from gevent.pywsgi import WSGIServer
+from gevent.pywsgi import WSGIServer, WSGIHandler
 import glob
 import hashlib
 from logging.handlers import RotatingFileHandler
+
+import clone
 from clone import cfg
-from clone.cfg import ROOT_DIR, TTS_DIR, VOICE_MODEL_EXITS, TMP_DIR, VOICE_DIR, TEXT_MODEL_EXITS,langlist
+from clone.cfg import ROOT_DIR, TTS_DIR, VOICE_MODEL_EXITS, TMP_DIR, VOICE_DIR, TEXT_MODEL_EXITS, langlist
 from clone.logic import ttsloop, stsloop, create_tts, openweb, merge_audio_segments, get_subtitle_from_srt
 from clone import logic
+from gevent.pywsgi import LoggingLogAdapter
+
+class CustomRequestHandler(WSGIHandler):
+    def log_request(self):
+        pass
+
+# 配置日志
+# 禁用 Werkzeug 默认的日志处理器
+log = logging.getLogger('werkzeug')
+log.handlers[:] = []
+log.setLevel(logging.WARNING)
 
 app = Flask(__name__, static_folder=os.path.join(ROOT_DIR, 'static'), static_url_path='/static',
             template_folder=os.path.join(ROOT_DIR, 'templates'))
-# 配置日志
-app.logger.setLevel(logging.INFO)  # 设置日志级别为 INFO
+
+root_log = logging.getLogger()  # Flask的根日志记录器
+root_log.handlers = []
+root_log.setLevel(logging.WARNING)
+
+
+app.logger.setLevel(logging.WARNING)  # 设置日志级别为 INFO
 # 创建 RotatingFileHandler 对象，设置写入的文件路径和大小限制
 file_handler = RotatingFileHandler(os.path.join(ROOT_DIR, 'app.log'), maxBytes=1024 * 1024, backupCount=5)
 # 创建日志的格式
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 # 设置文件处理器的级别和格式
-file_handler.setLevel(logging.INFO)
+file_handler.setLevel(logging.WARNING)
 file_handler.setFormatter(formatter)
 # 将文件处理器添加到日志记录器中
 app.logger.addHandler(file_handler)
+
+
 @app.route('/static/<path:filename>')
 def static_files(filename):
     return send_from_directory(app.config['STATIC_FOLDER'], filename)
 
+
 @app.route('/')
 def index():
-    voice_model = "yes" if VOICE_MODEL_EXITS else "no"
-    text_model = "yes" if TEXT_MODEL_EXITS else "no"
-    return render_template("index.html", text_model=text_model, voice_model=voice_model,
+    return render_template("index.html",
+                           text_model=TEXT_MODEL_EXITS,
+                           voice_model=VOICE_MODEL_EXITS,
+                           version=clone.ver,
+                           language=cfg.LANG,
                            root_dir=ROOT_DIR.replace('\\', '/'))
+
 
 # 上传音频
 @app.route('/upload', methods=['POST'])
@@ -49,22 +73,25 @@ def upload():
         save_dir = VOICE_DIR if not save_dir else os.path.join(ROOT_DIR, f'static/{save_dir}')
         app.logger.info(f"[upload]{audio_file.filename=},{save_dir=}")
         # 检查文件是否存在且是 WAV/mp3格式
-        noextname, ext=os.path.splitext(os.path.basename(audio_file.filename.lower()))
-        noextname=noextname.replace(' ', '')
-        if audio_file and ext in [".wav", ".mp3"]:
+        noextname, ext = os.path.splitext(os.path.basename(audio_file.filename.lower()))
+        noextname = noextname.replace(' ', '')
+        if audio_file and ext in [".wav", ".mp3",".flac"]:
             # 保存文件到服务器指定目录
-            name=f'{noextname}{ext}'
+            name = f'{noextname}{ext}'
             if os.path.exists(os.path.join(save_dir, f'{noextname}{ext}')):
                 name = f'{datetime.datetime.now().strftime("%m%d-%H%M%S")}-{noextname}{ext}'
             # mp3 or wav           
             tmp_wav = os.path.join(TMP_DIR, "tmp_" + name)
             audio_file.save(tmp_wav)
-            #save to wav
-            if ext =='.mp3':
-                name=f"{name[:-3]}wav"
+            # save to wav
+            if ext != '.wav':
+                name = f"{name[:-len(ext)]}.wav"
             savename = os.path.join(save_dir, name)
-            os.system(f'ffmpeg -y -i "{tmp_wav}" "{savename}"')
-            os.unlink(tmp_wav)
+            os.system(f'ffmpeg -hide_banner -y -i "{tmp_wav}" "{savename}"')
+            try:
+                os.unlink(tmp_wav)
+            except:
+                pass
             # 返回成功的响应
             return {'code': 0, 'msg': 'ok', "data": name}
         else:
@@ -90,7 +117,8 @@ def init():
 @app.route('/isstart', methods=['GET', 'POST'])
 def isstart():
     total = cfg.tts_n + cfg.sts_n
-    return jsonify({"code": 0, "msg": total, "tts": cfg.langlist['lang15'] if cfg.tts_n<1 else "", "sts":cfg.langlist['lang16'] if cfg.sts_n<1 else ""})
+    return jsonify({"code": 0, "msg": total, "tts": cfg.langlist['lang15'] if cfg.tts_n < 1 else "",
+                    "sts": cfg.langlist['lang16'] if cfg.sts_n < 1 else ""})
 
 
 # 根据文本返回tts结果，返回 name=文件名字，filename=文件绝对路径
@@ -223,9 +251,11 @@ def sts():
         app.logger.error(f"[sts][sts]error:{str(e)}")
         return jsonify({'code': 2, 'msg': f'voice->voice:{str(e)}'})
 
+
 @app.route('/checkupdate', methods=['GET', 'POST'])
 def checkupdate():
-    return jsonify({'code':0,"msg":cfg.updatetips})
+    return jsonify({'code': 0, "msg": cfg.updatetips})
+
 
 if __name__ == '__main__':
     web_address = os.getenv('WEB_ADDRESS', '127.0.0.1:9988')
@@ -243,7 +273,7 @@ if __name__ == '__main__':
             tts_thread.start()
         else:
             app.logger.error(
-                f"{langlist['lang3']}: {cfg.download_address}\n\n")
+                f"\n{langlist['lang3']}: {cfg.download_address}\n")
 
         if VOICE_MODEL_EXITS:
             print(langlist['lang4'])
@@ -251,16 +281,16 @@ if __name__ == '__main__':
             sts_thread.start()
         else:
             app.logger.error(
-                f"{langlist['lang5']}: {cfg.download_address}\n\n")
+                f"\n{langlist['lang5']}: {cfg.download_address}\n")
 
         if not VOICE_MODEL_EXITS and not TEXT_MODEL_EXITS:
-            print(f"{langlist['lang6']}: {cfg.download_address}\n\n")
+            print(f"\n{langlist['lang6']}: {cfg.download_address}\n")
         else:
             print(langlist['lang7'])
             http_server = None
             try:
                 host = web_address.split(':')
-                http_server = WSGIServer((host[0], int(host[1])), app)
+                http_server = WSGIServer((host[0], int(host[1])), app, handler_class=CustomRequestHandler)
                 threading.Thread(target=openweb, args=(web_address,)).start()
                 http_server.serve_forever()
             finally:
