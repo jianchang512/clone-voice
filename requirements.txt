@@ -5,3 +5,5 @@ flask
 tts
 requests
 gevent
+cutlet
+unidic-lite
