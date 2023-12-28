@@ -132,6 +132,13 @@ if md5sum is not None:
 ![](./images/3.png)
 ![](./images/4.png)
 
+# 相关联项目
+
+[视频翻译配音工具:翻译字幕并配音](https://github.com/jianchang512/pyvideotrans)
+
+[语音识别工具:本地离线的语音识别转文字工具](https://github.com/jianchang512/stt)
+
+[人声背景乐分离:极简的人声和背景音乐分离工具，本地化网页操作](https://github.com/jianchang512/stt)
 
 
 # [Youtube演示视频](https://youtu.be/CC227GXOJLk)
