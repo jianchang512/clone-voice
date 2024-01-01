@@ -98,7 +98,7 @@ if md5sum is not None:
 
 # CUDA 加速支持
 
-**安装CUDA工具**
+**安装CUDA工具** [详细安装方法](https://juejin.cn/post/7318704408727519270)
 
 如果你的电脑拥有 Nvidia 显卡，先升级显卡驱动到最新，然后去安装对应的 
    [CUDA Toolkit 11.8](https://developer.nvidia.com/cuda-downloads)  和  [cudnn for CUDA11.X](https://developer.nvidia.com/rdp/cudnn-archive)。
