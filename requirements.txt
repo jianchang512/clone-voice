@@ -7,3 +7,4 @@ requests
 gevent
 cutlet
 unidic-lite
+python-dotenv
