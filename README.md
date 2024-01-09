@@ -140,7 +140,8 @@ if md5sum is not None:
    首先确认模型已正确下载放置。tts文件夹内有3个文件夹，如下图
    ![image](https://github.com/jianchang512/clone-voice/assets/3378335/4b5a60eb-124d-404b-a748-c0a527482e90)
 
-   如果已正确放置了，但仍错误，[点击下载 2.tts_cache.zip](https://github.com/jianchang512/clone-voice/releases/download/v0.0.1/2.tts_cache.zip) ，将解压后得到的2个文件，复制到软件根目录的 tts_cache 文件夹内
+   如果已正确放置了，但仍错误，[点击下载 2.tts_cache.zip](https://github.com/jianchang512/clone-voice/releases/download/v0.0.1/2.tts_cache.zip) ，将解压后得到的2个文件，复制到软件根目录的 tts_cache 文件夹内,或者用个稳定的梯子开启全局代理，也可解决该问题
+   
 
 # 相关联项目
 
