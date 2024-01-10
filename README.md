@@ -36,7 +36,6 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 2. 下载后解压到某处，比如 E:/clone-voice 下
 
 3. 双击 app.exe ，等待自动打开web窗口，**请仔细阅读cmd窗口的文字提示**,如有错误，均会在此显示
-![image](https://github.com/jianchang512/clone-voice/assets/3378335/ad9bdaaa-f2a9-4133-9087-a272db662455)
 
 4. 模型下载后解压到软件目录下的 `tts` 文件夹内，解压后效果如图 
 
