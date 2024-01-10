@@ -143,6 +143,74 @@ def tts():
     # 判断是否是srt
     text_list = get_subtitle_from_srt(text)
     app.logger.info(f"[tts][tts]{text_list=}")
+    is_srt = True
+    # 不是srt格式,则按行分割
+    if text_list is None:
+        is_srt=False
+        text_list=[]
+        for it in text.split("\n"):
+            text_list.append({"text":it.strip()})
+        app.logger.info(f"[tts][tts] its not srt")
+
+    num = 0
+    while num < len(text_list):
+        t = text_list[num]
+        # 换行符改成 .
+        t['text'] = t['text'].replace("\n", ' . ')
+        md5_hash = hashlib.md5()
+        md5_hash.update(f"{t['text']}-{voice}-{language}".encode('utf-8'))
+        filename = md5_hash.hexdigest() + ".wav"
+        app.logger.info(f"[tts][tts]{filename=}")
+        # 合成语音
+        rs = create_tts(text=t['text'], voice=voice, language=language, filename=filename)
+        # 已有结果或错误，直接返回
+        if rs is not None:
+            text_list[num]['result'] = rs
+        # 循环等待 最多7200s
+        time_tmp = 0
+        while filename not in cfg.global_tts_result:
+            time.sleep(3)
+            time_tmp += 3
+            if time_tmp % 30 == 0:
+                app.logger.info(f"[tts][tts]{time_tmp=},{filename=}")
+
+        # 当前行已完成合成
+        if cfg.global_tts_result[filename] != 1:
+            msg = {"code": 1, "msg": cfg.global_tts_result[filename]}
+        else:
+            msg = {"code": 0, "filename": os.path.join(TTS_DIR, filename), 'name': filename}
+        app.logger.info(f"[tts][tts] {filename=},{msg=}")
+        cfg.global_tts_result.pop(filename)
+        text_list[num]['result'] = msg
+        app.logger.info(f"[tts][tts]{num=}")
+        num += 1
+
+    filename, errors = merge_audio_segments(text_list,is_srt=is_srt)
+    app.logger.info(f"[tts][tts]is srt，{filename=},{errors=}")
+    if filename and os.path.exists(filename) and os.path.getsize(filename) > 0:
+        res = {"code": 0, "filename": filename, "name": os.path.basename(filename), "msg": errors}
+    else:
+        res = {"code": 1, "msg": f"error:{filename=},{errors=}"}
+    app.logger.info(f"[tts][tts]end result:{res=}")
+    return jsonify(res)
+
+
+
+def ttsold():
+    # 原始字符串
+    text = request.form.get("text").strip()
+    voice = request.form.get("voice")
+    language = request.form.get("language")
+    app.logger.info(f"[tts][tts]recev {text=}\n{voice=},{language=}\n")
+
+    if re.match(r'^[~`!@#$%^&*()_+=,./;\':\[\]{}<>?\\|"，。？；‘：“”’｛【】｝！·￥、\s\n\r -]*$', text):
+        return jsonify({"code": 1, "msg": "no text"})
+    if not text or not voice or not language:
+        return jsonify({"code": 1, "msg": "text/voice/language params lost"})
+
+    # 判断是否是srt
+    text_list = get_subtitle_from_srt(text)
+    app.logger.info(f"[tts][tts]{text_list=}")
     is_srt = False
     # 不是srt格式
     if text_list is None:

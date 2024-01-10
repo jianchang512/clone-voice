@@ -33,17 +33,18 @@ def ttsloop():
     while not cfg.exit_event.is_set():
         try:
             obj = cfg.q.get(block=True, timeout=1)
+        
+            print(f"[tts][ttsloop]start tts，{obj=}")
+            try:
+                tts.tts_to_file(text=obj['text'], speaker_wav=os.path.join(cfg.VOICE_DIR, obj['voice']),
+                                language=obj['language'], file_path=os.path.join(cfg.TTS_DIR, obj['filename']))
+                cfg.global_tts_result[obj['filename']] = 1
+                print(f"[tts][ttsloop]end: {obj=}")
+            except Exception as e:
+                print(f"[tts][ttsloop]error:{str(e)}")
+                cfg.global_tts_result[obj['filename']] = str(e)
         except Exception:
             continue
-        print(f"[tts][ttsloop]start tts，{obj=}")
-        try:
-            tts.tts_to_file(text=obj['text'], speaker_wav=os.path.join(cfg.VOICE_DIR, obj['voice']),
-                            language=obj['language'], file_path=os.path.join(cfg.TTS_DIR, obj['filename']))
-            cfg.global_tts_result[obj['filename']] = 1
-            print(f"[tts][ttsloop]end: {obj=}")
-        except Exception as e:
-            print(f"[tts][ttsloop]error:{str(e)}")
-            cfg.global_tts_result[obj['filename']] = str(e)
 
 
 # s t s 线程
@@ -64,19 +65,19 @@ def stsloop():
         return
     while not cfg.exit_event.is_set():
         try:
-            obj = cfg.q_sts.get(block=True, timeout=1)
+            obj = cfg.q_sts.get(block=True, timeout=1)        
+            print(f"[sts][stsloop]start sts，{obj=}")
+            try:
+                tts.voice_conversion_to_file(source_wav=os.path.join(cfg.TMP_DIR, obj['filename']),
+                                             target_wav=os.path.join(cfg.VOICE_DIR, obj['voice']),
+                                             file_path=os.path.join(cfg.TTS_DIR, obj['filename']))
+                cfg.global_sts_result[obj['filename']] = 1
+                print(f"[sts][stsloop] end {obj=}")
+            except Exception as e:
+                print(f"[sts][stsloop]error:{str(e)}")
+                cfg.global_sts_result[obj['filename']] = str(e)
         except Exception as e:
             continue
-        print(f"[sts][stsloop]start sts，{obj=}")
-        try:
-            tts.voice_conversion_to_file(source_wav=os.path.join(cfg.TMP_DIR, obj['filename']),
-                                         target_wav=os.path.join(cfg.VOICE_DIR, obj['voice']),
-                                         file_path=os.path.join(cfg.TTS_DIR, obj['filename']))
-            cfg.global_sts_result[obj['filename']] = 1
-            print(f"[sts][stsloop] end {obj=}")
-        except Exception as e:
-            print(f"[sts][stsloop]error:{str(e)}")
-            cfg.global_sts_result[obj['filename']] = str(e)
 
 
 
@@ -97,7 +98,7 @@ def create_tts(*, text, voice, language, filename):
     return None
 
 # join all short audio to one ,eg name.mp4  name.mp4.wav
-def merge_audio_segments(text_list):
+def merge_audio_segments(text_list,is_srt=True):
     # 获得md5
     md5_hash = hashlib.md5()
     md5_hash.update(f"{json.dumps(text_list)}".encode('utf-8'))
@@ -108,16 +109,24 @@ def merge_audio_segments(text_list):
     segments = []
     start_times = []
     errors = []
+    merged_audio = AudioSegment.empty()
     for it in text_list:
         if "filename" in it['result']:
             # 存在音频文件
-            segments.append(AudioSegment.from_wav(it['result']['filename']))
-            start_times.append(it['start_time'])
+            seg=AudioSegment.from_wav(it['result']['filename'])
+            if "start_time" in it:
+                start_times.append(it['start_time'])
+                segments.append(seg)
+            else:
+                merged_audio+=seg
         elif "msg" in it['result']:
             # 出错
             errors.append(it['result']['msg'])
+    
+    if not is_srt:
+        merged_audio.export(absofilename, format="wav")
+        return (absofilename, "<-->".join(errors))
 
-    merged_audio = AudioSegment.empty()
     # start is not 0
     if int(start_times[0]) != 0:
         silence_duration = start_times[0]

@@ -50,7 +50,7 @@ TTS_DIR = os.path.join(ROOT_DIR, 'static/ttslist')
 # 临时目录
 TMP_DIR = os.path.join(ROOT_DIR, 'static/tmp')
 # 声音转声音 模型是否存在
-if os.path.exists(os.path.join(ROOT_DIR, "tts/voice_conversion_models--multilingual--vctk--freevc24/model.pth")):
+if os.path.exists(os.path.join(ROOT_DIR, "tts/1voice_conversion_models--multilingual--vctk--freevc24/model.pth")):
     VOICE_MODEL_EXITS = True
 else:
     VOICE_MODEL_EXITS = False
