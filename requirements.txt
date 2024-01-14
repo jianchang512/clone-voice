@@ -1,5 +1,7 @@
+
 torch==2.1.2 --index-url https://download.pytorch.org/whl/cu121
 torchaudio==2.1.2  --index-url https://download.pytorch.org/whl/cu121
+
 pydub
 flask
 tts
