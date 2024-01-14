@@ -1,0 +1,10 @@
+torch==2.1.2
+torchaudio==2.1.2
+pydub
+flask
+tts
+requests
+gevent
+cutlet
+unidic-lite
+python-dotenv
