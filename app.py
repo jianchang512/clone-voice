@@ -17,6 +17,8 @@ from clone.cfg import ROOT_DIR, TTS_DIR, VOICE_MODEL_EXITS, TMP_DIR, VOICE_DIR, 
 from clone.logic import ttsloop, stsloop, create_tts, openweb, merge_audio_segments, get_subtitle_from_srt
 from clone import logic
 from gevent.pywsgi import LoggingLogAdapter
+import shutil
+import subprocess
 
 class CustomRequestHandler(WSGIHandler):
     def log_request(self):
@@ -132,6 +134,11 @@ def tts():
     # 原始字符串
     text = request.form.get("text").strip()
     voice = request.form.get("voice")
+    speed=1.0
+    try:
+        speed = float(request.form.get("speed"))
+    except:
+        pass
     language = request.form.get("language")
     app.logger.info(f"[tts][tts]recev {text=}\n{voice=},{language=}\n")
 
@@ -158,11 +165,11 @@ def tts():
         # 换行符改成 .
         t['text'] = t['text'].replace("\n", ' . ')
         md5_hash = hashlib.md5()
-        md5_hash.update(f"{t['text']}-{voice}-{language}".encode('utf-8'))
+        md5_hash.update(f"{t['text']}-{voice}-{language}-{speed}".encode('utf-8'))
         filename = md5_hash.hexdigest() + ".wav"
         app.logger.info(f"[tts][tts]{filename=}")
         # 合成语音
-        rs = create_tts(text=t['text'], voice=voice, language=language, filename=filename)
+        rs = create_tts(text=t['text'], speed=speed, voice=voice, language=language, filename=filename)
         # 已有结果或错误，直接返回
         if rs is not None:
             text_list[num]['result'] = rs
@@ -178,7 +185,15 @@ def tts():
         if cfg.global_tts_result[filename] != 1:
             msg = {"code": 1, "msg": cfg.global_tts_result[filename]}
         else:
-            msg = {"code": 0, "filename": os.path.join(TTS_DIR, filename), 'name': filename}
+            target_wav=os.path.normpath(os.path.join(TTS_DIR, filename))
+            if speed != 1.0 and speed >0 and speed<=2.0:
+                #生成的加速音频
+                speed_tmp=os.path.join(TMP_DIR, f'speed_{time.time()}.wav')
+                p=subprocess.run(['ffmpeg','-hide_banner','-ignore_unknown','-y','-i',target_wav,'-af',f"atempo={speed}",os.path.normpath(speed_tmp)], encoding="utf-8", capture_output=True)
+                if p.returncode !=0:
+                    return jsonify({"code": 1, "msg": str(p.stderr)})
+                shutil.copy2(speed_tmp, target_wav)
+            msg = {"code": 0, "filename": target_wav, 'name': filename}
         app.logger.info(f"[tts][tts] {filename=},{msg=}")
         cfg.global_tts_result.pop(filename)
         text_list[num]['result'] = msg

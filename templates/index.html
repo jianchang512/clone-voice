@@ -11,7 +11,7 @@
         }
 
         .container {
-            max-width: 1240px;
+            max-width: 1300px;
             margin: 20px auto 50px;
         }
 
@@ -127,8 +127,8 @@
 			<a class="fs-6 text-black btn" href="https://github.com/jianchang512/clone-voice" target="_blank">Github</a>
 			<a class="fs-6 text-black btn" href="https://github.com/jianchang512/clone-voice/issue" target="_blank"
                data-en="Post a Issue" data-cn="遇到问题?"></a>
-			<a class="fs-6 text-success btn" href="https://github.com/jianchang512/pyvideotrans/issues/80"
-               target="_blank" data-en="Donate to the project" data-cn="捐助该项目"></a>
+			<a class="fs-6 text-success btn" href="javascript:;" onclick="showjz(this)" data-href="https://github.com/jianchang512/pyvideotrans/issues/80"
+               data-en="Donate to the project" data-cn="捐助该项目"></a>
 			</span>
         </h4>
         <hr>
@@ -142,7 +142,7 @@
     </div>
     <div class="p-3 shadow bg-white">
         <div class="row mt-4">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="languageSelect" class="form-label" data-en="Language:" data-cn="文本语言："></label>
                 <select class="form-select" id="languageSelect">
                     <option data-en="Chinese" value="zh-cn" data-cn="中文"></option>
@@ -163,7 +163,13 @@
                     <option data-en="Czech" value="cs" data-cn="捷克语"></option>
                 </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <label for="speed" class="form-label" data-en="Speed(0.1-2.0/1.0 is normal):" data-cn="速度倍数(0.1-2.0/1.0=常速)："></label>
+                <div>
+                <input id="speed" name="speed" class="form-control mt-0" style="width:80px;" type="number" min="0.1" max="2.0" step="0.05" value="1.0">
+                </div>
+            </div>
+            <div class="col-md-3">
                 <label for="audioSelect" class="form-label"><span data-en="The sound file to be used:"
                                                                   data-cn="要使用的声音文件:"></span><a href="javascript:;"
                                                                                                 onclick="shiting(this)"
@@ -184,7 +190,7 @@
                           data-cn="或在线录制5-15s的声音wav，即可在此选择使用"></span>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <button class="btn btn-sm btn-primary btn-record" id="startRecord" data-en="start recording"
                         data-cn="开始录制"></button>
                 <button class="btn btn-sm btn-danger btn-record" id="stopRecord" disabled data-en="stop recorder"
@@ -265,11 +271,6 @@
             <div class="col-md-12 d-none text-danger text-center" id="tips"></div>
         </div>
 
-        <div class="my-5 py-2 text-center">
-            <a href="https://github.com/jianchang512/clone-voice/issues/10" class="text-black-50 btn-link"
-               data-en="If the project is helpful to you, saving time and money, please consider providing small funding to developers help the project can be updated and maintained for a long time."
-               target="_blank" data-cn="如果项目对你有帮助，节省了时间和金钱，请考虑小额资助开发者，帮助项目能够长期保持更新和维护。"></a>
-        </div>
     </div>
 </div>
 <script src="/static/js/jquery.min.js"></script>
@@ -292,8 +293,13 @@
         'lang12': '必须上传要转换的声音wav/mp3文件',
         'lang13': '开始合成，用时可能较久，耐心等待',
         'lang14': "[文字->声音]或[声音->声音]线程还没有启动完毕，请等待",
-        'lang15': '已转为wav格式: '
+        'lang15': '已转为wav格式: ', 
+        'lang16':'速度必须在0.1--2.0之间，1为正常速度，2为两倍速', 
+        'lang17':'捐助该项目', 
+        'lang18':'如果项目对你有帮助，节省了时间和金钱，请考虑小额资助开发者，帮助项目能够长期保持更新和维护。'
+        
     } : {
+        
         "lang1": 'You must select the voice for audition',
         "lang2": 'Recording',
         "lang3": 'Use this button after stopping recording',
@@ -308,7 +314,10 @@
         'lang12': 'You must upload the wav/mp3 audio file for conversion',
         'lang13': 'The synthesis might take a while, please wait patiently',
         'lang14': "[text->speech] or [speech->speech] thread not started，hold on",
-        'lang15': 'Convered to wav format: '
+        'lang15': 'Convered to wav format: ', 
+        'lang16':'speed between 0.1 and 2.0，1 is normal speed', 
+        'lang17':'Donate to the project', 
+        'lang18':'If the project is helpful to you, saving time and money, please consider providing small funding to developers help the project can be updated and maintained for a long time'
     };
     let mediaRecorder;
     let audioChunks = [];
@@ -534,9 +543,16 @@
         let text = $('#textInput').val();
         // 当前所选的 合成类型
         let type = $('#tts-area').hasClass('d-none') ? 'sts' : 'tts';
+        let speed=parseFloat($('#speed').val())
+        if(type == 'tts' && !(speed>0 && speed<=2.0)){
+            alert(langlist['lang16'])
+            return False
+            speed=1.0
+        }
+        
 
         if (!voice) {
-            return layer.alert(langlist['10'], {title: false});
+            return layer.alert(langlist['lang10'], {title: false});
         }
         if (type == 'tts' && !text) {
             return layer.alert(langlist['lang11'], {title: false});
@@ -574,7 +590,7 @@
         }
 
         if (type == 'tts') {
-            $.post('/tts', {voice: voice, text: text, language: language}, function (res) {
+            $.post('/tts', {voice: voice, text: text, language: language, speed:speed}, function (res) {
                 fun_res(res);
             });
         } else {
@@ -684,7 +700,20 @@
             }
         });
     }
-
+    
+    function showjz(el){
+        layer.open({
+          type: 1, // page 层类型
+          area: ['300px', '450px'],
+          title: langlist['lang17'],
+          shade: 0.6, // 遮罩透明度
+          shadeClose: true, // 点击遮罩区域，关闭弹层
+          maxmin: true, // 允许全屏最小化
+          anim: 0, // 0-6 的动画形式，-1 不开启
+          content: `<div style="padding: 10px; "><div class="fs-6 text-black-500">${langlist['lang18']}</div><img src="/static/images/wx.png" width="200px" style="display:block;margin:10px auto;"><img src="/static/images/alipay.png" width="200px" style="display:block;margin:10px auto"></div>`
+        });
+    }
+    
     init();
     stsinit();
     check_start();

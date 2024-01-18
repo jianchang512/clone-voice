@@ -36,8 +36,8 @@ def ttsloop():
         
             print(f"[tts][ttsloop]start tts，{obj=}")
             try:
-                tts.tts_to_file(text=obj['text'], speaker_wav=os.path.join(cfg.VOICE_DIR, obj['voice']),
-                                language=obj['language'], file_path=os.path.join(cfg.TTS_DIR, obj['filename']))
+                #split_sentences=True
+                tts.tts_to_file(text=obj['text'], speaker_wav=os.path.join(cfg.VOICE_DIR, obj['voice']), language=obj['language'], file_path=os.path.join(cfg.TTS_DIR, obj['filename']), split_sentences=False)
                 cfg.global_tts_result[obj['filename']] = 1
                 print(f"[tts][ttsloop]end: {obj=}")
             except Exception as e:
@@ -68,6 +68,7 @@ def stsloop():
             obj = cfg.q_sts.get(block=True, timeout=1)        
             print(f"[sts][stsloop]start sts，{obj=}")
             try:
+                #split_sentences=True
                 tts.voice_conversion_to_file(source_wav=os.path.join(cfg.TMP_DIR, obj['filename']),
                                              target_wav=os.path.join(cfg.VOICE_DIR, obj['voice']),
                                              file_path=os.path.join(cfg.TTS_DIR, obj['filename']))
@@ -82,15 +83,15 @@ def stsloop():
 
 
 # 实际启动tts合成的函数
-def create_tts(*, text, voice, language, filename):
+def create_tts(*, text, voice, language, filename, speed=1.0):
     absofilename = os.path.join(cfg.TTS_DIR, filename)
     if os.path.exists(absofilename) and os.path.getsize(absofilename) > 0:
-        print(f"[tts][create_ts]{filename} has exists")
+        print(f"[tts][create_ts]{filename} {speed} has exists")
         cfg.global_tts_result[filename] = 1
         return {"code": 0, "filename": absofilename, 'name': filename}
     try:
         print(f"[tts][create_ts] **{text}** push queue")
-        cfg.q.put({"voice": voice, "text": text, "language": language, "filename": filename})
+        cfg.q.put({"voice": voice, "text": text,"speed":speed, "language": language, "filename": filename})
     except Exception as e:
         print(e)
         print(f"[tts][create_ts] error，{str(e)}")
@@ -119,6 +120,10 @@ def merge_audio_segments(text_list,is_srt=True):
                 segments.append(seg)
             else:
                 merged_audio+=seg
+            try:
+                os.unlink(it['result']['filename'])
+            except:
+                pass
         elif "msg" in it['result']:
             # 出错
             errors.append(it['result']['msg'])
