@@ -53,7 +53,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 
 # 源码部署(linux mac window)
 
-**源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问**
+**源码版需要在 .env 中 HTTP_PROXY=设置代理(比如http://127.0.0.1:7890)，要从 https://huggingface.co https://github.com 下载模型，而这个网址国内无法访问，必须保证代理稳定可靠，否则大模型下载可能中途失败**
 
 0. 要求 python 3.9->3.11
 1. 创建空目录，比如 E:/clone-voice, 在这个目录下打开 cmd 窗口，方法是地址栏中输入 `cmd`, 然后回车。
@@ -117,7 +117,7 @@ if md5sum is not None:
 
 **模型xtts仅可用于学习研究，不可用于商业**
 
-0. 源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问，源码版启动时可能频繁遇到错误，基本都是代理问题导致无法从墙外下载模型或下载中断不完整。建议使用稳定的代理，全局开启。如果始终无法完整下载，建议使用预编译版。
+0. 源码版需要在 .env 中 HTTP_PROXY=设置代理(比如http://127.0.0.1:7890)，要从 https://huggingface.co https://github.com 下载模型，而这个网址国内无法访问，必须保证代理稳定可靠，否则大模型下载可能中途失败
 
 1. 启动后需要冷加载模型，会消耗一些时间，请耐心等待显示出`http://127.0.0.1:9988`， 并自动打开浏览器页面后，稍等两三分钟后再进行转换
 
@@ -138,11 +138,13 @@ if md5sum is not None:
    首先确认模型已正确下载放置。tts文件夹内有3个文件夹，如下图
    ![image](https://github.com/jianchang512/clone-voice/assets/3378335/4b5a60eb-124d-404b-a748-c0a527482e90)
 
-   如果已正确放置了，但仍错误，[点击下载 tts_cache.zip](https://github.com/jianchang512/clone-voice/releases/download/v0.0.1/tts_cache.zip) ，将解压后得到的2个文件，复制到软件根目录的 tts_cache 文件夹内,或者用个稳定的梯子开启全局代理，在 .env 文件中 HTTP_PROXY后填写代理地址比如 `HTTP_PROXY=http://127.0.0.1:7890` 也可解决该问题
+   如果已正确放置了，但仍错误，[点击下载 tts_cache.zip](https://github.com/jianchang512/clone-voice/releases/download/v0.0.1/tts_cache.zip) ，将解压后得到的2个文件，复制到软件根目录的 tts_cache 文件夹内
+
+   如果上述方法无效，在 .env 文件中 HTTP_PROXY后填写代理地址比如 `HTTP_PROXY=http://127.0.0.1:7890`，可解决该问题，必须确保代理稳定，填写端口正确
 
 5. 提示 “The text length exceeds the character limit of 182/82 for language”
 
-   这是因为由句号分隔的句子太长导致的，建议将太长的语句使用句号隔开，而不是大量使用逗号，
+   这是因为由句号分隔的句子太长导致的，建议将太长的语句使用句号隔开，而不是大量使用逗号，或者你也可以打开 clone/character.json文件，手动修改限制
    
 
 # 相关联项目

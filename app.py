@@ -19,6 +19,8 @@ from clone import logic
 from gevent.pywsgi import LoggingLogAdapter
 import shutil
 import subprocess
+from dotenv import load_dotenv
+load_dotenv()
 
 class CustomRequestHandler(WSGIHandler):
     def log_request(self):
