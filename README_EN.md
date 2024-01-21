@@ -133,6 +133,10 @@ The model xtts can only be used for study and research, not for commerical use
 ![](./images/3.png)
 ![](./images/4.png)
 
+4. “The text length exceeds the character limit of 182/82 for language”
+
+  This is because sentences separated by periods are too long. It is recommended to use periods to separate sentences that are too long, rather than excessive use of commas,
+
 
 
 # [Youtube Demo Video](https://youtu.be/NL5cIoJ9Gjo)
