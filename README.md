@@ -112,9 +112,10 @@ if md5sum is not None:
 
 
 
-# 注意事项
 
-模型xtts仅可用于学习研究，不可用于商业
+# 常见问题
+
+**模型xtts仅可用于学习研究，不可用于商业**
 
 0. 源码版需要全局代理，因为要从 https://huggingface.co 下载模型，而这个网址国内无法访问，源码版启动时可能频繁遇到错误，基本都是代理问题导致无法从墙外下载模型或下载中断不完整。建议使用稳定的代理，全局开启。如果始终无法完整下载，建议使用预编译版。
 
@@ -132,14 +133,16 @@ if md5sum is not None:
 ![](./images/4.png)
 
 
-# 常见问题
-
-1. 预编译版 声音-声音线程启动失败
+4. 预编译版 声音-声音线程启动失败
 
    首先确认模型已正确下载放置。tts文件夹内有3个文件夹，如下图
    ![image](https://github.com/jianchang512/clone-voice/assets/3378335/4b5a60eb-124d-404b-a748-c0a527482e90)
 
-   如果已正确放置了，但仍错误，[点击下载 tts_cache.zip](https://github.com/jianchang512/clone-voice/releases/download/v0.0.1/tts_cache.zip) ，将解压后得到的2个文件，复制到软件根目录的 tts_cache 文件夹内,或者用个稳定的梯子开启全局代理，也可解决该问题
+   如果已正确放置了，但仍错误，[点击下载 tts_cache.zip](https://github.com/jianchang512/clone-voice/releases/download/v0.0.1/tts_cache.zip) ，将解压后得到的2个文件，复制到软件根目录的 tts_cache 文件夹内,或者用个稳定的梯子开启全局代理，在 .env 文件中 HTTP_PROXY后填写代理地址比如 `HTTP_PROXY=http://127.0.0.1:7890` 也可解决该问题
+
+5. 提示 “The text length exceeds the character limit of 182/82 for language”
+
+   这是因为由句号分隔的句子太长导致的，建议将太长的语句使用句号隔开，而不是大量使用逗号，
    
 
 # 相关联项目
