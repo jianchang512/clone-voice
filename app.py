@@ -14,17 +14,24 @@ from logging.handlers import RotatingFileHandler
 import clone
 from clone import cfg
 from clone.cfg import ROOT_DIR, TTS_DIR, VOICE_MODEL_EXITS, TMP_DIR, VOICE_DIR, TEXT_MODEL_EXITS, langlist
-from clone.logic import ttsloop, stsloop, create_tts, openweb, merge_audio_segments, get_subtitle_from_srt
+from clone.logic import ttsloop, stsloop, create_tts, openweb, merge_audio_segments, get_subtitle_from_srt, updatecache
 from clone import logic
 from gevent.pywsgi import LoggingLogAdapter
 import shutil
 import subprocess
 from dotenv import load_dotenv
+
 load_dotenv()
+
+web_address = os.getenv('WEB_ADDRESS', '127.0.0.1:9988')
+
 
 class CustomRequestHandler(WSGIHandler):
     def log_request(self):
         pass
+
+
+updatecache()
 
 # 配置日志
 # 禁用 Werkzeug 默认的日志处理器
@@ -38,7 +45,6 @@ app = Flask(__name__, static_folder=os.path.join(ROOT_DIR, 'static'), static_url
 root_log = logging.getLogger()  # Flask的根日志记录器
 root_log.handlers = []
 root_log.setLevel(logging.WARNING)
-
 
 app.logger.setLevel(logging.WARNING)  # 设置日志级别为 INFO
 # 创建 RotatingFileHandler 对象，设置写入的文件路径和大小限制
@@ -79,7 +85,7 @@ def upload():
         # 检查文件是否存在且是 WAV/mp3格式
         noextname, ext = os.path.splitext(os.path.basename(audio_file.filename.lower()))
         noextname = noextname.replace(' ', '')
-        if audio_file and ext in [".wav", ".mp3",".flac"]:
+        if audio_file and ext in [".wav", ".mp3", ".flac"]:
             # 保存文件到服务器指定目录
             name = f'{noextname}{ext}'
             if os.path.exists(os.path.join(save_dir, f'{noextname}{ext}')):
@@ -97,13 +103,13 @@ def upload():
             except:
                 pass
             # 返回成功的响应
-            return {'code': 0, 'msg': 'ok', "data": name}
+            return jsonify({'code': 0, 'msg': 'ok', "data": name})
         else:
             # 返回错误的响应
-            return {'code': 1, 'msg': 'not wav'}
+            return jsonify({'code': 1, 'msg': 'not wav'})
     except Exception as e:
         app.logger.error(f'[upload]error: {e}')
-        return {'code': 2, 'msg': 'error'}
+        return jsonify({'code': 2, 'msg': 'error'})
 
 
 # 从 voicelist 目录获取可用的 wav 声音列表
@@ -125,6 +131,85 @@ def isstart():
                     "sts": cfg.langlist['lang16'] if cfg.sts_n < 1 else ""})
 
 
+# 外部接口
+@app.route('/apitts', methods=['GET', 'POST'])
+def apitts():
+    '''
+    audio:原始声音wav,作为音色克隆源
+    voice:已有的声音名字，如果存在 voice则先使用，否则使用audio
+    text:文字一行
+    language：语言代码
+    Returns:
+    '''
+    try:
+        langcodelist=["zh-cn","en","ja","ko","es","de","fr","it","tr","ru","pt","pl","nl","ar","hu","cs"]
+        text = request.form.get("text").strip()
+        text = text.replace("\n", ' . ')
+        language = request.form.get("language","").lower()
+        if language.startswith("zh"):
+            language="zh-cn"
+        if language not in langcodelist:
+            return jsonify({"code":1,"msg":f"dont support language {language}"})
+
+        md5_hash = hashlib.md5()
+
+        audio_name = request.form.get('voice')
+        # 存在传来的声音文件名字
+        if audio_name:
+            voicename = os.path.join(VOICE_DIR, audio_name)
+        else:  # 获取上传的文件
+            audio_file = request.files['audio']
+            print(f'{audio_file.filename}')
+            # 保存临时上传过来的声音文件
+            audio_name = f'video_{audio_file.filename}.wav'
+            voicename = os.path.join(TMP_DIR, audio_name)
+            audio_file.save(voicename)
+        md5_hash.update(f"{text}-{language}-{audio_name}".encode('utf-8'))
+
+        app.logger.info(f"[apitts]{voicename=}")
+        if re.match(r'^[~`!@#$%^&*()_+=,./;\':\[\]{}<>?\\|"，。？；‘：“”’｛【】｝！·￥、\s\n\r -]*$', text):
+            return jsonify({"code": 1, "msg": "lost text for translate"})
+        if not text or not language:
+            return jsonify({"code": 1, "msg": "text & language params lost"})
+        app.logger.info(f"[apitts]{text=},{language=}")
+
+        # 存放结果
+        # 合成后的语音文件
+        filename = md5_hash.hexdigest() + ".mp3"
+        app.logger.info(f"[apitts]{filename=}")
+        # 合成语音
+        rs = create_tts(text=text, speed=1.0, voice=voicename, language=language, filename=filename)
+        # 已有结果或错误，直接返回
+        if rs is not None:
+            result = rs
+        else:
+            # 循环等待 最多7200s
+            time_tmp = 0
+            while filename not in cfg.global_tts_result:
+                time.sleep(3)
+                time_tmp += 3
+                if time_tmp % 30 == 0:
+                    app.logger.info(f"[apitts][tts]{time_tmp=},{filename=}")
+
+            # 当前行已完成合成
+            if cfg.global_tts_result[filename] != 1:
+                msg = {"code": 1, "msg": cfg.global_tts_result[filename]}
+            else:
+                target_wav = os.path.normpath(os.path.join(TTS_DIR, filename))
+                msg = {"code": 0, "filename": target_wav, 'name': filename}
+            app.logger.info(f"[apitts][tts] {filename=},{msg=}")
+            cfg.global_tts_result.pop(filename)
+            result = msg
+            app.logger.info(f"[apitts]{msg=}")
+        if result['code'] == 0:
+            result['url'] = f'http://{web_address}/static/ttslist/{filename}'
+        return jsonify(result)
+    except Exception as e:
+        msg=f'{str(e)} {str(e.args)}'
+        app.logger.error(f"[apitts]{msg}")
+        return jsonify({'code': 2, 'msg': msg})
+
+
 # 根据文本返回tts结果，返回 name=文件名字，filename=文件绝对路径
 # 请求端根据需要自行选择使用哪个
 # params
@@ -136,7 +221,7 @@ def tts():
     # 原始字符串
     text = request.form.get("text").strip()
     voice = request.form.get("voice")
-    speed=1.0
+    speed = 1.0
     try:
         speed = float(request.form.get("speed"))
     except:
@@ -155,10 +240,10 @@ def tts():
     is_srt = True
     # 不是srt格式,则按行分割
     if text_list is None:
-        is_srt=False
-        text_list=[]
+        is_srt = False
+        text_list = []
         for it in text.split("\n"):
-            text_list.append({"text":it.strip()})
+            text_list.append({"text": it.strip()})
         app.logger.info(f"[tts][tts] its not srt")
 
     num = 0
@@ -175,6 +260,8 @@ def tts():
         # 已有结果或错误，直接返回
         if rs is not None:
             text_list[num]['result'] = rs
+            num += 1
+            continue
         # 循环等待 最多7200s
         time_tmp = 0
         while filename not in cfg.global_tts_result:
@@ -187,12 +274,14 @@ def tts():
         if cfg.global_tts_result[filename] != 1:
             msg = {"code": 1, "msg": cfg.global_tts_result[filename]}
         else:
-            target_wav=os.path.normpath(os.path.join(TTS_DIR, filename))
-            if speed != 1.0 and speed >0 and speed<=2.0:
-                #生成的加速音频
-                speed_tmp=os.path.join(TMP_DIR, f'speed_{time.time()}.wav')
-                p=subprocess.run(['ffmpeg','-hide_banner','-ignore_unknown','-y','-i',target_wav,'-af',f"atempo={speed}",os.path.normpath(speed_tmp)], encoding="utf-8", capture_output=True)
-                if p.returncode !=0:
+            target_wav = os.path.normpath(os.path.join(TTS_DIR, filename))
+            if speed != 1.0 and speed > 0 and speed <= 2.0:
+                # 生成的加速音频
+                speed_tmp = os.path.join(TMP_DIR, f'speed_{time.time()}.wav')
+                p = subprocess.run(
+                    ['ffmpeg', '-hide_banner', '-ignore_unknown', '-y', '-i', target_wav, '-af', f"atempo={speed}",
+                     os.path.normpath(speed_tmp)], encoding="utf-8", capture_output=True)
+                if p.returncode != 0:
                     return jsonify({"code": 1, "msg": str(p.stderr)})
                 shutil.copy2(speed_tmp, target_wav)
             msg = {"code": 0, "filename": target_wav, 'name': filename}
@@ -202,88 +291,7 @@ def tts():
         app.logger.info(f"[tts][tts]{num=}")
         num += 1
 
-    filename, errors = merge_audio_segments(text_list,is_srt=is_srt)
-    app.logger.info(f"[tts][tts]is srt，{filename=},{errors=}")
-    if filename and os.path.exists(filename) and os.path.getsize(filename) > 0:
-        res = {"code": 0, "filename": filename, "name": os.path.basename(filename), "msg": errors}
-    else:
-        res = {"code": 1, "msg": f"error:{filename=},{errors=}"}
-    app.logger.info(f"[tts][tts]end result:{res=}")
-    return jsonify(res)
-
-
-
-def ttsold():
-    # 原始字符串
-    text = request.form.get("text").strip()
-    voice = request.form.get("voice")
-    language = request.form.get("language")
-    app.logger.info(f"[tts][tts]recev {text=}\n{voice=},{language=}\n")
-
-    if re.match(r'^[~`!@#$%^&*()_+=,./;\':\[\]{}<>?\\|"，。？；‘：“”’｛【】｝！·￥、\s\n\r -]*$', text):
-        return jsonify({"code": 1, "msg": "no text"})
-    if not text or not voice or not language:
-        return jsonify({"code": 1, "msg": "text/voice/language params lost"})
-
-    # 判断是否是srt
-    text_list = get_subtitle_from_srt(text)
-    app.logger.info(f"[tts][tts]{text_list=}")
-    is_srt = False
-    # 不是srt格式
-    if text_list is None:
-        text_list = [{"text": text}]
-        app.logger.info(f"[tts][tts] its not srt")
-    else:
-        # 是字幕
-        is_srt = True
-    num = 0
-    response_json = {}
-    while num < len(text_list):
-        t = text_list[num]
-        # 换行符改成 .
-        t['text'] = t['text'].replace("\n", ' . ')
-        md5_hash = hashlib.md5()
-        md5_hash.update(f"{t['text']}-{voice}-{language}".encode('utf-8'))
-        filename = md5_hash.hexdigest() + ".wav"
-        app.logger.info(f"[tts][tts]{filename=}")
-        # 合成语音
-        rs = create_tts(text=t['text'], voice=voice, language=language, filename=filename)
-        # 已有结果或错误，直接返回
-        if rs is not None:
-            if not is_srt:
-                response_json = rs
-                break
-            else:
-                text_list[num]['result'] = rs
-        # 循环等待 最多7200s
-        time_tmp = 0
-        while filename not in cfg.global_tts_result:
-            time.sleep(3)
-            time_tmp += 3
-            if time_tmp % 30 == 0:
-                app.logger.info(f"[tts][tts]{time_tmp=},{filename=}")
-
-        # 当前行已完成合成
-        if cfg.global_tts_result[filename] != 1:
-            msg = {"code": 1, "msg": cfg.global_tts_result[filename]}
-        else:
-            msg = {"code": 0, "filename": os.path.join(TTS_DIR, filename), 'name': filename}
-        app.logger.info(f"[tts][tts] {filename=},{msg=}")
-        cfg.global_tts_result.pop(filename)
-        if not is_srt:
-            response_json = msg
-            break
-
-        text_list[num]['result'] = msg
-        app.logger.info(f"[tts][tts]{num=}")
-        num += 1
-    # 不是字幕则返回
-    if not is_srt:
-        app.logger.info(f"[tts][tts] {response_json=}")
-        return jsonify(response_json)
-    # 继续处理字幕
-
-    filename, errors = merge_audio_segments(text_list)
+    filename, errors = merge_audio_segments(text_list, is_srt=is_srt)
     app.logger.info(f"[tts][tts]is srt，{filename=},{errors=}")
     if filename and os.path.exists(filename) and os.path.getsize(filename) > 0:
         res = {"code": 0, "filename": filename, "name": os.path.basename(filename), "msg": errors}
@@ -343,7 +351,7 @@ def checkupdate():
 
 
 if __name__ == '__main__':
-    web_address = os.getenv('WEB_ADDRESS', '127.0.0.1:9988')
+
     tts_thread = None
     sts_thread = None
     try:

@@ -13,6 +13,22 @@ import clone
 from clone import cfg
 from clone.cfg import langlist
 from TTS.api import TTS
+
+def updatecache():
+    # 禁止更新，避免无代理时报错
+    file=os.path.join(cfg.ROOT_DIR,'tts_cache/cache')
+    if file:
+        j=json.load(open(file,'r',encoding='utf-8'))
+        for i,it in enumerate(j):
+            if "time" in it and "fn" in it:
+                cache_file=os.path.join(cfg.ROOT_DIR,f'tts_cache/{it["fn"]}')
+                if os.path.exists(cache_file) and os.path.getsize(cache_file)>17000000:
+                    it['time']=time.time()
+                    j[i]=it
+        json.dump(j,open(file,'w',encoding='utf-8'))
+
+
+
 # tts 合成线程
 def ttsloop():
     try:

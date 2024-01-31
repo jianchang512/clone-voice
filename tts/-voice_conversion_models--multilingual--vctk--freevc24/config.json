@@ -1,0 +1,204 @@
+{
+    "output_path": "output",
+    "logger_uri": null,
+    "run_name": "run",
+    "project_name": null,
+    "run_description": "\ud83d\udc38Coqui trainer run.",
+    "print_step": 25,
+    "plot_step": 100,
+    "model_param_stats": false,
+    "wandb_entity": null,
+    "dashboard_logger": "tensorboard",
+    "log_model_step": null,
+    "save_step": 10000,
+    "save_n_checkpoints": 5,
+    "save_checkpoints": true,
+    "save_all_best": false,
+    "save_best_after": 10000,
+    "target_loss": null,
+    "print_eval": false,
+    "test_delay_epochs": 0,
+    "run_eval": true,
+    "run_eval_steps": null,
+    "distributed_backend": "nccl",
+    "distributed_url": "tcp://localhost:54321",
+    "mixed_precision": false,
+    "epochs": 1000,
+    "batch_size": 32,
+    "eval_batch_size": 16,
+    "grad_clip": [
+        1000,
+        1000
+    ],
+    "scheduler_after_epoch": true,
+    "lr": 0.001,
+    "optimizer": "AdamW",
+    "optimizer_params": {
+        "betas": [
+            0.8,
+            0.99
+        ],
+        "eps": 1e-09,
+        "weight_decay": 0.01
+    },
+    "lr_scheduler": null,
+    "lr_scheduler_params": {},
+    "use_grad_scaler": false,
+    "cudnn_enable": true,
+    "cudnn_deterministic": false,
+    "cudnn_benchmark": false,
+    "training_seed": 54321,
+    "model": "freevc",
+    "num_loader_workers": 0,
+    "num_eval_loader_workers": 0,
+    "use_noise_augment": false,
+    "audio": {
+        "max_wav_value": 32768.0,
+        "input_sample_rate": 16000,
+        "output_sample_rate": 24000,
+        "filter_length": 1280,
+        "hop_length": 320,
+        "win_length": 1280,
+        "n_mel_channels": 80,
+        "mel_fmin": 0.0,
+        "mel_fmax": null
+    },
+    "batch_group_size": 0,
+    "loss_masking": null,
+    "min_audio_len": 1,
+    "max_audio_len": Infinity,
+    "min_text_len": 1,
+    "max_text_len": Infinity,
+    "compute_f0": false,
+    "compute_energy": false,
+    "compute_linear_spec": true,
+    "precompute_num_workers": 0,
+    "start_by_longest": false,
+    "shuffle": false,
+    "drop_last": false,
+    "datasets": [
+        {
+            "formatter": "",
+            "dataset_name": "",
+            "path": "",
+            "meta_file_train": "",
+            "ignored_speakers": null,
+            "language": "",
+            "phonemizer": "",
+            "meta_file_val": "",
+            "meta_file_attn_mask": ""
+        }
+    ],
+    "test_sentences": [
+        [
+            "It took me quite a long time to develop a voice, and now that I have it I'm not going to be silent."
+        ],
+        [
+            "Be a voice, not an echo."
+        ],
+        [
+            "I'm sorry Dave. I'm afraid I can't do that."
+        ],
+        [
+            "This cake is great. It's so delicious and moist."
+        ],
+        [
+            "Prior to November 22, 1963."
+        ]
+    ],
+    "eval_split_max_size": null,
+    "eval_split_size": 0.01,
+    "use_speaker_weighted_sampler": false,
+    "speaker_weighted_sampler_alpha": 1.0,
+    "use_language_weighted_sampler": false,
+    "language_weighted_sampler_alpha": 1.0,
+    "use_length_weighted_sampler": false,
+    "length_weighted_sampler_alpha": 1.0,
+    "model_args": {
+        "spec_channels": 641,
+        "inter_channels": 192,
+        "hidden_channels": 192,
+        "filter_channels": 768,
+        "n_heads": 2,
+        "n_layers": 6,
+        "kernel_size": 3,
+        "p_dropout": 0.1,
+        "resblock": "1",
+        "resblock_kernel_sizes": [
+            3,
+            7,
+            11
+        ],
+        "resblock_dilation_sizes": [
+            [
+                1,
+                3,
+                5
+            ],
+            [
+                1,
+                3,
+                5
+            ],
+            [
+                1,
+                3,
+                5
+            ]
+        ],
+        "upsample_rates": [
+            10,
+            6,
+            4,
+            2
+        ],
+        "upsample_initial_channel": 512,
+        "upsample_kernel_sizes": [
+            16,
+            16,
+            4,
+            4
+        ],
+        "n_layers_q": 3,
+        "use_spectral_norm": false,
+        "gin_channels": 256,
+        "ssl_dim": 1024,
+        "use_spk": true,
+        "num_spks": 0,
+        "segment_size": 8960
+    },
+    "lr_gen": 0.0002,
+    "lr_disc": 0.0002,
+    "lr_scheduler_gen": "ExponentialLR",
+    "lr_scheduler_gen_params": {
+        "gamma": 0.999875,
+        "last_epoch": -1
+    },
+    "lr_scheduler_disc": "ExponentialLR",
+    "lr_scheduler_disc_params": {
+        "gamma": 0.999875,
+        "last_epoch": -1
+    },
+    "kl_loss_alpha": 1.0,
+    "disc_loss_alpha": 1.0,
+    "gen_loss_alpha": 1.0,
+    "feat_loss_alpha": 1.0,
+    "mel_loss_alpha": 45.0,
+    "dur_loss_alpha": 1.0,
+    "speaker_encoder_loss_alpha": 1.0,
+    "return_wav": true,
+    "use_weighted_sampler": false,
+    "weighted_sampler_attrs": {},
+    "weighted_sampler_multipliers": {},
+    "r": 1,
+    "add_blank": true,
+    "num_speakers": 0,
+    "use_speaker_embedding": false,
+    "speakers_file": null,
+    "speaker_embedding_channels": 256,
+    "language_ids_file": null,
+    "use_language_embedding": false,
+    "use_d_vector_file": false,
+    "d_vector_file": null,
+    "d_vector_dim": null
+}

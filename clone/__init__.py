@@ -1,2 +1,2 @@
-VERSION=888
-ver="0.8.8.8"
+VERSION=889
+ver="0.8.8.9"

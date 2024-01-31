@@ -24,15 +24,9 @@ def setorget_proxy():
     proxy = os.environ.get("http_proxy", '') or os.environ.get("HTTP_PROXY", '')
     if proxy:
         os.environ['AIOHTTP_PROXY'] = "http://" + proxy.replace('http://', '')
+        os.environ['HTTPS_PROXY'] = "http://" + proxy.replace('http://', '')
         return proxy
-    if not proxy:
-        proxy = os.getenv('HTTP_PROXY', '')
-        if proxy:
-            os.environ['HTTP_PROXY'] = "http://" + proxy.replace('http://', '')
-            os.environ['HTTPS_PROXY'] = "http://" + proxy.replace('http://', '')
-            os.environ['AIOHTTP_PROXY'] = "http://" + proxy.replace('http://', '')
-            return proxy
-    return proxy
+    return None
 
 
 # 存放录制好的素材，5-15s的语音 wav
