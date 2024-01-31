@@ -174,8 +174,8 @@ def apitts():
         app.logger.info(f"[apitts]{text=},{language=}")
 
         # 存放结果
-        # 合成后的语音文件
-        filename = md5_hash.hexdigest() + ".mp3"
+        # 合成后的语音文件, 以wav格式存放和返回
+        filename = md5_hash.hexdigest() + ".wav"
         app.logger.info(f"[apitts]{filename=}")
         # 合成语音
         rs = create_tts(text=text, speed=1.0, voice=voicename, language=language, filename=filename)
@@ -367,7 +367,7 @@ if __name__ == '__main__':
         else:
             app.logger.error(
                 f"\n{langlist['lang3']}: {cfg.download_address}\n")
-
+        
         if VOICE_MODEL_EXITS:
             print(langlist['lang4'])
             sts_thread = threading.Thread(target=stsloop)
@@ -375,7 +375,7 @@ if __name__ == '__main__':
         else:
             app.logger.error(
                 f"\n{langlist['lang5']}: {cfg.download_address}\n")
-
+        
         if not VOICE_MODEL_EXITS and not TEXT_MODEL_EXITS:
             print(f"\n{langlist['lang6']}: {cfg.download_address}\n")
         else:
