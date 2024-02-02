@@ -378,6 +378,7 @@ if __name__ == '__main__':
         
         if not VOICE_MODEL_EXITS and not TEXT_MODEL_EXITS:
             print(f"\n{langlist['lang6']}: {cfg.download_address}\n")
+            input("Press Enter close")
         else:
             print(langlist['lang7'])
             http_server = None

@@ -1,20 +1,20 @@
-[English README](./README_EN.md)  / [Discord](https://discord.gg/TMCM2PfHzQ) / [捐助项目](https://github.com/jianchang512/pyvideotrans/issues/80) / [Q群 902124277](https://qm.qq.com/cgi-bin/qm/qr?k=9VNSiJyInxyQ3HK3vmOTibo8pzcDekju&jump_from=webapi&authKey=xcW1+7N1E4SM+DXqyl5d61UOtNooA1C9WR5A/yfA0fmfyUDRRSZex1WD0l+9x1kO) <img src="https://github.com/jianchang512/clone-voice/assets/3378335/20858f50-6d47-411d-939b-272fe35e474c" width="50" title="点击看大图">
+[English README](./README_EN.md)  / [Discord](https://discord.gg/TMCM2PfHzQ) / [捐助项目](https://github.com/jianchang512/pyvideotrans/issues/80) / Q群 608815898
+
 # CV声音克隆工具
 
-该项目所用模型均源于 https://github.com/coqui-ai/TTS  ，模型协议为[CPML](https://coqui.ai/cpml/)只可用于学习研究，不可商用
+> 本项目所用模型为[coqui.ai](https://coqui.ai/)出品的xtts_v2，模型开源协议为[Coqui Public Model License 1.0.0](https://coqui.ai/cpml.txt),使用本项目请遵循该协议，协议全文见 https://coqui.ai/cpml.txt
 
 
-> 
-> 这是一个声音克隆工具，可使用任何人类音色，将一段文字合成为使用该音色说话的声音，或者将一个声音使用该音色转换为另一个声音。
-> 
-> 使用非常简单，没有N卡GPU也可以使用，下载预编译版本，双击 app.exe 打开一个web界面，鼠标点点就能用。
-> 
-> 支持 **中、英、日、韩、法、德、意等16种语言**，可在线从麦克风录制声音。
-> 
-> 为保证合成效果，建议录制时长5秒到20秒，发音清晰准确，不要存在背景噪声。
-> 
-> 英文效果很棒，中文效果还凑合。
-> 
+ 这是一个声音克隆工具，可使用任何人类音色，将一段文字合成为使用该音色说话的声音，或者将一个声音使用该音色转换为另一个声音。
+ 
+ 使用非常简单，没有N卡GPU也可以使用，下载预编译版本，双击 app.exe 打开一个web界面，鼠标点点就能用。
+ 
+ 支持 **中、英、日、韩、法、德、意等16种语言**，可在线从麦克风录制声音。
+ 
+ 为保证合成效果，建议录制时长5秒到20秒，发音清晰准确，不要存在背景噪声。
+ 
+ 英文效果很棒，中文效果还凑合。
+ 
 
 
 # 视频演示
@@ -95,22 +95,6 @@ if md5sum is not None:
 9. 源码版启动时可能频繁遇到错误，基本都是代理问题导致无法从墙外下载模型或下载中断不完整。建议使用稳定的代理，全局开启。如果始终无法完整下载，建议使用预编译版。
 
 
-# CUDA 加速支持
-
-**安装CUDA工具** [详细安装方法](https://juejin.cn/post/7318704408727519270)
-
-如果你的电脑拥有 Nvidia 显卡，先升级显卡驱动到最新，然后去安装对应的 
-   [CUDA Toolkit 11.8](https://developer.nvidia.com/cuda-downloads)  和  [cudnn for CUDA11.X](https://developer.nvidia.com/rdp/cudnn-archive)。
-   
-   安装完成成，按`Win + R`,输入 `cmd`然后回车，在弹出的窗口中输入`nvcc --version`,确认有版本信息显示，类似该图
-   ![image](https://github.com/jianchang512/pyvideotrans/assets/3378335/e68de07f-4bb1-4fc9-bccd-8f841825915a)
-
-   然后继续输入`nvidia-smi`,确认有输出信息，并且能看到cuda版本号，类似该图
-   ![image](https://github.com/jianchang512/pyvideotrans/assets/3378335/71f1d7d3-07f9-4579-b310-39284734006b)
-
-   说明安装正确，可以cuda加速了，否则需重新安装
-
-
 
 
 # 常见问题
@@ -146,6 +130,29 @@ if md5sum is not None:
 
    这是因为由句号分隔的句子太长导致的，建议将太长的语句使用句号隔开，而不是大量使用逗号，或者你也可以打开 clone/character.json文件，手动修改限制
    
+6. 提示"symbol not found __svml_cosf8_ha"
+
+打开网页 https://www.dll-files.com/svml_dispmd.dll.html ,点击红色"Download"下载字样，下载后解压，将里面的dll文件复制粘贴到"C:\Windows\System32"
+   
+
+
+
+# CUDA 加速支持
+
+**安装CUDA工具** [详细安装方法](https://juejin.cn/post/7318704408727519270)
+
+如果你的电脑拥有 Nvidia 显卡，先升级显卡驱动到最新，然后去安装对应的 
+   [CUDA Toolkit 11.8](https://developer.nvidia.com/cuda-downloads)  和  [cudnn for CUDA11.X](https://developer.nvidia.com/rdp/cudnn-archive)。
+   
+   安装完成成，按`Win + R`,输入 `cmd`然后回车，在弹出的窗口中输入`nvcc --version`,确认有版本信息显示，类似该图
+   ![image](https://github.com/jianchang512/pyvideotrans/assets/3378335/e68de07f-4bb1-4fc9-bccd-8f841825915a)
+
+   然后继续输入`nvidia-smi`,确认有输出信息，并且能看到cuda版本号，类似该图
+   ![image](https://github.com/jianchang512/pyvideotrans/assets/3378335/71f1d7d3-07f9-4579-b310-39284734006b)
+
+   说明安装正确，可以cuda加速了，否则需重新安装
+
+
 
 # 相关联项目
 

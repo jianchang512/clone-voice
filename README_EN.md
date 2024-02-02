@@ -2,18 +2,19 @@
 
 # CV Voice Clone Tool
 
-All the models used in this project are from https://github.com/coqui-ai/TTS, the model protocol is [CPML](https://coqui.ai/cpml/) and can only be used for study and research, not for commercial use. 
+> The model used in this project is xtts_v2 produced by [coqui.ai](https://coqui.ai/), and the model open source license is [Coqui Public Model License 1.0.0](https://coqui.ai/cpml.txt) , please follow this agreement when using this project. The full text of the agreement can be found at https://coqui.ai/cpml.txt
 
-> 
-> This is a voice cloning tool that can use any human voice to synthesize a piece of text into a voice using that voice, or to convert one voice into another using that voice. 
-> 
-> It's very easy to use, even without an N-series GPU. Download the precompiled version and double click on app.exe to open a web interface, and it can be used with a few mouse clicks. 
-> 
-> Supports **Chinese English Japanese Korean eg. total 16 languages**, and can record voices online through a microphone. 
-> 
-> To ensure the synthesized effect, it's recommended to record for 5 to 20 seconds, pronounce clearly and accurately, and don't have background noise. 
-> 
-> 
+
+ 
+ This is a voice cloning tool that can use any human voice to synthesize a piece of text into a voice using that voice, or to convert one voice into another using that voice. 
+ 
+ It's very easy to use, even without an N-series GPU. Download the precompiled version and double click on app.exe to open a web interface, and it can be used with a few mouse clicks. 
+ 
+ Supports **Chinese English Japanese Korean eg. total 16 languages**, and can record voices online through a microphone. 
+ 
+ To ensure the synthesized effect, it's recommended to record for 5 to 20 seconds, pronounce clearly and accurately, and don't have background noise. 
+ 
+ 
 
 
 # Video Demonstration

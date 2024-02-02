@@ -1,3 +1,11 @@
+本项目所用模型为[coqui.ai](https://coqui.ai/)出品的xtts_v2，模型开源协议为[Coqui Public Model License 1.0.0](https://coqui.ai/cpml.txt),使用本项目请遵循该协议，协议全文见 https://coqui.ai/cpml.txt
+
+
+The model used in this project is xtts_v2 produced by [coqui.ai](https://coqui.ai/), and the model open source license is [Coqui Public Model License 1.0.0](https://coqui.ai/cpml.txt) , please follow this agreement when using this project. The full text of the agreement can be found at https://coqui.ai/cpml.txt
+
+----
+
+
 Coqui Public Model License 1.0.0
 
 https://coqui.ai/cpml.txt
