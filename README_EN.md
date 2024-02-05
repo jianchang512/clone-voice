@@ -38,7 +38,6 @@ https://github.com/jianchang512/clone-voice/assets/3378335/813d46dd-7634-43d1-97
 1. Download the 'precompiled version of the main file(1.7G) and Model(3G) separately from [Releases](https://github.com/jianchang512/clone-voice/releases) on the right. 
 2. After downloading, unzip it to somewhere, for example E:/clone-voice. 
 3. Double click app.exe, wait for the web window to open automatically, **Please read the text prompts in the CMD window carefully**, if there are errors, they will be displayed here.
-![image](https://github.com/jianchang512/clone-voice/assets/3378335/ad9bdaaa-f2a9-4133-9087-a272db662455)
 
 
 4. After the model download, unzip it to the tts folder under the software directory, the effect after unzipping is as shown in the picture
@@ -73,7 +72,6 @@ and exec git pull source code `git clone git@github.com:jianchang512/clone-voice
     ![image](https://github.com/jianchang512/clone-voice/assets/3378335/0c61c8b6-7f7e-475f-8984-47fb87ba58e8)
    
 6. **First run** `python code_dev.py`, enter `y` when prompted to accept the agreement, then wait for the model to be downloaded completely.
-   ![](./images/code_dev01.png)
    ![](./images/code_dev02.png)
 
 
@@ -131,8 +129,7 @@ The model xtts can only be used for study and research, not for commerical use
 		
 3. If the cmd window opened for a long time doesn't move, you need to press Enter on it to continue output, please click on the icon in the upper left corner of cmd, select "Properties", then uncheck the "Quick Edit" and "Insert Mode" checkboxes
 
-![](./images/3.png)
-![](./images/4.png)
+
 
 4. “The text length exceeds the character limit of 182/82 for language”
 
