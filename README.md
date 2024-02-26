@@ -122,7 +122,7 @@ if md5sum is not None:
    首先确认模型已正确下载放置。tts文件夹内有3个文件夹，如下图
    ![image](https://github.com/jianchang512/clone-voice/assets/3378335/4b5a60eb-124d-404b-a748-c0a527482e90)
 
-   如果已正确放置了，但仍错误，[点击下载 tts_cache.zip](https://github.com/jianchang512/clone-voice/releases/download/v0.0.1/tts_cache.zip) ，将解压后得到的2个文件，复制到软件根目录的 tts_cache 文件夹内
+   如果已正确放置了，但仍错误，[点击下载 extra-to-tts_cache.zip](https://github.com/jianchang512/clone-voice/releases/download/v0.0.1/extra-to-tts_cache.zip) ，将解压后得到的2个文件，复制到软件根目录的 tts_cache 文件夹内
 
    如果上述方法无效，在 .env 文件中 HTTP_PROXY后填写代理地址比如 `HTTP_PROXY=http://127.0.0.1:7890`，可解决该问题，必须确保代理稳定，填写端口正确
 
