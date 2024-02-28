@@ -1,4 +1,4 @@
-[English README](./README_EN.md)  / [Discord](https://discord.gg/TMCM2PfHzQ) / [捐助项目](https://github.com/jianchang512/pyvideotrans/issues/80) / Q群 608815898
+[English README](./README_EN.md)  / [捐助项目](https://github.com/jianchang512/pyvideotrans/issues/80) / Q群 608815898 / 公众号:微信搜一搜“ pyvideotrans ”
 
 # CV声音克隆工具
 

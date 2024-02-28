@@ -16,6 +16,7 @@ recipes
 share
 venv
 tests
+dev
 ffmpeg.exe
 ffprobe.exe
 *.zip
@@ -36,8 +37,13 @@ tts/voice_conversion_models--multilingual--vctk--freevc24
 tts/wavlm
 tts/*.7z
 tts_cache/*
+tts/mymodels/xiaomi
+tts/1voice_conversion_models--multilingual--vctk--freevc24
 
 hubconf.py
 static/ttslist/*
 static/tmp/*.wav
 static/ttslist/*.wav
+*.pth
+*.out
+*.bin

@@ -1,0 +1,8 @@
+{
+"port":5003,
+"out_path":"",
+"num_epochs":1,
+"batch_size":2,
+"grad_acumm":1,
+"max_audio_length":10
+}
