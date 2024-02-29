@@ -169,8 +169,6 @@ threadpoolctl==3.2.0
 tokenizers==0.15.0
 tomlkit==0.12.0
 toolz==0.12.1
-torch==2.1.2+cu121
-torchaudio==2.1.2+cu121
 tqdm==4.66.1
 trainer==0.0.36
 transformers==4.36.2
