@@ -74,7 +74,7 @@ windows 和 linux 如果要启用cuda加速，继续执行 `pip uninstall -y tor
 	
 	如果显示下载多个模型均成功了，但最后还是提示“Downloading WavLM model”错误，则需要修改库包文件 `\venv\Lib\site-packages\aiohttp\client.py`, 在大约535行附近，`if proxy is not None:` 上面一行添加你的代理地址，比如 `proxy="http://127.0.0.1:10809"`.
 
-7. 下载完毕后，再启动 `python app.py`，
+7. 下载完毕后，再启动 `python app.py`，如果是训练，执行 `python train.py`
 
 8. 每次启动都会连接墙外检测或更新模型，请耐心等待。如果不想每次启动都检测或更新，需手动修改依赖包下文件，打开 \venv\Lib\site-packages\TTS\utils\manage.py ,大约 389 行附近，def download_model 方法中，注释掉如下代码
 
