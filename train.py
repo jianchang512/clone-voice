@@ -306,8 +306,8 @@ if __name__ == "__main__":
                     return f"训练出错了: {error}","", "", "", ""
 
                 # copy original files to avoid parameters changes issues
-                os.system(f"cp {config_path} {exp_path}")
-                os.system(f"cp {vocab_file} {exp_path}")
+                shutil.copy2(config_path,exp_path)
+                shutil.copy2(vocab_file,exp_path)
 
                 ft_xtts_checkpoint = os.path.join(exp_path, "best_model.pth")
                 print("训练完毕!")
