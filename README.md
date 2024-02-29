@@ -60,7 +60,8 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 使用git拉取源码到当前目录 ` git clone git@github.com:jianchang512/clone-voice.git . `
 2. 创建虚拟环境 `python -m venv venv`
 3. 激活环境，win下 `E:/clone-voice/venv/scripts/activate`，
-4. 安装依赖: `pip install -r requirements.txt`
+4. 安装依赖: `pip install -r requirements.txt --no-deps`, 
+windows 和 linux 如果要启用cuda加速，继续执行 `pip uninstall -y torch` 卸载，然后执行`pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121`。(必须有N卡并且配置好CUDA环境)
 5. win下解压 ffmpeg.7z，将其中的`ffmpeg.exe`和`app.py`在同一目录下, linux和mac 到 [ffmpeg官网](https://ffmpeg.org/download.html)下载对应版本ffmpeg，解压其中的`ffmpeg`程序到根目录下，必须将可执行二进制文件 `ffmpeg` 和app.py放在同一目录下。
 
    ![image](https://github.com/jianchang512/clone-voice/assets/3378335/0c61c8b6-7f7e-475f-8984-47fb87ba58e8)
