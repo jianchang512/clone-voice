@@ -77,7 +77,7 @@ def upload():
     try:
         # 获取上传的文件
         audio_file = request.files['audio']
-        save_dir = request.form.get("save_dir")
+        save_dir = request.form.get("save_dir",'')
         save_dir = VOICE_DIR if not save_dir else os.path.join(ROOT_DIR, f'static/{save_dir}')
         app.logger.info(f"[upload]{audio_file.filename=},{save_dir=}")
         # 检查文件是否存在且是 WAV/mp3格式
@@ -140,8 +140,8 @@ def apitts():
     '''
     try:
         langcodelist = ["zh-cn", "en", "ja", "ko", "es", "de", "fr", "it", "tr", "ru", "pt", "pl", "nl", "ar", "hu", "cs"]
-        text = request.form.get("text").strip()
-        model = request.form.get("model").strip()
+        text = request.form.get("text","").strip()
+        model = request.form.get("model","").strip()
         text = text.replace("\n", ' . ')
         language = request.form.get("language", "").lower()
         if language.startswith("zh"):
@@ -151,7 +151,7 @@ def apitts():
 
         md5_hash = hashlib.md5()
 
-        audio_name = request.form.get('voice')
+        audio_name = request.form.get('voice','')
         voicename=""
         model=""
         # 存在传来的声音文件名字
@@ -231,14 +231,14 @@ def apitts():
 @app.route('/tts', methods=['GET', 'POST'])
 def tts():
     # 原始字符串
-    text = request.form.get("text").strip()
-    voice = request.form.get("voice")
+    text = request.form.get("text","").strip()
+    voice = request.form.get("voice",'')
     speed = 1.0
     try:
-        speed = float(request.form.get("speed"))
+        speed = float(request.form.get("speed",1))
     except:
         pass
-    language = request.form.get("language")
+    language = request.form.get("language",'')
     model = request.form.get("model","")
     app.logger.info(f"[tts][tts]recev {text=}\n{voice=},{language=}\n")
 
@@ -334,8 +334,8 @@ def sts():
     try:
         # 保存文件到服务器指定目录
         # 目标
-        voice = request.form.get("voice")
-        filename = request.form.get("name")
+        voice = request.form.get("voice",'')
+        filename = request.form.get("name",'')
         app.logger.info(f"[sts][sts]sts {voice=},{filename=}\n")
 
         if not voice:
@@ -373,8 +373,8 @@ def sts():
 # 启动或关闭模型
 @app.route('/onoroff',methods=['GET','POST'])
 def onoroff():
-    name = request.form.get("name")
-    status_new = request.form.get("status_new")
+    name = request.form.get("name",'')
+    status_new = request.form.get("status_new",'')
     if status_new=='on':
         if not cfg.MYMODEL_OBJS[name] or  isinstance(cfg.MYMODEL_OBJS[name],str):
             cfg.MYMODEL_QUEUE[name]=queue.Queue(1000)            

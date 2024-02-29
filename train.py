@@ -288,9 +288,9 @@ if __name__ == "__main__":
                     return "请等待数据处理完毕，目前不存在有效的训练数据集!","", "", "", ""
                 try:
                     with open(trainfile,'w',encoding='utf-8') as f:
-                        f.write(train_text)
+                        f.write(train_text.replace('\r\n','\n'))
                     with open(evalfile,'w',encoding='utf-8') as f:
-                        f.write(eval_text)
+                        f.write(eval_text.replace('\r\n','\n'))
                     
                     print(f'{trainfile=}')
                     print(f'{evalfile=}')
@@ -318,7 +318,7 @@ if __name__ == "__main__":
                     config_path,
                     vocab_file
                 )
-                gr.INFO("训练完毕，可以测试了")
+                gr.Info("训练完毕，可以测试了")
                 return "训练完毕，可以测试了",config_path, vocab_file, ft_xtts_checkpoint, speaker_wav
         
             # 处理数据集
@@ -425,6 +425,3 @@ if __name__ == "__main__":
         server_port=args['port'],
         server_name="0.0.0.0"
     )
-
-
-input("\n按回车退出")

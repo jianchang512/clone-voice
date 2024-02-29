@@ -169,12 +169,12 @@ threadpoolctl==3.2.0
 tokenizers==0.15.0
 tomlkit==0.12.0
 toolz==0.12.1
-torch==2.1.2
-torchaudio==2.1.2
+torch==2.1.2+cu121
+torchaudio==2.1.2+cu121
 tqdm==4.66.1
 trainer==0.0.36
 transformers==4.36.2
-TTS==0.20.6
+TTS @ git+https://github.com/coqui-ai/TTS.git@1936330adaad84812b0fafd2aa17cb7bba6edea9
 typer==0.9.0
 typing_extensions==4.9.0
 tzdata==2023.3
