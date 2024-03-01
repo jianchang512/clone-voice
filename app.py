@@ -155,10 +155,11 @@ def apitts():
         voicename=""
         model=""
         # 存在传来的声音文件名字
+        print(f'1,{text=},{model=},{audio_name=},{language=}')
         if audio_name and audio_name.lower().endswith('.wav'):
             voicename = os.path.join(VOICE_DIR, audio_name)
             if not os.path.exists(voicename):
-                return jsonify({"code": 1, "msg": f"{audio_name} 不存在"})
+                return jsonify({"code": 2, "msg": f"{audio_name} 不存在"})
             if os.path.isdir(voicename):
                 model=audio_name
                 voicename=""
@@ -172,14 +173,14 @@ def apitts():
             audio_name = f'video_{audio_file.filename}.wav'
             voicename = os.path.join(TMP_DIR, audio_name)
             audio_file.save(voicename)
-        
+        print(f'22={text=},{model=},{audio_name=},{language=}')
         md5_hash.update(f"{text}-{language}-{audio_name}-{model}".encode('utf-8'))
 
         app.logger.info(f"[apitts]{voicename=}")
         if re.match(r'^[~`!@#$%^&*()_+=,./;\':\[\]{}<>?\\|"，。？；‘：“”’｛【】｝！·￥、\s\n\r -]*$', text):
-            return jsonify({"code": 1, "msg": "lost text for translate"})
+            return jsonify({"code": 3, "msg": "lost text for translate"})
         if not text or not language:
-            return jsonify({"code": 1, "msg": "text & language params lost"})
+            return jsonify({"code": 4, "msg": "text & language params lost"})
         app.logger.info(f"[apitts]{text=},{language=}")
 
         # 存放结果
@@ -190,6 +191,7 @@ def apitts():
         rs = create_tts(text=text,model=model, speed=1.0, voice=voicename, language=language, filename=filename)
         # 已有结果或错误，直接返回
         if rs is not None:
+            print(f'{rs=}')
             result = rs
         else:
             # 循环等待 最多7200s
@@ -200,17 +202,21 @@ def apitts():
                 if time_tmp % 30 == 0:
                     app.logger.info(f"[apitts][tts]{time_tmp=},{filename=}")
                 if time_tmp>3600:
-                    return jsonify({"code": 1, "msg": f'error:{text}'})
+                    return jsonify({"code": 5, "msg": f'error:{text}'})
                     
 
             # 当前行已完成合成
-            if not os.path.exists(filename):
-                msg = {"code": 1, "msg": cfg.global_tts_result[filename]}
+            target_wav = os.path.normpath(os.path.join(TTS_DIR, filename))
+            if not os.path.exists(target_wav):
+                msg = {"code": 6, "msg": cfg.global_tts_result[filename] if filename in cfg.global_tts_result else "error"}
             else:
-                target_wav = os.path.normpath(os.path.join(TTS_DIR, filename))
+                
                 msg = {"code": 0, "filename": target_wav, 'name': filename}
             app.logger.info(f"[apitts][tts] {filename=},{msg=}")
-            cfg.global_tts_result.pop(filename)
+            try:
+                cfg.global_tts_result.pop(filename)
+            except:
+                pass
             result = msg
             app.logger.info(f"[apitts]{msg=}")
         if result['code'] == 0:
@@ -219,7 +225,7 @@ def apitts():
     except Exception as e:
         msg = f'{str(e)} {str(e.args)}'
         app.logger.error(f"[apitts]{msg}")
-        return jsonify({'code': 2, 'msg': msg})
+        return jsonify({'code': 7, 'msg': msg})
 
 
 # 根据文本返回tts结果，返回 name=文件名字，filename=文件绝对路径
@@ -309,7 +315,10 @@ def tts():
                 shutil.copy2(speed_tmp, target_wav)
             msg = {"code": 0, "filename": target_wav, 'name': filename}
         app.logger.info(f"[tts][tts] {filename=},{msg=}")
-        cfg.global_tts_result.pop(filename)
+        try:
+            cfg.global_tts_result.pop(filename)
+        except:
+            pass
         text_list[num]['result'] = msg
         app.logger.info(f"[tts][tts]{num=}")
         num += 1
@@ -377,13 +386,9 @@ def onoroff():
     status_new = request.form.get("status_new",'')
     if status_new=='on':
         if not cfg.MYMODEL_OBJS[name] or  isinstance(cfg.MYMODEL_OBJS[name],str):
-            cfg.MYMODEL_QUEUE[name]=queue.Queue(1000)            
             try:
                 print(f'start {name}...')
                 res=logic.load_model(name)
-                if isinstance(cfg.MYMODEL_OBJS[name],str):
-                    #字符串 启动失败
-                    cfg.MYMODEL_QUEUE[name]=None
                 print(f'{res=}')
                 return jsonify({"code":0,"msg":res})
             except Exception as e:

@@ -55,7 +55,7 @@ https://github.com/jianchang512/clone-voice/assets/3378335/4e63f2ac-cc68-4324-a4
 
 **源码版需要在 .env 中 HTTP_PROXY=设置代理(比如http://127.0.0.1:7890)，要从 https://huggingface.co https://github.com 下载模型，而这个网址国内无法访问，必须保证代理稳定可靠，否则大模型下载可能中途失败**
 
-0. 要求 python 3.9->3.11
+0. 要求 python 3.9->3.11, 并且提前安装好 git-cmd 工具，[下载地址](https://github.com/git-for-windows/git/releases/download/v2.44.0.windows.1/Git-2.44.0-64-bit.exe)
 1. 创建空目录，比如 E:/clone-voice, 在这个目录下打开 cmd 窗口，方法是地址栏中输入 `cmd`, 然后回车。
 使用git拉取源码到当前目录 ` git clone git@github.com:jianchang512/clone-voice.git . `
 2. 创建虚拟环境 `python -m venv venv`
@@ -74,7 +74,9 @@ windows 和 linux 如果要启用cuda加速，继续执行 `pip uninstall -y tor
 	
 	如果显示下载多个模型均成功了，但最后还是提示“Downloading WavLM model”错误，则需要修改库包文件 `\venv\Lib\site-packages\aiohttp\client.py`, 在大约535行附近，`if proxy is not None:` 上面一行添加你的代理地址，比如 `proxy="http://127.0.0.1:10809"`.
 
-7. 下载完毕后，再启动 `python app.py`，如果是训练，执行 `python train.py`, 训练才是在 `param.json`中调整，调整后重新执行训练脚本`python train.py`
+7. 下载完毕后，再启动 `python app.py`
+
+8. **【训练说明】** 如果想训练，执行 `python train.py`, 训练参数在 `param.json`中调整，调整后重新执行训练脚本`python train.py`
 
 8. 每次启动都会连接墙外检测或更新模型，请耐心等待。如果不想每次启动都检测或更新，需手动修改依赖包下文件，打开 \venv\Lib\site-packages\TTS\utils\manage.py ,大约 389 行附近，def download_model 方法中，注释掉如下代码
 

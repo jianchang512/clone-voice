@@ -115,18 +115,19 @@ def create_tts(*, text, voice, language, filename, speed=1.0,model=""):
         cfg.global_tts_result[filename] = 1
         return {"code": 0, "filename": absofilename, 'name': filename}
     try:
-        print(f"[tts][create_ts] **{text}** push queue")
+        print(f"[tts][create_ts] **{text}** {voice=},{model=}")
         if not model or model =="default":
             cfg.q.put({"voice": voice, "text": text,"speed":speed, "language": language, "filename": filename})
         else:
             #如果不存在该模型，就先启动
-            if not cfg.MYMODEL_QUEUE[model]:
+            print(f'{model=}')
+            if model not in cfg.MYMODEL_QUEUE or not cfg.MYMODEL_QUEUE[model]:
                 run_tts(model)
             cfg.MYMODEL_QUEUE[model].put({"text": text,"speed":speed, "language": language, "filename": filename})
     except Exception as e:
         print(e)
-        print(f"[tts][create_ts] error，{str(e)}")
-        return {"code": 1, "msg": str(e)}
+        print(f"error，{str(e)}")
+        return {"code": 10, "msg": str(e)}
     return None
 
 # join all short audio to one ,eg name.mp4  name.mp4.wav
@@ -362,6 +363,7 @@ def clear_gpu_cache():
 
 # 加载自定义模型,name是文件夹名， tts/mymodels/name/
 def load_model(name):
+    print(f'load_model,{name=}')
     while cfg.MYMODEL_OBJS[name]=="loading":
         time.sleep(3)
     
@@ -378,18 +380,18 @@ def load_model(name):
     
     cfg.MYMODEL_OBJS[name]="loading"
     try:
+        cfg.MYMODEL_QUEUE[name]=queue.Queue(1000)
         config = XttsConfig()
         config.load_json(xtts_config)
         cfg.MYMODEL_OBJS[name] = Xtts.init_from_config(config)
         print("Loading XTTS model! ")
-        try:
-            cfg.MYMODEL_OBJS[name].load_checkpoint(config, checkpoint_path=xtts_checkpoint, vocab_path=xtts_vocab, use_deepspeed=False)
-        except Exception as e:        
-            print(f"e={str(e)}")
+        
+        cfg.MYMODEL_OBJS[name].load_checkpoint(config, checkpoint_path=xtts_checkpoint, vocab_path=xtts_vocab, use_deepspeed=False)
         if torch.cuda.is_available():
             cfg.MYMODEL_OBJS[name].cuda()
         threading.Thread(target=run_tts,args=(name,)).start()
     except Exception as e:
+        cfg.MYMODEL_QUEUE[name]=None
         cfg.MYMODEL_OBJS[name]="error"
         return str(e)
     return "启动成功!"
