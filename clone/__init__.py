@@ -1,2 +1,2 @@
-VERSION=905
-ver="0.905"
+VERSION=906
+ver="0.906"

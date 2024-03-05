@@ -275,7 +275,7 @@ def tts():
         filename = md5_hash.hexdigest() + ".wav"
         app.logger.info(f"[tts][tts]{filename=}")
         # 合成语音
-        rs = create_tts(text=t['text'], model=model,speed=speed, voice=voice, language=language, filename=filename)
+        rs = create_tts(text=t['text'], model=model,speed=speed, voice=os.path.join(cfg.VOICE_DIR, voice), language=language, filename=filename)
         # 已有结果或错误，直接返回
         if rs is not None:
             text_list[num]['result'] = rs

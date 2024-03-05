@@ -59,11 +59,12 @@ def ttsloop():
     while 1:
         try:
             obj = cfg.q.get(block=True, timeout=1)
-        
             print(f"[tts][ttsloop]start tts，{obj=}")
-            try:
-                #split_sentences=True
-                tts.tts_to_file(text=obj['text'], speaker_wav=os.path.join(cfg.VOICE_DIR, obj['voice']), language=obj['language'], file_path=os.path.join(cfg.TTS_DIR, obj['filename']))
+            if not os.path.exists(obj['voice']):
+                cfg.global_tts_result[obj['filename']] = f'参考声音不存:{obj["voice"]}'
+                continue
+            try:               
+                tts.tts_to_file(text=obj['text'], speaker_wav=obj['voice'], language=obj['language'], file_path=os.path.join(cfg.TTS_DIR, obj['filename']))
                 cfg.global_tts_result[obj['filename']] = 1
                 print(f"[tts][ttsloop]end: {obj=}")
             except Exception as e:

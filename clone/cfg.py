@@ -22,7 +22,7 @@ else:
 
 
 def setorget_proxy():
-    proxy = os.environ.get("http_proxy", '') or os.environ.get("HTTP_PROXY", '')
+    proxy = os.getenv("http_proxy", '') or os.getenv("HTTP_PROXY", '')
     if proxy:
         os.environ['AIOHTTP_PROXY'] = "http://" + proxy.replace('http://', '')
         os.environ['HTTPS_PROXY'] = "http://" + proxy.replace('http://', '')
@@ -72,9 +72,9 @@ MYMODEL_OBJS=get_models(MYMODEL_DIR)
 MYMODEL_QUEUE={}
 
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-q = queue.Queue(maxsize=100)
-q_sts = queue.Queue(maxsize=100)
+device = "cuda" if os.getenv('CUDA','')=='CUDA' and torch.cuda.is_available() else "cpu"
+q = queue.Queue(maxsize=2000)
+q_sts = queue.Queue(maxsize=2000)
 # 存放tts结果
 global_tts_result = {}
 #存放sts结果
