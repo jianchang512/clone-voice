@@ -72,7 +72,7 @@ MYMODEL_OBJS=get_models(MYMODEL_DIR)
 MYMODEL_QUEUE={}
 
 
-device = "cuda" if os.getenv('CUDA','')=='CUDA' and torch.cuda.is_available() else "cpu"
+device = "cuda" if os.getenv('DEVICE','')=='CUDA' and torch.cuda.is_available() else "cpu"
 q = queue.Queue(maxsize=2000)
 q_sts = queue.Queue(maxsize=2000)
 # 存放tts结果
