@@ -438,7 +438,6 @@ if __name__ == '__main__':
                 f"\n{langlist['lang5']}: {cfg.download_address}\n")
 
         print(langlist['lang7'])
-        http_server = None
         try:
             host = web_address.split(':')
             threading.Thread(target=openweb, args=(web_address,)).start()
