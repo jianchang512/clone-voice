@@ -257,6 +257,12 @@
             </div>
         </div>
         <div id="sts-area" class="d-none">
+			<div class="p-2">
+				<label for="audioSelect2" class="form-label">
+					<span data-en="The sound file to be clone:" data-cn="要克隆的音色:"></span>
+				</label>
+				<select class="form-select d-inline-block w-auto" id="audioSelect2"></select>
+			</div>
             <div>
                 {% if voice_model %}
                     <div id="dropaudio" class=" border m-2 p-5 text-center "
@@ -275,6 +281,7 @@
                             class="d-block" src="/static/images/2.png" width="300">
                     </div>
                 {% endif %}
+				<div class="alert alert-danger d-none" id="sts_no"></div>
             </div>
         </div>
 
@@ -570,7 +577,8 @@
                 res.forEach(it => {
                     html += '<option value="' + it + '">' + it + '</option>'
                 })
-                $('#audioSelect').html(html)
+                $('#audioSelect').html(html);
+                $('#audioSelect2').html(html);
             }
         });
     }
@@ -640,6 +648,7 @@
                 fun_res(res);
             });
         } else {
+			voice = $("#audioSelect2").val();
             $.post('/sts', {voice: voice, name: window['sts_audio_name']}, function (res) {
                 fun_res(res);
             });
@@ -684,6 +693,25 @@
             fileInput.click();
         });
     }
+	
+	function sts_status(){
+		$.get('/stsstatus', function (res) {
+            if (res.code === 0) {
+				if(res.msg=='stop'){
+					$('#sts_no').removeClass('d-none').text(language=='zh'?'声音转声音 线程未启动，如果已下载了模型，请打开 .env 文件将 ENABLE_STS=0 改为 ENABLE_STS=1，然后重启软件':'The sts model has not been launched yet, please download it and set .env  ENABLE_STS=0 to ENABLE_STS=1 ');
+					if(!window.sts_time){
+						window.sts_time=0;
+					}
+					window.sts_time+=5
+					if(window.sts_time < 300){
+						setTimeout(sts_status,5000);
+					}
+				}else{
+					$('#sts_no').addClass('d-none').text("")
+				}
+            }
+        });
+	}
 
 
     // 拖拽上传声音音频  
@@ -692,7 +720,7 @@
         var formData = new FormData();
         formData.append('audio', file);
         formData.append('save_dir', 'tmp')
-
+		let index=layer.load()
         $.ajax({
             type: 'POST',
             url: '/upload',  // Update with your backend endpoint
@@ -712,9 +740,10 @@
                 dropaudio.text('Error');
             },
             beforeSend: function () {
-                dropaudio.text('Upload...');
+                dropaudio.text(language==='zh'?'上传中请稍等..':'Uploading... ');
             },
             complete: function () {
+				layer.close(index)
                 dropaudio.removeClass('dragover');
             }
         });
@@ -777,12 +806,16 @@
 			</div>`
         });
     }
+	
 
     init();
     stsinit();
     check_start();
     checkupdate();
     switch_language();
+	{% if voice_model %}
+		sts_status();
+	{% endif %}
 
 </script>
 

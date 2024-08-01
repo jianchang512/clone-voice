@@ -23,6 +23,8 @@ from waitress import serve
 load_dotenv()
 
 web_address = os.getenv('WEB_ADDRESS', '127.0.0.1:9988')
+enable_sts = int(os.getenv('ENABLE_STS', '0'))
+
 
 
 updatecache()
@@ -385,7 +387,7 @@ def onoroff():
     name = request.form.get("name",'')
     status_new = request.form.get("status_new",'')
     if status_new=='on':
-        if not cfg.MYMODEL_OBJS[name] or  isinstance(cfg.MYMODEL_OBJS[name],str):
+        if name not in cfg.MYMODEL_OBJS  or not cfg.MYMODEL_OBJS[name] or  isinstance(cfg.MYMODEL_OBJS[name],str):
             try:
                 print(f'start {name}...')
                 res=logic.load_model(name)
@@ -401,11 +403,16 @@ def onoroff():
         cfg.MYMODEL_OBJS[name]=None
         #删除队列
         cfg.MYMODEL_QUEUE[name]=None
-    return jsonify({"code":0,"msg":"已启动"})
+        return jsonify({"code":0,"msg":"已停止"})
 
 @app.route('/checkupdate', methods=['GET', 'POST'])
 def checkupdate():
     return jsonify({'code': 0, "msg": cfg.updatetips})
+
+@app.route('/stsstatus', methods=['GET', 'POST'])
+def stsstatus():
+    return jsonify({'code': 0, "msg": "start" if cfg.sts_status else "stop"})
+
 
 
 if __name__ == '__main__':
@@ -419,8 +426,9 @@ if __name__ == '__main__':
         threading.Thread(target=logic.checkupdate).start()
 
         # 如果存在默认模型则启动
+        
         if TEXT_MODEL_EXITS:
-            print(langlist['lang2'])
+            print("\n"+langlist['lang2'])
             tts_thread = threading.Thread(target=ttsloop)
             tts_thread.start()
         else:
@@ -428,15 +436,15 @@ if __name__ == '__main__':
                 f"\n{langlist['lang3']}: {cfg.download_address}\n")
             input(f"\n{langlist['lang3']}: {cfg.download_address}\n")
             sys.exit()
-
-        if VOICE_MODEL_EXITS:
+        
+        if enable_sts==1 and VOICE_MODEL_EXITS:
             print(langlist['lang4'])
             sts_thread = threading.Thread(target=stsloop)
             sts_thread.start()
-        else:
-            app.logger.error(
-                f"\n{langlist['lang5']}: {cfg.download_address}\n")
-
+        #else:
+        #    app.logger.error(
+        #        f"\n{langlist['lang5']}: {cfg.download_address}\n")
+        
         print(langlist['lang7'])
         try:
             host = web_address.split(':')
@@ -447,4 +455,5 @@ if __name__ == '__main__':
     except Exception as e:
         print("error:" + str(e))
         app.logger.error(f"[app]start error:{str(e)}")
+        time.sleep(30)
         sys.exit()

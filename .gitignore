@@ -47,3 +47,4 @@ static/ttslist/*.wav
 *.pth
 *.out
 *.bin
+*.7z

@@ -50,7 +50,7 @@ def ttsloop():
         if not cfg.setorget_proxy():
             print(f'.env {langlist["lang12"]}')
         else:
-            print(langlist['lang11'])
+            print("\n"+langlist['lang11']+"\n")
         return
     except Exception as e:
         print(f'{langlist["lang13"]}:{str(e)}')
@@ -78,8 +78,9 @@ def ttsloop():
 def stsloop():
     try:
         tts = TTS(model_name='voice_conversion_models/multilingual/vctk/freevc24').to(cfg.device)
-        print(langlist['lang10'])
+        print("\n"+langlist['lang10']+"\n")
     except aiohttp.client_exceptions.ClientOSError as e:
+        cfg.sts_status=False
         print(f'{langlist["lang9"]}：{str(e)}')
         if not cfg.setorget_proxy():
             print(f'.env {langlist["lang12"]}')
@@ -87,8 +88,11 @@ def stsloop():
             print(f'{os.environ.get("HTTP_PROXY")} {langlist["lang11"]}')
         return
     except Exception as e:
+        cfg.sts_status=False
         print(f'{langlist["lang9"]}：{str(e)}')
         return
+    else:
+        cfg.sts_status=True
     while 1:
         try:
             obj = cfg.q_sts.get(block=True, timeout=1)        
@@ -196,8 +200,11 @@ def merge_audio_segments(text_list,is_srt=True):
 def openweb(web_address):
     while cfg.tts_n==0:
         time.sleep(5)
-    webbrowser.open("http://"+web_address)
-    print(f"\n{langlist['lang8']} http://{web_address}")
+    try:
+        webbrowser.open("http://"+web_address)
+        print(f"\n{langlist['lang8']} http://{web_address}")
+    except Exception as e:
+        pass
 
 # 判断是否符合字幕格式，如果是，则直接返回
 # 从字幕文件获取格式化后的字幕信息
@@ -346,10 +353,10 @@ def get_subtitle_from_srt0(txt):
 def checkupdate():
     try:
         res=requests.get("https://raw.githubusercontent.com/jianchang512/clone-voice/main/version.json")
-        print(f"{res.status_code=}")
+        #print(f"{res.status_code=}")
         if res.status_code==200:
             d=res.json()
-            print(f"{d=}")
+            #print(f"{d=}")
             if d['version_num']>clone.VERSION:
                 cfg.updatetips=f'New version {d["version"]}'
     except Exception as e:

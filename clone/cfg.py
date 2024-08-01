@@ -71,6 +71,8 @@ MYMODEL_DIR=os.path.join(ROOT_DIR,'tts','mymodels')
 MYMODEL_OBJS=get_models(MYMODEL_DIR)
 MYMODEL_QUEUE={}
 
+sts_status=False
+
 
 device = "cuda" if os.getenv('DEVICE','')=='CUDA' and torch.cuda.is_available() else "cpu"
 q = queue.Queue(maxsize=2000)

@@ -30,7 +30,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 
-ttsv2 = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
+#ttsv2 = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
 
 tts = TTS(model_name='voice_conversion_models/multilingual/vctk/freevc24').to(device)
 
