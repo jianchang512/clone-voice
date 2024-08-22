@@ -106,7 +106,7 @@ def upload():
             if ext != '.wav':
                 name = f"{name[:-len(ext)]}.wav"
             savename = os.path.join(save_dir, name)
-            os.system(f'ffmpeg -hide_banner -y -i "{tmp_wav}" "{savename}"')
+            subprocess.run(['ffmpeg', '-hide_banner', '-y', '-i', tmp_wav, savename], check=True)
             try:
                 os.unlink(tmp_wav)
             except:

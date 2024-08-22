@@ -75,11 +75,12 @@ def index():
 
 # 上传音频
 @app.route('/upload', methods=['POST'])
+@app.route('/upload', methods=['POST'])
 def upload():
     try:
         # 获取上传的文件
         audio_file = request.files['audio']
-        save_dir = request.form.get("save_dir",'')
+        save_dir = request.form.get("save_dir")
         save_dir = VOICE_DIR if not save_dir else os.path.join(ROOT_DIR, f'static/{save_dir}')
         app.logger.info(f"[upload]{audio_file.filename=},{save_dir=}")
         # 检查文件是否存在且是 WAV/mp3格式
@@ -97,7 +98,7 @@ def upload():
             if ext != '.wav':
                 name = f"{name[:-len(ext)]}.wav"
             savename = os.path.join(save_dir, name)
-            os.system(f'ffmpeg -hide_banner -y -i "{tmp_wav}" "{savename}"')
+            subprocess.run(['ffmpeg', '-hide_banner', '-y', '-i', tmp_wav, savename], check=True)
             try:
                 os.unlink(tmp_wav)
             except:
