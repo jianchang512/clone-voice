@@ -1,0 +1,16 @@
+name: clone-voice
+channels:
+  - conda-forge
+  - pytorch
+  - nvidia
+dependencies:
+  - python=3.10
+
+  - pytorch==2.5.1
+  - pytorch-cuda==12.4
+
+  - ffmpeg==7.1.0
+
+  - pip:
+    - huggingface-hub
+    - -r ./requirements.txt
