@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "debugpy: code_dev",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/code_dev.py",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
+            "name": "debugpy: app",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/app.py",
+            "console": "integratedTerminal",
+            "env": {
+                "WEB_ADDRESS": "0.0.0.0:9988",
+                "ENABLE_STS": "1",
+                "DEVICE": "CUDA",
+                "PATH": "${env:PATH}:${env:CONDA_PREFIX}/envs/clone-voice/bin"
+            },
+            "justMyCode": false
+        },
+    ]
+}
