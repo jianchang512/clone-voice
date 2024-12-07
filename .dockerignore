@@ -1,0 +1,15 @@
+.git/
+.github/
+.vscode/
+cache/
+docker/
+tts/
+.dockerignore
+.gitignore
+.env
+app.log
+environment.yml
+runapp.bat
+runtrain.bat
+# Ignore generated files
+**/*.pyc

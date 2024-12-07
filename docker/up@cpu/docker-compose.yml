@@ -1,0 +1,17 @@
+
+
+services:
+  clone-voice:
+    image: jianchang512/clone-voice:main
+    container_name: clone-voice
+    environment:
+      - DEVICE=CPU
+      - LANG=zh
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "9988:9988"
+    volumes:
+      - ./../../tts/tts_models--multilingual--multi-dataset--xtts_v2:/app/tts/tts_models--multilingual--multi-dataset--xtts_v2
+      - ./../../tts/voice_conversion_models--multilingual--vctk--freevc24:/app/tts/voice_conversion_models--multilingual--vctk--freevc24
+      - ./../../tts/wavlm:/app/tts/wavlm
+      - .models.json:/opt/conda/lib/python3.10/site-packages/TTS/.models.json

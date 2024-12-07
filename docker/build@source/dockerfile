@@ -1,0 +1,34 @@
+
+FROM pytorch/pytorch:2.3.1-cuda12.1-cudnn8-runtime
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    libgl1-mesa-glx \
+    libsm6 \
+    libxext6 \
+    libglib2.0-0 \
+    libxrender-dev \
+    git \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install --upgrade pip
+
+COPY ./requirements.txt /app/requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+COPY . /app
+
+ENV WEB_ADDRESS=0.0.0.0:9988
+ENV ENABLE_STS=1
+ENV DEVICE=CUDA
+ENV PYTHONUNBUFFERED=1
+
+EXPOSE 9988
+
+VOLUME /app/tts
+VOLUME /app/tts_cache
+
+CMD ["python", "app.py"]

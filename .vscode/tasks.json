@@ -1,0 +1,88 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "docker: compose up@gpu",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/docker/up@gpu/"
+            },
+            "command": "docker compose -p clone-voice up",
+        },
+        {
+            "label": "docker: compose up@cpu",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/docker/up@cpu/"
+            },
+            "command": "docker compose -p clone-voice up",
+        },
+        {
+            "label": "docker: build main",
+            "type": "shell",
+            "command": "docker build -t jianchang512/clone-voice:main -f ./docker/build@source/dockerfile .",
+        },
+        {
+            "label": "conda: run code_dev",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "command": "conda run -n clone-voice python code_dev.py",
+        },
+        {
+            "label": "conda: run app",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "WEB_ADDRESS": "0.0.0.0:9988",
+                    "ENABLE_STS": "1",
+                    "PATH": "${env:PATH}:${env:CONDA_PREFIX}/envs/clone-voice/bin"
+                }
+            },
+            "command": "conda run -n clone-voice python app.py"
+        },
+        {
+            "label": "huggingface-cli: download model Voice-Conversion",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "HF_ENDPOINT": "https://hf-mirror.com",
+                    "HF_HUB_ETAG_TIMEOUT": "1000",
+                    "HF_HUB_DOWNLOAD_TIMEOUT": "1000"
+                }
+            },
+            "command": [
+                "huggingface-cli download --revision main --cache-dir ./cache --repo-type space vuxuanhoan/Voice-Conversion",
+                "&& huggingface-cli download --revision main --cache-dir ./cache --local-dir ./tts --local-dir-use-symlinks False --repo-type space vuxuanhoan/Voice-Conversion --include 'tts_models/*'",
+                "&& mv ./tts/tts_models/voice_conversion_models--multilingual--vctk--freevc24 ./tts/",
+                "&& mv ./tts/tts_models/wavlm ./tts/",
+            ]
+        },   
+        {
+            "label": "huggingface-cli: download model xtts_v2",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "HF_ENDPOINT": "https://hf-mirror.com",
+                    "HF_HUB_ETAG_TIMEOUT": "1000",
+                    "HF_HUB_DOWNLOAD_TIMEOUT": "1000"
+                }
+            },
+            "command": [
+                "huggingface-cli download --resume-download --revision v2.0.2 --cache-dir ./cache coqui/XTTS-v2",
+                "&& huggingface-cli download --revision v2.0.2 --cache-dir ./cache --local-dir ./tts/tts_models--multilingual--multi-dataset--xtts_v2 --local-dir-use-symlinks False coqui/XTTS-v2",
+            ]
+        },
+        {
+            "label": "conda: create env",
+            "type": "shell",
+            "command": [
+                "conda env create -f environment.yml"
+            ]
+        }
+    ]
+}
